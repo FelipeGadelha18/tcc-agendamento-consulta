@@ -1,0 +1,42 @@
+<div class="login-container">
+
+  <div class="logo-header">
+    <span>PREFEITURA DE</span>
+    <h1>Rio Branco</h1>
+  </div>
+
+  <div class="subtitle">
+    <h2>E-Ficha RB</h2>
+    <small>Acesse</small>
+  </div>
+
+  <div class="form-area">
+
+    <div class="p-inputgroup input-field">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-user"></i>
+      </span>
+      <input type="text" pInputText placeholder="CPF" [(ngModel)]="cpf">
+    </div>
+
+    <div class="p-inputgroup input-field">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-lock"></i>
+      </span>
+      <input type="password" pInputText placeholder="Senha" [(ngModel)]="senha">
+    </div>
+
+    <button pButton
+            type="button"
+            class="btn-enter"
+            label="Entrar"
+            (click)="entrar()">
+    </button>
+  </div>
+
+  <a class="register">Ainda não possui cadastro? Cadastra-se</a>
+
+  <div class="fab">
+    F
+  </div>
+</div>
