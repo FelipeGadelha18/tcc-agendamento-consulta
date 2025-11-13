@@ -1,20 +1,12 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
-import { ButtonModule } from 'primeng/button';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    FormsModule,
-    CommonModule,
-    InputTextModule,
-    PasswordModule,
-    ButtonModule
-  ],
+  imports: [CommonModule, FormsModule,],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

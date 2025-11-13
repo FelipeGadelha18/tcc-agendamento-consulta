@@ -1,42 +1,30 @@
 <div class="login-container">
+  <div class="login-card">
+    <h2>Bem vindos ao E-ficha RB</h2>
 
-  <div class="logo-header">
-    <span>PREFEITURA DE</span>
+    <div class="input-group">
+      <i class="pi pi-user"></i>
+      <input type="text" placeholder="CPF" />
+    </div>
+
+    <div class="input-group">
+      <i class="pi pi-check"></i>
+      <input type="password" placeholder="Senha" />
+    </div>
+
+    <button class="login-btn">Entrar</button>
+
+    <p class="signup-text">
+      Ainda não possui cadastro?
+      <a href="#">Cadastre-se</a>
+    </p>
+  </div>
+
+  <div class="side-text">
+    <h3>PREFEITURA DE</h3>
     <h1>Rio Branco</h1>
   </div>
 
-  <div class="subtitle">
-    <h2>E-Ficha RB</h2>
-    <small>Acesse</small>
-  </div>
-
-  <div class="form-area">
-
-    <div class="p-inputgroup input-field">
-      <span class="p-inputgroup-addon">
-        <i class="pi pi-user"></i>
-      </span>
-      <input type="text" pInputText placeholder="CPF" [(ngModel)]="cpf">
-    </div>
-
-    <div class="p-inputgroup input-field">
-      <span class="p-inputgroup-addon">
-        <i class="pi pi-lock"></i>
-      </span>
-      <input type="password" pInputText placeholder="Senha" [(ngModel)]="senha">
-    </div>
-
-    <button pButton
-            type="button"
-            class="btn-enter"
-            label="Entrar"
-            (click)="entrar()">
-    </button>
-  </div>
-
-  <a class="register">Ainda não possui cadastro? Cadastra-se</a>
-
-  <div class="fab">
-    F
-  </div>
+  <div class="shape shape1"></div>
+  <div class="shape shape2"></div>
 </div>
