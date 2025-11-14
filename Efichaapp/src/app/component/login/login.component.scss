@@ -6,12 +6,11 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 20%;  // ← ajuste a posição do card
+  padding-left: 20%;
   background: #f1f2f6;
   font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
-
 
 /* CARD CENTRAL */
 .login-card {
@@ -20,7 +19,7 @@
   padding: 60px 50px;
   border-radius: 14px;
   box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.08);
-  z-index: 1;
+  z-index: 3; /* acima das shapes */
 }
 
 .login-card h2 {
@@ -28,7 +27,7 @@
   font-size: 22px;
   text-align: center;
   font-weight: 500;
-  margin-bottom: 35px;  
+  margin-bottom: 35px;
 }
 
 /* INPUTS */
@@ -37,9 +36,9 @@
   align-items: center;
   background: white;
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 15px 20px;
   margin-bottom: 18px;
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .icon {
@@ -63,7 +62,7 @@
   border: none;
   color: white;
   font-weight: 600;
-  padding: 12px 0;
+  padding: 15px 0;
   border-radius: 8px;
   font-size: 15px;
   margin-top: 8px;
@@ -71,34 +70,35 @@
 }
 
 .login-btn:hover {
-  background: #003d80;
+  background: #00a1d7;
 }
 
 /* LINKS */
 .signup-text {
-  font-size: 12px;
+  font-size: 15px;
   margin-top: 12px;
   text-align: center;
 }
 
 .signup-text a {
   color: #0052a3;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
 }
 
-/* TEXTO DA DIREITA - PREFEITURA */
+/* TEXTO DE RIO BRANCO*/
 .side-text {
   position: absolute;
   right: 350px;
-  top: 50%;
+  top: 35%;
   transform: translateY(-50%);
   text-align: right;
+  z-index: 3;
 }
 
 .side-text h3 {
   color: #0052a3;
-  font-size: 16px;
+  font-size: 40px;
   text-align: center;
   letter-spacing: 1px;
   font-weight: 400;
@@ -106,7 +106,8 @@
 
 .side-text h1 {
   margin-top: -5px;
-  font-size: 65px;
+  font-size: 96px;
+  text-align: center;
   color: #003d80;
   font-weight: 700;
 }
@@ -114,24 +115,42 @@
 /* FORMAS DECORATIVAS */
 .shape {
   position: absolute;
-  background: #003d80;
+  background: #012f60;
   border-radius: 50%;
-  z-index: 1;
+  z-index: 2;
 }
 
 .shape1 {
-  width: 650px;
-  height: 500px;
-  top: -300px;
+  width: 559px;
+  height: 401px;
+  top: -200px;
   left: -100px;
 }
 
 .shape2 {
-  width: 660px;
-  height: 460px;
-  bottom: -300px;
+  width: 466px;
+  height: 664px;
+  bottom: -100px;
   right: -200px;
 }
+
+/* TRIÂNGULO */
+.shape-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 200px solid transparent;
+  border-right: 200px solid transparent;
+  border-bottom: 300px solid #003b7a;
+  top: 480px;
+  left: 250px;
+  border-radius: 50% 50% 0 0;
+
+  z-index: 1;
+
+  transform: rotate(41deg);
+}
+
 
 /* RESPONSIVO */
 @media (max-width: 900px) {
@@ -144,5 +163,6 @@
 
   .login-container {
     flex-direction: column;
+    padding-left: 0;
   }
 }
