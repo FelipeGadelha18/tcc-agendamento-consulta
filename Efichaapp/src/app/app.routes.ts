@@ -9,6 +9,11 @@ export const routes: Routes = [
     },
 
     {
+        path: 'cadastro',
+        loadComponent: () => import('./component/cadastro/cadastro.component').then((m) => m.CadastroComponent),
+    },
+
+    {
         path: 'paciente',
     loadComponent: () => import('./restrito-layout/restrito-layout/restrito-layout.component').then((m) => m.RestritoLayoutComponent),
         canActivate: [AuthGuard],

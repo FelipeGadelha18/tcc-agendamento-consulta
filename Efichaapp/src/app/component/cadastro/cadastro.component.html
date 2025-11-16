@@ -1,1 +1,56 @@
-<p>cadastro works!</p>
+<div class="page">
+
+    <div class="shape top-left" aria-hidden="true"></div>
+    <div class="shape bottom-right" aria-hidden="true"></div>
+
+
+    <div class="content">
+
+        <div class="card">
+            <h2>Cadastro E-ficha</h2>
+
+            <form [formGroup]="cadastroForm" (ngSubmit)="salvar()" novalidate>
+                <label>Nome completo:</label>
+                <input type="text" formControlName="nome" />
+
+                <div class="row">
+                    <div class="col">
+                        <label>CPF:</label>
+                        <input type="text" formControlName="cpf" />
+                    </div>
+                    <div class="col">
+                        <label>Telefone:</label>
+                        <input type="text" formControlName="telefone" />
+                    </div>
+                </div>
+
+                <label>E-mail:</label>
+                <input type="email" formControlName="email" />
+
+                <div class="row">
+                    <div class="col flex2">
+                        <label>Endereço:</label>
+                        <input type="text" formControlName="endereco" />
+                    </div>
+                    <div class="col flex1">
+                        <label>Nº:</label>
+                        <input type="text" formControlName="numero" />
+                    </div>
+                </div>
+
+                <label>Senha:</label>
+                <input type="password" formControlName="senha" />
+
+                <button type="submit" class="btn">Salvar</button>
+
+                <p class="login-text">Possui conta? <a routerLink="/login">CLIQUE AQUI</a></p>
+            </form>
+        </div>
+
+
+        <div class="right-text" aria-hidden="true">
+            <h3>PREFEITURA DE</h3>
+            <h1>Rio Branco</h1>
+        </div>
+    </div>
+</div>
