@@ -11,111 +11,100 @@ public class Paciente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nome;
-
-    @Column(nullable = false)
-    private String sobrenome;
+    @Column(name = "nome_completo", nullable = false, length = 150)
+    private String nomeCompleto;
 
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(name = "numero_sus", nullable = false, unique = true, length = 15)
-    private String numeroSUS;
-
-    @Column(nullable = false)
-    private String endereco;
-
-    @Column(nullable = false)
-    private String email;
-
     @Column(nullable = false, length = 15)
     private String telefone;
 
-    // senha armazenada como hash (BCrypt produz ~60 chars)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // permite apenas escrita via JSON (não é enviada nas respostas)
+    @Column(nullable = false, unique = true, length = 120)
+    private String email;
+
+    @Column(nullable = false, length = 200)
+    private String endereco;
+
+    @Column(name = "numero_casa", nullable = false, length = 10)
+    private String numeroCasa;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
     @Column(nullable = false, length = 60)
     private String senha;
 
     public Paciente() {}
 
-    public Paciente(String nome, String sobrenome, String cpf, String numeroSUS, String endereco, String email, String telefone, String senha) {
-        this.nome = nome;
-        this.sobrenome = sobrenome;
+    public Paciente(String nomeCompleto, String cpf, String telefone, String email,
+                    String endereco, String numeroCasa, String senha) {
+        this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
-        this.numeroSUS = numeroSUS;
-        this.endereco = endereco;
-        this.email = email;
         this.telefone = telefone;
+        this.email = email;
+        this.endereco = endereco;
+        this.numeroCasa = numeroCasa;
         this.senha = senha;
     }
 
-    // getters e setters (incluindo senha)
-    public Long getId(){ 
+    // GETTERS E SETTERS
+
+    public Long getId() {
         return id;
     }
 
-    public String getNome(){ 
-        return nome; 
-    }
-    public void setNome(String nome){ 
-        this.nome = nome; 
+    public String getNomeCompleto() {
+        return nomeCompleto;
     }
 
-    public String getSobrenome(){ 
-        return sobrenome; 
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
-    public void setSobrenome(String sobrenome){ 
-        this.sobrenome = sobrenome; 
+    public String getCpf() {
+        return cpf;
     }
 
-    public String getCpf(){ 
-        return cpf; 
-    }
-
-    public void setCpf(String cpf){ 
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    public String getNumeroSUS(){ 
-        return numeroSUS; 
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setNumeroSUS(String numeroSUS){ 
-        this.numeroSUS = numeroSUS; 
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public String getEndereco(){ 
-        return endereco; 
+    public String getEmail() {
+        return email;
     }
 
-    public void setEndereco(String endereco){ 
-        this.endereco = endereco; 
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getEmail(){ 
-        return email; 
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setEmail(String email){ 
-        this.email = email; 
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
-    public String getTelefone(){ 
-        return telefone; 
+    public String getNumeroCasa() {
+        return numeroCasa;
     }
 
-    public void setTelefone(String telefone){ 
-        this.telefone = telefone; 
+    public void setNumeroCasa(String numeroCasa) {
+        this.numeroCasa = numeroCasa;
     }
 
-    public String getSenha(){ 
-        return senha; 
+    public String getSenha() {
+        return senha;
     }
 
-    public void setSenha(String senha){ 
-        this.senha = senha; 
-    
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

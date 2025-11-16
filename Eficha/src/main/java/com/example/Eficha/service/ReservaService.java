@@ -28,30 +28,32 @@ public class ReservaService {
 
         LocalDate hoje = LocalDate.now();
 
+        // Verifica se já possui reserva para hoje
         if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, hoje)) {
             throw new RuntimeException("O paciente já possui uma reserva para hoje.");
         }
 
+        // Verifica fichas disponíveis
         if (posto.getFichasDisponiveis() <= 0) {
             throw new RuntimeException("Não há fichas disponíveis neste posto.");
         }
 
-        // Cria nova reserva
+        // Cria reserva
         Reserva reserva = new Reserva();
         reserva.setDataReserva(hoje);
         reserva.setPaciente(paciente);
         reserva.setPostoSaude(posto);
         reservaRepository.save(reserva);
 
-        // Atualiza as fichas do posto
+        // Atualiza fichas restantes
         posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
         postoRepository.save(posto);
 
-        // Retorna informações completas
+        // Retorno completo
         Map<String, Object> resposta = new HashMap<>();
         resposta.put("mensagem", "Reserva feita com sucesso!");
         resposta.put("dataReserva", reserva.getDataReserva());
-        resposta.put("nomePaciente", paciente.getNome() + " " + paciente.getSobrenome());
+        resposta.put("nomePaciente", paciente.getNomeCompleto()); // ✅ atualizado
         resposta.put("posto", Map.of(
                 "nome", posto.getNome(),
                 "endereco", posto.getEndereco(),

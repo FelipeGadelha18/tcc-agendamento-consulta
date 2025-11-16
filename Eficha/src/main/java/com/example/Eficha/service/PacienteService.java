@@ -1,28 +1,24 @@
 package com.example.Eficha.service;
 
-import org.springframework.stereotype.Service;
 import com.example.Eficha.model.Paciente;
 import com.example.Eficha.repository.PacienteRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class PacienteService {
 
     private final PacienteRepository repository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public PacienteService(PacienteRepository repository, PasswordEncoder passwordEncoder) {
+    public PacienteService(PacienteRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public Paciente salvar(Paciente paciente) {
-        // se a senha vier não nula, codifica antes de salvar
-        if (paciente.getSenha() != null && !paciente.getSenha().isBlank()) {
-            String hashed = passwordEncoder.encode(paciente.getSenha());
-            paciente.setSenha(hashed);
-        }
+        paciente.setSenha(encoder.encode(paciente.getSenha()));
         return repository.save(paciente);
     }
 
