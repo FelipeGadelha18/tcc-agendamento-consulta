@@ -1,4 +1,8 @@
 <div class="login-container">
+
+  <p-toast></p-toast>
+
+
   <div class="shape shape1"></div>
   <div class="shape shape2"></div>
   <div class="shape-triangle"></div>
@@ -6,17 +10,20 @@
   <div class="login-card">
     <h2>Bem vindos ao E-ficha RB</h2>
 
-    <div class="input-group">
-      <i class="pi pi-user icon"></i>
-      <input type="text" placeholder="CPF" />
-    </div>
+    <form (ngSubmit)="entrar()">
+      <div class="input-group">
+        <i class="pi pi-user icon"></i>
+        <input type="text" [(ngModel)]="cpf" name="cpf" placeholder="CPF"/>
+      </div>
 
-    <div class="input-group">
-      <i class="pi pi-lock icon"></i>
-      <input type="password" placeholder="Senha" />
-    </div>
+      <div class="input-group">
+        <i class="pi pi-lock icon"></i>
+        <input type="password" [(ngModel)]="senha" name="senha" placeholder="Senha" />
+      </div>
 
-    <button class="login-btn">Entrar</button>
+      <button class="login-btn">Entrar</button>
+    </form>
+    
 
     <p class="signup-text">
       Ainda não possui cadastro?

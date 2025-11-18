@@ -1,4 +1,5 @@
 <div class="page">
+    <p-toast></p-toast>
 
     <div class="shape top-left" aria-hidden="true"></div>
     <div class="shape bottom-right" aria-hidden="true"></div>
@@ -9,37 +10,37 @@
         <div class="card">
             <h2>Cadastro E-ficha</h2>
 
-            <form [formGroup]="cadastroForm" (ngSubmit)="salvar()" novalidate>
+            <form (ngSubmit)="salvar()" >
                 <label>Nome completo:</label>
-                <input type="text" formControlName="nome" />
+                <input type="text" name="nome" [(ngModel)]="paciente.nome" required />
 
                 <div class="row">
                     <div class="col">
                         <label>CPF:</label>
-                        <input type="text" formControlName="cpf" />
+                        <input type="text" name="cpf" [(ngModel)]="paciente.cpf" required/>
                     </div>
                     <div class="col">
                         <label>Telefone:</label>
-                        <input type="text" formControlName="telefone" />
+                        <input type="text" name="telefone" [(ngModel)]="paciente.telefone" required />
                     </div>
                 </div>
 
                 <label>E-mail:</label>
-                <input type="email" formControlName="email" />
+                <input type="email" [(ngModel)]="paciente.email" name="email" required />
 
                 <div class="row">
                     <div class="col flex2">
                         <label>Endereço:</label>
-                        <input type="text" formControlName="endereco" />
+                        <input type="text" name="endereco" [(ngModel)]="paciente.endereco" required />
                     </div>
                     <div class="col flex1">
                         <label>Nº:</label>
-                        <input type="text" formControlName="numero" />
+                        <input type="text" name="numeroCasa" [(ngModel)]="paciente.numeroCasa" required />
                     </div>
                 </div>
 
                 <label>Senha:</label>
-                <input type="password" formControlName="senha" />
+                <input type="password" [(ngModel)]="paciente.senha" name="senha" required />
 
                 <button type="submit" class="btn">Salvar</button>
 

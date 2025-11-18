@@ -1,76 +1,73 @@
-// src/app/component/cadastro/cadastro.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { PacienteService } from '../../services/paciente.service';
-import { RouterLink, RouterModule, Router } from '@angular/router';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    RouterLink
-  ],
+  imports: [CommonModule, FormsModule, RouterLink, ToastModule],
+  providers: [MessageService],
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
 })
 export class CadastroComponent {
 
-  cadastroForm: FormGroup;
   sucesso = '';
   erro = '';
 
+  paciente = {
+    nome: '',
+    cpf: '',
+    telefone: '',
+    email: '',
+    endereco: '',
+    numeroCasa: '',
+    senha: ''
+  };
+
   constructor(
-    private fb: FormBuilder,
     private pacienteService: PacienteService,
-    private router: Router       // <-- IMPORTANTE: Router aqui
-  ) {
-    this.cadastroForm = this.fb.group({
-      nome: ['', Validators.required],
-      cpf: ['', Validators.required],
-      telefone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      endereco: ['', Validators.required],
-      numero: ['', Validators.required],
-      senha: ['', Validators.required]
-    });
-  }
+    private router: Router,
+    private messageService: MessageService,
+  ) {}
 
   salvar() {
-    if (this.cadastroForm.invalid) {
-      this.erro = 'Preencha todos os campos corretamente.';
+    if (
+      !this.paciente.nome ||
+      !this.paciente.cpf ||
+      !this.paciente.telefone ||
+      !this.paciente.email ||
+      !this.paciente.endereco ||
+      !this.paciente.numeroCasa ||
+      !this.paciente.senha
+    ) {
+      this.erro = 'Preencha todos os campos.';
       this.sucesso = '';
       return;
     }
 
-    const paciente = {
-      nomeCompleto: this.cadastroForm.value.nome,
-      cpf: this.cadastroForm.value.cpf,
-      telefone: this.cadastroForm.value.telefone,
-      email: this.cadastroForm.value.email,
-      endereco: this.cadastroForm.value.endereco,
-      numeroCasa: this.cadastroForm.value.numero,
-      senha: this.cadastroForm.value.senha
-    };
-
-    this.pacienteService.cadastrar(paciente).subscribe({
+    this.pacienteService.cadastrar(this.paciente).subscribe({
       next: () => {
-        this.sucesso = 'Cadastro realizado com sucesso!';
-        this.erro = '';
-        this.cadastroForm.reset();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Cadastro realizado com sucesso!'
+        });
 
-        // ⬅ Aguarda 2 segundos e vai para a tela de login
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 1000);
       },
       error: (err) => {
-        this.erro = err?.error?.message || 'Erro ao salvar. Tente novamente.';
-        this.sucesso = '';
-        console.error(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao cadastrar: ' + (err.error?.message || 'Erro desconhecido')
+        });
       }
     });
   }
