@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PacienteService } from '../../services/paciente.service';
-import { RouterModule } from '@angular/router'; // só se usar routerLink dentro do template
+import { RouterLink, RouterModule } from '@angular/router'; // só se usar routerLink dentro do template
 
 @Component({
   selector: 'app-cadastro',
@@ -11,7 +11,8 @@ import { RouterModule } from '@angular/router'; // só se usar routerLink dentro
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    RouterLink
   ],
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
