@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PacienteService } from '../../services/paciente.service';
-import { RouterLink, RouterModule } from '@angular/router'; // só se usar routerLink dentro do template
+import { RouterLink, RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro',
-  standalone: true,                      // <-- importante: componente standalone
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -25,7 +25,8 @@ export class CadastroComponent {
 
   constructor(
     private fb: FormBuilder,
-    private pacienteService: PacienteService
+    private pacienteService: PacienteService,
+    private router: Router       // <-- IMPORTANTE: Router aqui
   ) {
     this.cadastroForm = this.fb.group({
       nome: ['', Validators.required],
@@ -60,6 +61,11 @@ export class CadastroComponent {
         this.sucesso = 'Cadastro realizado com sucesso!';
         this.erro = '';
         this.cadastroForm.reset();
+
+        // ⬅ Aguarda 2 segundos e vai para a tela de login
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1000);
       },
       error: (err) => {
         this.erro = err?.error?.message || 'Erro ao salvar. Tente novamente.';
