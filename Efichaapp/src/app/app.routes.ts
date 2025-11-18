@@ -35,20 +35,5 @@ export const routes: Routes = [
                     .then(m => m.HomeComponent),
             },
         ]
-    },
-
-    {
-        path: 'admin',
-        loadComponent: () => import('./restrito-layout/restrito-layout/restrito-layout.component')
-            .then((m) => m.RestritoLayoutComponent),
-        canActivate: [AuthGuard],
-        data: { role: 'ADMIN' },
-        children: [
-            {
-                path: 'inicio',
-                loadComponent: () => import('./admin/home-admin/home-admin.component')
-                    .then(m => m.HomeAdminComponent),
-            },
-        ]
     }
 ];

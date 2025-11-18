@@ -9,7 +9,7 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const user = localStorage.getItem('tipoUsuario'); // ADMIN | PACIENTE
+  const user = localStorage.getItem('tipoUsuario'); // PACIENTE
     const expected = route.data['role'];
 
     if (user === expected) {
