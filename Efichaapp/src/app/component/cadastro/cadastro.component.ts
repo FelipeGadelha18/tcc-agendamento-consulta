@@ -20,7 +20,7 @@ export class CadastroComponent {
   erro = '';
 
   paciente = {
-    nome: '',
+    nomeCompleto: '',
     cpf: '',
     telefone: '',
     email: '',
@@ -37,7 +37,7 @@ export class CadastroComponent {
 
   salvar() {
     if (
-      !this.paciente.nome ||
+      !this.paciente.nomeCompleto ||
       !this.paciente.cpf ||
       !this.paciente.telefone ||
       !this.paciente.email ||
