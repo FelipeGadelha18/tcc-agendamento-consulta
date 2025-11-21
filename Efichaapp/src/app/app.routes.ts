@@ -24,7 +24,7 @@ export const routes: Routes = [
 
     {
         path: 'paciente',
-        loadComponent: () => import('./restrito-layout/restrito-layout/restrito-layout.component')
+        loadComponent: () => import('./restrito-layout/restrito-layout.component')
             .then((m) => m.RestritoLayoutComponent),
         canActivate: [AuthGuard],
         data: { role: 'PACIENTE' },

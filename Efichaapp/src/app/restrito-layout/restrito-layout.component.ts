@@ -1,6 +1,6 @@
 import { Component,HostListener } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { FooterComponent } from '../../component/layouts/footer/footer.component';
+import { FooterComponent } from '../component/layouts/footer/footer.component';
 
 @Component({
   standalone: true,
