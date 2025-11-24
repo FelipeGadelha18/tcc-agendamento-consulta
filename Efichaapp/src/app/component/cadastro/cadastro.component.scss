@@ -42,8 +42,9 @@
 /* Card de cadastro */
 .card {
   width: 420px;
-  background: #e9e9e9;
+  background: #e5e2e2;
   padding: 35px;
+  margin-bottom: 5px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
@@ -168,5 +169,54 @@ input {
 
   .right-text h1 {
     font-size: 36px;
+  }
+}
+
+/* RESPONSIVIDADE PARA NOTEBOOK 14" (1366px) */
+@media (max-width: 1366px) {
+  
+  .page {
+    padding: 20px;
+  }
+
+  .content {
+    max-width: 1000px;
+    gap: 20px;
+  }
+
+  .card {
+    width: 380px;
+    padding: 28px;
+  }
+
+  /* Ajuste do texto da prefeitura */
+  .right-text {
+    right: 200px;
+    top: 40%;
+    transform: translateY(-50%);
+  }
+
+  .right-text h3 {
+    font-size: 32px;
+  }
+
+  .right-text h1 {
+    font-size: 70px;
+  }
+
+  /* Ajuste das formas para caberem melhor */
+  .shape {
+    width: 380px;
+    height: 380px;
+  }
+
+  .shape.top-left {
+    top: -150px;
+    left: -150px;
+  }
+
+  .shape.bottom-right {
+    bottom: -150px;
+    right: -150px;
   }
 }
