@@ -6,3 +6,12 @@
     </header>
 
 </div>
+
+
+<div class="cards-container">
+    <div class="card" *ngFor="let card of cards"
+        [routerLink]="card.route">
+        <i [ngClass]="card.icon"></i>
+        <h3 [innerHTML]="card.title"></h3>
+    </div>
+</div>

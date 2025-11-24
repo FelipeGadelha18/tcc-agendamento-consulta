@@ -5,6 +5,7 @@ vertical-align:baseline;
 border:0
 }
 
+// Header styles
 .header{
     background:linear-gradient(#307BD2,#284C77, #0E2948);
     position: relative;
@@ -17,3 +18,60 @@ border:0
     flex-direction: column; 
     justify-content: center; 
 }
+
+// Titulo e subtitulo styles
+h1{
+    font-size: 48px;
+    margin-bottom: 25px;
+}
+
+h2{
+    font-size: 25px;
+}
+
+// Cards styles
+
+.cards-container{
+    display: flex;
+    justify-content: space-around;
+    margin: 40px 0;
+    padding: 40px 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.card{
+    background-color: #f3f1f1;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    height: 300px;
+    margin: 60px;
+    padding: 20px;
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover{
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+i{
+    color: #0365B9;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+h3{
+    font-size: 20px;
+    color: #0F2C4E;
+}
+
+
+

@@ -1,14 +1,15 @@
 .footer{
 
     height: 40px;
-    background: linear-gradient(to rith, #0C4DA2, #041D3C);
+    background: linear-gradient(to right, #2b65a7, #284C77, #0E2948);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px;
+    height: 100px; 
+    width: 100%;
 
     p{
-        color: #fff;
+        color: #ffffff;
         text-align: center;
     }
 }
