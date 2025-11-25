@@ -22,16 +22,6 @@ export const routes: Routes = [
             .then((m) => m.CadastroComponent),
     },
 
-
-
-    {
-        path: 'postos-proximos',
-        loadComponent: () => import('./component/postos-proximos/postos-proximos.component')
-            .then((m) => m.PostosProximosComponent),
-    },
-
-
-    
     {
         path: 'paciente',
         loadComponent: () => import('./restrito-layout/restrito-layout.component')
@@ -43,6 +33,11 @@ export const routes: Routes = [
                 path: 'inicio',
                 loadComponent: () => import('./component/paciente/home/home.component')
                     .then(m => m.HomeComponent),
+            },
+            {
+                path: 'postos-proximos',
+                loadComponent: () => import('./component/paciente/postos-proximos/postos-proximos.component')
+                    .then((m) => m.PostosProximosComponent),
             },
         ]
     }

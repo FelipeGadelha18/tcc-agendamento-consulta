@@ -12,7 +12,7 @@ import { RouterLink } from "@angular/router";
 export class HomeComponent {
 
   cards = [
-    { icon: 'pi pi-map-marker', title: 'Postos<br>Próximos', route: '/postos-proximos' },
+    { icon: 'pi pi-map-marker', title: 'Postos<br>Próximos', route: '/paciente/postos-proximos' },
     { icon: 'pi pi-calendar', title: 'Reservar Ficha', route: '/reservar' },
     { icon: 'pi pi-file', title: 'Minhas Fichas', route: '/fichas' },
     { icon: 'pi pi-user', title: 'Perfil', route: '/perfil' },
