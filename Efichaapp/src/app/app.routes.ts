@@ -22,6 +22,16 @@ export const routes: Routes = [
             .then((m) => m.CadastroComponent),
     },
 
+
+
+    {
+        path: 'postos-proximos',
+        loadComponent: () => import('./component/postos-proximos/postos-proximos.component')
+            .then((m) => m.PostosProximosComponent),
+    },
+
+
+    
     {
         path: 'paciente',
         loadComponent: () => import('./restrito-layout/restrito-layout.component')
