@@ -1,5 +1,6 @@
 package com.example.Eficha.service;
 
+import com.example.Eficha.dto.LoginRequest;
 import com.example.Eficha.model.Paciente;
 import com.example.Eficha.repository.PacienteRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,12 +18,36 @@ public class PacienteService {
         this.repository = repository;
     }
 
+    // CADASTRO DO PACIENTE
     public Paciente salvar(Paciente paciente) {
         paciente.setSenha(encoder.encode(paciente.getSenha()));
-        return repository.save(paciente);
+        Paciente salvo = repository.save(paciente);
+        salvo.setSenha(null); // nunca retorna senha
+        return salvo;
     }
 
+    // LISTAR TODOS
     public List<Paciente> listar() {
-        return repository.findAll();
+        List<Paciente> lista = repository.findAll();
+        lista.forEach(p -> p.setSenha(null));
+        return lista;
+    }
+
+    // LOGIN
+    public Paciente login(LoginRequest login) {
+        Paciente paciente = repository.findByCpf(login.getCpf());
+
+        if (paciente == null) {
+            return null; // CPF não encontrado
+        }
+
+        boolean senhaCorreta = encoder.matches(login.getSenha(), paciente.getSenha());
+
+        if (!senhaCorreta) {
+            return null; // Senha errada
+        }
+
+        paciente.setSenha(null);
+        return paciente;
     }
 }

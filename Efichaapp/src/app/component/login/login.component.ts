@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,30 +15,45 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
+  
   cpf: string = '';
   senha: string = '';
 
   constructor(
     private router: Router,
     private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   entrar() {
     if (!this.cpf || !this.senha) {
       this.messageService.add({
-        severity:'warn', 
-        summary: 'Atenção', 
+        severity:'warn',
+        summary: 'Atenção',
         detail: 'CPF e Senha são obrigatórios.'
       });
       return;
     }
 
-    // next:(Response)
+    this.authService.login(this.cpf, this.senha).subscribe({
+      next: (response) => {
+        console.log('Login OK:', response);
 
-    console.log('CPF:', this.cpf);
-    console.log('Senha:', this.senha);
+        // Salva dados no localStorage
+        localStorage.setItem('usuario', JSON.stringify(response));
+        localStorage.setItem('tipoUsuario', 'PACIENTE');
 
-    localStorage.setItem('tipoUsuario', 'PACIENTE');
-    this.router.navigate(['/paciente/inicio']);
+        this.router.navigate(['/paciente/inicio']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity:'error',
+          summary:'Erro',
+          detail: 'CPF ou senha incorretos.'
+        });
+      }
+    });
+
   }
 }

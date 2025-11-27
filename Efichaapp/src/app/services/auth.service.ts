@@ -5,15 +5,11 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PacienteService {
+export class AuthService {
 
   private apiUrl = 'http://localhost:8080/pacientes';
 
   constructor(private http: HttpClient) {}
-
-  cadastrar(paciente: any): Observable<any> {
-    return this.http.post(this.apiUrl, paciente);
-  }
 
   login(cpf: string, senha: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, {
