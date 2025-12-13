@@ -1,6 +1,5 @@
 package com.example.Eficha.controller;
 
-
 import com.example.Eficha.model.Reserva;
 import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.ReservaRepository;
@@ -8,6 +7,7 @@ import com.example.Eficha.repository.PostoSaudeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,23 +28,31 @@ public class ReservaController {
         return reservaRepository.findAll();
     }
 
-    // 🔹 Cadastrar nova reserva
     @PostMapping
     public Reserva criarReserva(@RequestBody Reserva reserva) {
-        // Verifica se o posto existe
-        PostoSaude posto = postoSaudeRepository.findById(reserva.getPostoSaude().getId())
-                .orElseThrow(() -> new RuntimeException("Posto de saúde não encontrado."));
 
-        // Verifica se há fichas disponíveis
-        if (posto.getFichasDisponiveis() <= 0) {
-            throw new RuntimeException("Não há fichas disponíveis neste posto.");
+        if (reserva.getDataReserva() == null) {
+            throw new RuntimeException("Selecione uma data para a reserva.");
         }
 
-        // Reduz uma ficha disponível
+        Long pacienteId = reserva.getPaciente().getId();
+        LocalDate dataSelecionada = reserva.getDataReserva();
+
+        if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, dataSelecionada)) {
+            throw new RuntimeException("Você já possui uma reserva para esta data.");
+        }
+
+        PostoSaude posto = postoSaudeRepository
+                .findById(reserva.getPostoSaude().getId())
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+
+        if (posto.getFichasDisponiveis() <= 0) {
+            throw new RuntimeException("Não há fichas disponíveis");
+        }
+
         posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
         postoSaudeRepository.save(posto);
 
-        // Salva a reserva
         return reservaRepository.save(reserva);
     }
 
@@ -56,4 +64,13 @@ public class ReservaController {
                 .filter(r -> r.getPostoSaude() != null && r.getPostoSaude().getId().equals(id))
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/por-paciente/{id}")
+    public List<Reserva> listarPorPaciente(@PathVariable Long id) {
+        return reservaRepository.findAll()
+                .stream()
+                .filter(r -> r.getPaciente() != null && r.getPaciente().getId().equals(id))
+                .toList();
+    }
+
 }

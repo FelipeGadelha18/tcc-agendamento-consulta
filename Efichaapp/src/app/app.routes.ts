@@ -39,6 +39,16 @@ export const routes: Routes = [
                 loadComponent: () => import('./component/paciente/postos-proximos/postos-proximos.component')
                     .then((m) => m.PostosProximosComponent),
             },
+            {
+                path: 'reservar-ficha',
+                loadComponent: () => import('./component/paciente/reservar-ficha/reservar-ficha.component')
+                    .then((m) => m.ReservarFichaComponent),
+            },
+            {
+                path: 'minhas-fichas',
+                loadComponent: () => import('./component/paciente/minhas-fichas/minhas-fichas.component')
+                    .then((m) => m.MinhasFichasComponent),
+            },
         ]
     }
 ];

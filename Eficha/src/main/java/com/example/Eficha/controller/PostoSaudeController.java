@@ -1,15 +1,15 @@
 package com.example.Eficha.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
 import com.example.Eficha.model.PostoSaude;
-import com.example.Eficha.repository.*;
+import com.example.Eficha.repository.PostoSaudeRepository;
 
 @RestController
 @RequestMapping("/postos")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostoSaudeController {
 
     @Autowired

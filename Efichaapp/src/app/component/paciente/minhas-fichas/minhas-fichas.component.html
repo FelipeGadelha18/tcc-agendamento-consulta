@@ -1,0 +1,22 @@
+<div class="container">
+  <h2>Minhas Fichas</h2>
+
+  <div *ngIf="reservas.length === 0" class="vazio">
+    Você ainda não possui fichas reservadas.
+  </div>
+
+  <div class="lista">
+    <div class="card" *ngFor="let reserva of reservas">
+      <h3>{{ reserva.postoSaude.nome }}</h3>
+
+      <p class="endereco">
+        {{ reserva.postoSaude.endereco }} - {{ reserva.postoSaude.bairro }}
+      </p>
+
+      <div class="info">
+        <span>📅 {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
+        <span class="status">Confirmada</span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,8 +13,8 @@ export class HomeComponent {
 
   cards = [
     { icon: 'pi pi-map-marker', title: 'Postos<br>Próximos', route: '/paciente/postos-proximos' },
-    { icon: 'pi pi-calendar', title: 'Reservar Ficha', route: '/reservar' },
-    { icon: 'pi pi-file', title: 'Minhas Fichas', route: '/fichas' },
+    { icon: 'pi pi-calendar', title: 'Reservar Ficha', route: '/paciente/reservar-ficha' },
+    { icon: 'pi pi-file', title: 'Minhas Fichas', route: '/paciente/minhas-fichas' },
     { icon: 'pi pi-user', title: 'Perfil', route: '/perfil' },
   ];
 
