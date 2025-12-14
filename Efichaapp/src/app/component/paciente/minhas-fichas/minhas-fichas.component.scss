@@ -46,13 +46,47 @@
     align-items: center;
     font-size: 14px;
   }
+}
 
-  .status {
-    background: #e3f2fd;
-    color: #1976d2;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
+/* STATUS */
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.confirmada {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status.cancelada {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.status.atendida {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* AÇÕES */
+.acoes {
+  margin-top: 10px;
+}
+
+.btn-cancelar {
+  background: #c62828;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-cancelar:hover {
+  background: #b71c1c;
 }

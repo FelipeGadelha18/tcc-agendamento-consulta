@@ -7,16 +7,31 @@
 
   <div class="lista">
     <div class="card" *ngFor="let reserva of reservas">
-      <h3>{{ reserva.postoSaude.nome }}</h3>
+
+      <h3>{{ reserva.postoSaude?.nome }}</h3>
 
       <p class="endereco">
-        {{ reserva.postoSaude.endereco }} - {{ reserva.postoSaude.bairro }}
+        {{ reserva.postoSaude?.endereco }} - {{ reserva.postoSaude?.bairro }}
       </p>
 
       <div class="info">
         <span>📅 {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
-        <span class="status">Confirmada</span>
+
+        <span
+          class="status"
+          [ngClass]="reserva.status?.toLowerCase()"
+        >
+          {{ reserva.status }}
+        </span>
       </div>
+
+      <!-- AÇÕES -->
+      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+        <button class="btn-cancelar" (click)="cancelarFicha(reserva.id)">
+          Cancelar ficha
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
