@@ -11,14 +11,18 @@ public class UsuarioAdm {
     private Long id;
 
     private String nome;
+
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String senha;
 
     @ManyToOne
     @JoinColumn(name = "posto_id", nullable = false)
     private PostoSaude posto;
 
-    // 🔹 GETTERS E SETTERS
+    // GETTERS E SETTERS
 
     public Long getId() {
         return id;
