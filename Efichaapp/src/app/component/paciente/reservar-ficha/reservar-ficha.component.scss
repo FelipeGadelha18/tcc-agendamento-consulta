@@ -171,3 +171,88 @@
     }
   }
 }
+
+/* ===== TELA DE CONFIRMAÇÃO ===== */
+
+.confirmacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.card-confirmacao {
+  border: 3px solid #1e88e5;
+  border-radius: 20px;
+  padding: 30px 25px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  background: #fff;
+}
+
+/* Ícone de sucesso */
+.icone-sucesso {
+  width: 70px;
+  height: 70px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+/* Título */
+.card-confirmacao h2 {
+  color: #0d47a1;
+  margin-bottom: 10px;
+}
+
+/* Texto sucesso */
+.card-confirmacao .sucesso {
+  color: #1565c0;
+  margin-bottom: 25px;
+}
+
+/* Informações */
+.card-confirmacao .info {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.card-confirmacao .info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+/* Botões */
+.btn-principal {
+  width: 100%;
+  padding: 12px;
+  background-color: #0d47a1;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-principal:hover {
+  background-color: #08306b;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #1565c0;
+  font-size: 14px;
+  cursor: pointer;
+}

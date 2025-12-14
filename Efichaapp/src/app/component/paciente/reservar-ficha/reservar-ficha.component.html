@@ -1,69 +1,126 @@
 <div class="container">
-  <h2>Reservar Ficha</h2>
 
-  <div class="content">
+  <!-- ============================= -->
+  <!-- TELA DE RESERVA (ANTES) -->
+  <!-- ============================= -->
+  <div *ngIf="!reservaConfirmada">
 
-    <!-- LISTA DE POSTOS -->
-    <div class="postos-lista">
-      <h3>Postos de Saúde</h3>
+    <h2>Reservar Ficha</h2>
 
-      <!-- BUSCA -->
-      <div class="busca">
-        <i class="pi pi-search"></i>
-        <input type="text" placeholder="Pesquisar posto..." [(ngModel)]="termoBusca" />
-      </div>
+    <div class="content">
 
-      <!-- LISTA FILTRADA -->
-      <div class="posto-card" *ngFor="let posto of postosFiltrados" (click)="selecionarPosto(posto)"
-        [class.ativo]="posto === postoSelecionado">
-        <h4>{{ posto.nome }}</h4>
-        <p>{{ posto.bairro }} - {{ posto.cidade }}</p>
-      </div>
+      <!-- LISTA DE POSTOS -->
+      <div class="postos-lista">
+        <h3>Postos de Saúde</h3>
 
-      <p class="nenhum" *ngIf="postosFiltrados.length === 0">
-        Nenhum posto encontrado
-      </p>
-    </div>
+        <!-- BUSCA -->
+        <div class="busca">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            placeholder="Pesquisar posto..."
+            [(ngModel)]="termoBusca"
+            (input)="filtrarPostos()"
+          />
+        </div>
 
+        <!-- LISTA FILTRADA -->
+        <div
+          class="posto-card"
+          *ngFor="let posto of postosFiltrados"
+          (click)="selecionarPosto(posto)"
+          [class.ativo]="posto === postoSelecionado"
+        >
+          <h4>{{ posto.nome }}</h4>
+          <p>{{ posto.bairro }} - {{ posto.cidade }}</p>
+        </div>
 
-    <!-- DETALHES DO POSTO -->
-    <div class="posto-detalhes" *ngIf="postoSelecionado">
-      <h3>{{ postoSelecionado.nome }}</h3>
-
-      <p><strong>Endereço:</strong> {{ postoSelecionado.endereco }}</p>
-      <p><strong>Bairro:</strong> {{ postoSelecionado.bairro }}</p>
-      <p><strong>Cidade:</strong> {{ postoSelecionado.cidade }}</p>
-      <p><strong>Telefone:</strong> {{ postoSelecionado.telefone }}</p>
-
-      <div class="fichas">
-        <p>
-          <strong>Fichas disponíveis:</strong>
-          {{ postoSelecionado.fichasDisponiveis }}
+        <p class="nenhum" *ngIf="postosFiltrados.length === 0">
+          Nenhum posto encontrado
         </p>
       </div>
 
-      <div class="datas">
-        <label>Selecione a data:</label>
+      <!-- DETALHES DO POSTO -->
+      <div class="posto-detalhes" *ngIf="postoSelecionado">
+        <h3>{{ postoSelecionado.nome }}</h3>
 
-        <select [(ngModel)]="dataSelecionada">
-          <option value="">Selecione</option>
-          <option *ngFor="let data of datasDisponiveis" [value]="data">
-            {{ data | date:'dd/MM/yyyy' }}
-          </option>
-        </select>
+        <p><strong>Endereço:</strong> {{ postoSelecionado.endereco }}</p>
+        <p><strong>Bairro:</strong> {{ postoSelecionado.bairro }}</p>
+        <p><strong>Cidade:</strong> {{ postoSelecionado.cidade }}</p>
+        <p><strong>Telefone:</strong> {{ postoSelecionado.telefone }}</p>
+
+        <div class="fichas">
+          <p>
+            <strong>Fichas disponíveis:</strong>
+            {{ postoSelecionado.fichasDisponiveis }}
+          </p>
+        </div>
+
+        <!-- DATAS -->
+        <div class="datas">
+          <label>Selecione a data:</label>
+
+          <select [(ngModel)]="dataSelecionada">
+            <option value="">Selecione</option>
+            <option *ngFor="let data of datasDisponiveis" [value]="data">
+              {{ data | date:'dd/MM/yyyy' }}
+            </option>
+          </select>
+        </div>
+
+        <button
+          class="btn-reservar"
+          (click)="reservarFicha()"
+          [disabled]="postoSelecionado.fichasDisponiveis === 0"
+        >
+          Reservar ficha
+        </button>
       </div>
 
-
-      <button class="btn-reservar" (click)="reservarFicha()" [disabled]="postoSelecionado.fichasDisponiveis === 0">
-        Reservar ficha
-      </button>
+      <!-- MENSAGEM INICIAL -->
+      <div class="posto-detalhes vazio" *ngIf="!postoSelecionado">
+        <p>Selecione um posto para ver os detalhes</p>
+      </div>
 
     </div>
+  </div>
 
-    <!-- MENSAGEM INICIAL -->
-    <div class="posto-detalhes vazio" *ngIf="!postoSelecionado">
-      <p>Selecione um posto para ver os detalhes</p>
+  <!-- ============================= -->
+  <!-- TELA DE CONFIRMAÇÃO -->
+  <!-- ============================= -->
+  <div class="confirmacao" *ngIf="reservaConfirmada">
+
+    <div class="card-confirmacao">
+      <div class="icone-sucesso">
+        ✔
+      </div>
+
+      <h2>Agendamento Confirmado</h2>
+      <p class="sucesso">
+        Sua ficha foi reservada com sucesso
+      </p>
+
+      <div class="info">
+        <p>📅 <strong>Data:</strong>
+          {{ dadosConfirmacao.data | date:'dd/MM/yyyy' }}
+        </p>
+        <p>⏰ <strong>Horário:</strong>
+          {{ dadosConfirmacao.horario }}
+        </p>
+        <p>📍 <strong>Unidade:</strong>
+          {{ dadosConfirmacao.posto }}
+        </p>
+      </div>
+
+      <button class="btn-principal" (click)="verMinhasFichas()">
+        Ver minhas fichas
+      </button>
+
+      <button class="btn-link" (click)="voltarInicio()">
+        Voltar à Página Inicial
+      </button>
     </div>
 
   </div>
+
 </div>

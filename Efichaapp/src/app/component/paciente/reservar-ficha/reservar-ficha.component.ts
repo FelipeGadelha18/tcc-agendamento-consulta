@@ -18,10 +18,9 @@ export class ReservarFichaComponent implements OnInit {
   postoSelecionado: any = null;
 
   termoBusca: string = '';
-
   pacienteLogado: any = null;
 
-  // 📅 DATAS FIXAS (temporário até ADM)
+  // 📅 DATAS FIXAS (temporário)
   datasDisponiveis: string[] = [
     '2025-10-01',
     '2025-10-02',
@@ -29,6 +28,10 @@ export class ReservarFichaComponent implements OnInit {
   ];
 
   dataSelecionada: string = '';
+
+  // ✅ CONFIRMAÇÃO
+  reservaConfirmada = false;
+  dadosConfirmacao: any = null;
 
   constructor(
     private http: HttpClient,
@@ -59,7 +62,7 @@ export class ReservarFichaComponent implements OnInit {
 
   selecionarPosto(posto: any) {
     this.postoSelecionado = posto;
-    this.dataSelecionada = ''; // limpa data ao trocar de posto
+    this.dataSelecionada = '';
   }
 
   reservarFicha() {
@@ -89,15 +92,31 @@ export class ReservarFichaComponent implements OnInit {
       }
     };
 
-    this.http.post('http://localhost:8080/reservas', reserva)
+    this.http.post<any>('http://localhost:8080/reservas', reserva)
       .subscribe({
-        next: () => {
-          alert('Ficha reservada com sucesso!');
-          this.router.navigate(['/paciente/inicio']);
+        next: (response) => {
+
+          // ✅ MOSTRA TELA DE CONFIRMAÇÃO
+          this.reservaConfirmada = true;
+
+          this.dadosConfirmacao = {
+            data: this.dataSelecionada,
+            horario: '08:00', // fixo por enquanto
+            posto: this.postoSelecionado.nome
+          };
         },
         error: (err) => {
           alert(err.error?.message || 'Erro ao reservar ficha');
         }
       });
+  }
+
+  // 🔁 AÇÕES DA TELA FINAL
+  verMinhasFichas() {
+    this.router.navigate(['/paciente/minhas-fichas']);
+  }
+
+  voltarInicio() {
+    this.router.navigate(['/paciente/inicio']);
   }
 }
