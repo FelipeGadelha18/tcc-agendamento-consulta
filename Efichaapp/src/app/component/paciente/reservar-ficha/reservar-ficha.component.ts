@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -17,30 +17,38 @@ export class ReservarFichaComponent implements OnInit {
   postosFiltrados: any[] = [];
   postoSelecionado: any = null;
 
-  termoBusca: string = '';
+  termoBusca = '';
   pacienteLogado: any = null;
 
-  // 📅 DATAS FIXAS (temporário)
   datasDisponiveis: string[] = [
     '2025-10-01',
     '2025-10-02',
     '2025-10-03'
   ];
 
-  dataSelecionada: string = '';
+  dataSelecionada = '';
 
-  // ✅ CONFIRMAÇÃO
   reservaConfirmada = false;
   dadosConfirmacao: any = null;
 
+  postoIdRecebido: number | null = null;
+
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.carregarPostos();
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    this.route.queryParams.subscribe(params => {
+      if (params['postoId']) {
+        this.postoIdRecebido = Number(params['postoId']);
+      }
+    });
+
+    this.carregarPostos();
   }
 
   carregarPostos() {
@@ -48,6 +56,11 @@ export class ReservarFichaComponent implements OnInit {
       .subscribe(dados => {
         this.postos = dados;
         this.postosFiltrados = dados;
+
+        if (this.postoIdRecebido) {
+          this.postoSelecionado =
+            this.postos.find(p => p.id === this.postoIdRecebido);
+        }
       });
   }
 
@@ -66,52 +79,28 @@ export class ReservarFichaComponent implements OnInit {
   }
 
   reservarFicha() {
-
-    if (!this.postoSelecionado) {
-      alert('Selecione um posto');
-      return;
-    }
-
-    if (!this.dataSelecionada) {
-      alert('Selecione uma data');
-      return;
-    }
-
-    if (!this.pacienteLogado || !this.pacienteLogado.id) {
-      alert('Paciente não identificado. Faça login novamente.');
+    if (!this.postoSelecionado || !this.dataSelecionada) {
+      alert('Selecione posto e data');
       return;
     }
 
     const reserva = {
       dataReserva: this.dataSelecionada,
-      paciente: {
-        id: this.pacienteLogado.id
-      },
-      postoSaude: {
-        id: this.postoSelecionado.id
-      }
+      paciente: { id: this.pacienteLogado.id },
+      postoSaude: { id: this.postoSelecionado.id }
     };
 
     this.http.post<any>('http://localhost:8080/reservas', reserva)
-      .subscribe({
-        next: (response) => {
-
-          // ✅ MOSTRA TELA DE CONFIRMAÇÃO
-          this.reservaConfirmada = true;
-
-          this.dadosConfirmacao = {
-            data: this.dataSelecionada,
-            horario: '08:00', // fixo por enquanto
-            posto: this.postoSelecionado.nome
-          };
-        },
-        error: (err) => {
-          alert(err.error?.message || 'Erro ao reservar ficha');
-        }
+      .subscribe(() => {
+        this.reservaConfirmada = true;
+        this.dadosConfirmacao = {
+          data: this.dataSelecionada,
+          horario: '08:00',
+          posto: this.postoSelecionado.nome
+        };
       });
   }
 
-  // 🔁 AÇÕES DA TELA FINAL
   verMinhasFichas() {
     this.router.navigate(['/paciente/minhas-fichas']);
   }
