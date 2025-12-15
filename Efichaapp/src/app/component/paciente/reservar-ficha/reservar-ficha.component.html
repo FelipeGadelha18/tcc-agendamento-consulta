@@ -1,7 +1,7 @@
 <div class="container">
 
   <!-- ============================= -->
-  <!-- TELA DE RESERVA (ANTES) -->
+  <!-- TELA DE RESERVA -->
   <!-- ============================= -->
   <div *ngIf="!reservaConfirmada">
 
@@ -15,7 +15,6 @@
 
         <!-- BUSCA -->
         <div class="busca">
-          <i class="pi pi-search"></i>
           <input
             type="text"
             placeholder="Pesquisar posto..."
@@ -29,7 +28,7 @@
           class="posto-card"
           *ngFor="let posto of postosFiltrados"
           (click)="selecionarPosto(posto)"
-          [class.ativo]="posto === postoSelecionado"
+          [class.ativo]="postoSelecionado?.id === posto.id"
         >
           <h4>{{ posto.nome }}</h4>
           <p>{{ posto.bairro }} - {{ posto.cidade }}</p>
@@ -91,14 +90,10 @@
   <div class="confirmacao" *ngIf="reservaConfirmada">
 
     <div class="card-confirmacao">
-      <div class="icone-sucesso">
-        ✔
-      </div>
+      <div class="icone-sucesso">✔</div>
 
       <h2>Agendamento Confirmado</h2>
-      <p class="sucesso">
-        Sua ficha foi reservada com sucesso
-      </p>
+      <p class="sucesso">Sua ficha foi reservada com sucesso</p>
 
       <div class="info">
         <p>📅 <strong>Data:</strong>
