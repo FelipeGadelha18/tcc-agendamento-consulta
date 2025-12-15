@@ -5,7 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-postos-proximos',
   standalone: true,
-  imports: [HttpClientModule], // 🔥 IMPORTANTE
+  imports: [HttpClientModule],
   templateUrl: './postos-proximos.component.html',
   styleUrls: ['./postos-proximos.component.scss']
 })
