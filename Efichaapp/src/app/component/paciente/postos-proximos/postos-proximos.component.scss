@@ -1,16 +1,14 @@
 .container {
-  padding: 20px;
+  padding: 15px;
+}
 
-  h2 {
-    margin-bottom: 15px;
-    font-size: 22px;
-    font-weight: bold;
-  }
+h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
 }
 
 #map {
   width: 100%;
-  height: 500px;
-  border-radius: 10px;
-  border: 2px solid #dcdcdc;
+  height: 75vh;
+  border-radius: 12px;
 }
