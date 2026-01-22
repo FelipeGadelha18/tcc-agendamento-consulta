@@ -1,3 +1,5 @@
+<header class="header"></header>
+
 <div class="container">
   <h2>Minhas Fichas</h2>
 
@@ -15,15 +17,23 @@
       </p>
 
       <div class="info">
-        <span>📅 {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
 
-        <span
-          class="status"
-          [ngClass]="reserva.status?.toLowerCase()"
-        >
-          {{ reserva.status }}
-        </span>
+        <div class="info-item">
+          <i class="pi pi-calendar"></i>
+          <span>{{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="status" [ngClass]="reserva.status?.toLowerCase()">
+          <i class="pi" [ngClass]="{
+            'pi-check-circle': reserva.status === 'CONFIRMADA',
+            'pi-times-circle': reserva.status === 'CANCELADA',
+            'pi-exclamation-circle': reserva.status === 'PENDENTE'}">
+          </i>
+          <span>{{ reserva.status }}</span>
+        </div>
+
       </div>
+
 
       <!-- AÇÕES -->
       <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">

@@ -1,11 +1,19 @@
 .container {
-  padding: 20px;
+  padding: 50px;
+  margin: 60px;
 
   h2 {
-    margin-bottom: 15px;
-    font-size: 22px;
+    font-size: 45px;
+    text-align: center;
     font-weight: bold;
+    color: #003d80;
   }
+}
+
+.header {
+  background: linear-gradient(#307BD2, #284C77, #0E2948);
+  height: 70px;
+  width: 100%;
 }
 
 .vazio {
@@ -26,7 +34,7 @@
   border-radius: 12px;
   padding: 15px;
   border-left: 5px solid #1976d2;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   h3 {
     margin: 0;
@@ -42,35 +50,46 @@
 
   .info {
     display: flex;
-    justify-content: space-between;
+    gap: 16px;
     align-items: center;
+    margin-top: 8px;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 14px;
+    color: #555;
+  }
+
+  .info-item i {
+    font-size: 16px;
   }
 }
 
 /* STATUS */
 .status {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
+  margin-left: auto;
   font-weight: 600;
-  text-transform: uppercase;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
 }
 
+/* CORES POR STATUS */
 .status.confirmada {
-  background: #e3f2fd;
-  color: #1976d2;
+  color: #2e7d32; // verde
 }
 
 .status.cancelada {
-  background: #fdecea;
-  color: #c62828;
+  color: #c62828; // vermelho
 }
 
-.status.atendida {
-  background: #e8f5e9;
-  color: #2e7d32;
+.status.pendente {
+  color: #ed6c02; // laranja
 }
+
 
 /* AÇÕES */
 .acoes {
