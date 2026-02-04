@@ -1,3 +1,5 @@
+<header class="header"></header>
+
 <div class="container">
   <h2>Minhas Fichas</h2>
 
@@ -15,16 +17,24 @@
       </p>
 
       <div class="info">
-        <span>📅 {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
 
-        <span
-          class="status"
-          [ngClass]="reserva.status?.toLowerCase()"
-        >
-          {{ reserva.status }}
-        </span>
+        <div class="info-item">
+          <i class="pi pi-calendar"></i>
+          <span>{{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="status" [ngClass]="reserva.status?.toLowerCase()">
+          <i class="pi" [ngClass]="{
+            'pi-check-circle': reserva.status === 'CONFIRMADA',
+            'pi-times-circle': reserva.status === 'CANCELADA',
+            'pi-exclamation-circle': reserva.status === 'PENDENTE'}">
+          </i>
+          <span>{{ reserva.status }}</span>
+        </div>
+
       </div>
 
+<<<<<<< HEAD
     <!-- AÇÕES -->
     <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
 
@@ -40,6 +50,13 @@
           (click)="cancelarFicha(reserva.id)"
         >
           ❌ Cancelar ficha
+=======
+
+      <!-- AÇÕES -->
+      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+        <button class="btn-cancelar" (click)="cancelarFicha(reserva.id)">
+          Cancelar ficha
+>>>>>>> 8ec43528a4f22b027c6f97762315897b75540991
         </button>
     </div>
 

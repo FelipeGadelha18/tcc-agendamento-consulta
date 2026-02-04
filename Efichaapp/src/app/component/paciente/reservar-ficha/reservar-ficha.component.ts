@@ -4,12 +4,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 @Component({
   selector: 'app-reservar-ficha',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ToastModule],
   templateUrl: './reservar-ficha.component.html',
-  styleUrls: ['./reservar-ficha.component.scss']
+  styleUrls: ['./reservar-ficha.component.scss'],
+  providers: [MessageService]
 })
 export class ReservarFichaComponent implements OnInit {
 
@@ -36,7 +40,8 @@ export class ReservarFichaComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -79,8 +84,14 @@ export class ReservarFichaComponent implements OnInit {
   }
 
   reservarFicha() {
-    if (!this.postoSelecionado || !this.dataSelecionada) {
-      alert('Selecione posto e data');
+
+    // 🔔 Validação de data obrigatória
+    if (!this.dataSelecionada) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Data obrigatória',
+        detail: 'Selecione uma data para reservar a ficha'
+      });
       return;
     }
 
@@ -91,13 +102,32 @@ export class ReservarFichaComponent implements OnInit {
     };
 
     this.http.post<any>('http://localhost:8080/reservas', reserva)
-      .subscribe(() => {
-        this.reservaConfirmada = true;
-        this.dadosConfirmacao = {
-          data: this.dataSelecionada,
-          horario: '08:00',
-          posto: this.postoSelecionado.nome
-        };
+      .subscribe({
+        next: () => {
+          this.reservaConfirmada = true;
+          this.dadosConfirmacao = {
+            data: this.dataSelecionada,
+            horario: '08:00',
+            posto: this.postoSelecionado.nome
+          };
+        },
+        error: (err) => {
+
+          // ❌ Data já cadastrada
+          if (err.status === 409 || err.status === 400) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Data indisponível',
+              detail: 'Você já possui uma ficha reservada para esta data'
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: 'Não foi possível reservar a ficha'
+            });
+          }
+        }
       });
   }
 

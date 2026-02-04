@@ -1,11 +1,16 @@
-<div class="container">
+<header class="header"></header>
 
-  <!-- ============================= -->
-  <!-- TELA DE RESERVA -->
-  <!-- ============================= -->
+<div class="container">
+  <p-toast position="top-right"></p-toast>
+
+
   <div *ngIf="!reservaConfirmada">
 
-    <h2>Reservar Ficha</h2>
+    <button class="btn-voltar" (click)="voltarInicio()" [disabled]="">
+      <i class="pi pi-arrow-left"></i>
+      Voltar
+    </button>
+    <h1> Reservar Ficha</h1>
 
     <div class="content">
 
@@ -15,21 +20,12 @@
 
         <!-- BUSCA -->
         <div class="busca">
-          <input
-            type="text"
-            placeholder="Pesquisar posto..."
-            [(ngModel)]="termoBusca"
-            (input)="filtrarPostos()"
-          />
+          <input type="text" placeholder="Pesquisar posto..." [(ngModel)]="termoBusca" (input)="filtrarPostos()" />
         </div>
 
         <!-- LISTA FILTRADA -->
-        <div
-          class="posto-card"
-          *ngFor="let posto of postosFiltrados"
-          (click)="selecionarPosto(posto)"
-          [class.ativo]="postoSelecionado?.id === posto.id"
-        >
+        <div class="posto-card" *ngFor="let posto of postosFiltrados" (click)="selecionarPosto(posto)"
+          [class.ativo]="postoSelecionado?.id === posto.id">
           <h4>{{ posto.nome }}</h4>
           <p>{{ posto.bairro }} - {{ posto.cidade }}</p>
         </div>
@@ -67,11 +63,7 @@
           </select>
         </div>
 
-        <button
-          class="btn-reservar"
-          (click)="reservarFicha()"
-          [disabled]="postoSelecionado.fichasDisponiveis === 0"
-        >
+        <button class="btn-reservar" (click)="reservarFicha()" [disabled]="postoSelecionado.fichasDisponiveis === 0">
           Reservar ficha
         </button>
       </div>
@@ -84,9 +76,7 @@
     </div>
   </div>
 
-  <!-- ============================= -->
   <!-- TELA DE CONFIRMAÇÃO -->
-  <!-- ============================= -->
   <div class="confirmacao" *ngIf="reservaConfirmada">
 
     <div class="card-confirmacao">
