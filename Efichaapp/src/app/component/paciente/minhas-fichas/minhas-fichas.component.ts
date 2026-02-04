@@ -29,7 +29,6 @@ export class MinhasFichasComponent implements OnInit {
       .get<any[]>(`http://localhost:8080/reservas/por-paciente/${this.pacienteLogado.id}`)
       .subscribe({
         next: (dados) => {
-          // Garante status
           this.reservas = dados.map(r => ({
             ...r,
             status: r.status || 'CONFIRMADA'
@@ -52,6 +51,28 @@ export class MinhasFichasComponent implements OnInit {
           this.carregarMinhasReservas();
         },
         error: () => alert('Erro ao cancelar ficha')
+      });
+  }
+
+  // 🔹 NOVA FUNÇÃO: baixar comprovante PDF
+  baixarComprovante(idReserva: number) {
+    this.http
+      .get(`http://localhost:8080/reservas/${idReserva}/comprovante`, {
+        responseType: 'blob'
+      })
+      .subscribe({
+        next: (pdf) => {
+          const blob = new Blob([pdf], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `comprovante-reserva-${idReserva}.pdf`;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: () => alert('Erro ao baixar comprovante')
       });
   }
 }

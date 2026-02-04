@@ -45,6 +45,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
+    margin-top: 5px;
   }
 }
 
@@ -74,19 +75,41 @@
 
 /* AÇÕES */
 .acoes {
-  margin-top: 10px;
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.btn-cancelar {
-  background: #c62828;
-  color: white;
-  border: none;
+/* BOTÕES PADRÃO */
+.acoes button {
+  font-size: 13px;
   padding: 8px 14px;
   border-radius: 8px;
-  font-size: 13px;
   cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* COMPROVANTE */
+.btn-comprovante {
+  background: #1976d2;
+  color: #fff;
+}
+
+.btn-comprovante:hover {
+  background: #125aa0;
+}
+
+/* CANCELAR */
+.btn-cancelar {
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #f5c6cb;
 }
 
 .btn-cancelar:hover {
-  background: #b71c1c;
+  background: #f8d7da;
 }

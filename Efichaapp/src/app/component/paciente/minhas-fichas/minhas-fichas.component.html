@@ -25,12 +25,24 @@
         </span>
       </div>
 
-      <!-- AÇÕES -->
-      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
-        <button class="btn-cancelar" (click)="cancelarFicha(reserva.id)">
-          Cancelar ficha
+    <!-- AÇÕES -->
+    <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+
+      <button
+        class="btn-comprovante"
+        (click)="baixarComprovante(reserva.id)"
+      >
+        📄 Baixar comprovante
+      </button>
+
+     <button
+          class="btn-cancelar"
+          (click)="cancelarFicha(reserva.id)"
+        >
+          ❌ Cancelar ficha
         </button>
-      </div>
+    </div>
+
 
     </div>
   </div>

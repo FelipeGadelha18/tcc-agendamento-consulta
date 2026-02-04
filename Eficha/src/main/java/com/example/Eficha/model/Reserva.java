@@ -13,6 +13,12 @@ public class Reserva {
 
     private LocalDate dataReserva;
 
+    @Column(name = "data_criacao")
+    private LocalDate dataCriacao = LocalDate.now();
+
+    @Enumerated(EnumType.STRING)
+    private StatusReserva status;
+
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
@@ -24,9 +30,12 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Long id, LocalDate dataReserva, Paciente paciente, PostoSaude postoSaude) {
+    public Reserva(Long id, LocalDate dataReserva, LocalDate dataCriacao,
+                   StatusReserva status, Paciente paciente, PostoSaude postoSaude) {
         this.id = id;
         this.dataReserva = dataReserva;
+        this.dataCriacao = dataCriacao;
+        this.status = status;
         this.paciente = paciente;
         this.postoSaude = postoSaude;
     }
@@ -45,6 +54,22 @@ public class Reserva {
 
     public void setDataReserva(LocalDate dataReserva) {
         this.dataReserva = dataReserva;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public StatusReserva getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusReserva status) {
+        this.status = status;
     }
 
     public Paciente getPaciente() {

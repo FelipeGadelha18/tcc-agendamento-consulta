@@ -4,7 +4,12 @@ import com.example.Eficha.model.Reserva;
 import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.ReservaRepository;
 import com.example.Eficha.repository.PostoSaudeRepository;
+import com.example.Eficha.service.ReservaPdfService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,12 +27,16 @@ public class ReservaController {
     @Autowired
     private PostoSaudeRepository postoSaudeRepository;
 
+    @Autowired
+    private ReservaPdfService reservaPdfService;
+
     // 🔹 Listar todas as reservas
     @GetMapping
     public List<Reserva> listarReservas() {
         return reservaRepository.findAll();
     }
 
+    // 🔹 Criar reserva
     @PostMapping
     public Reserva criarReserva(@RequestBody Reserva reserva) {
 
@@ -65,6 +74,7 @@ public class ReservaController {
                 .collect(Collectors.toList());
     }
 
+    // 🔹 Listar reservas por paciente
     @GetMapping("/por-paciente/{id}")
     public List<Reserva> listarPorPaciente(@PathVariable Long id) {
         return reservaRepository.findAll()
@@ -73,4 +83,16 @@ public class ReservaController {
                 .toList();
     }
 
+    // 🔹 DOWNLOAD DO COMPROVANTE (PDF)
+    @GetMapping("/{id}/comprovante")
+    public ResponseEntity<byte[]> baixarComprovante(@PathVariable Long id) {
+
+        byte[] pdf = reservaPdfService.gerarComprovante(id);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=comprovante_reserva_" + id + ".pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
 }
