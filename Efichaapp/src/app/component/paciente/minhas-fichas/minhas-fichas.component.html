@@ -34,31 +34,25 @@
 
       </div>
 
-<<<<<<< HEAD
-    <!-- AÇÕES -->
-    <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+     <!-- AÇÕES -->
+<div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
 
-      <button
-        class="btn-comprovante"
-        (click)="baixarComprovante(reserva.id)"
-      >
-        📄 Baixar comprovante
-      </button>
+  <button
+    class="btn-comprovante"
+    (click)="baixarComprovante(reserva.id)"
+  >
+    📄 Baixar comprovante
+  </button>
 
-     <button
-          class="btn-cancelar"
-          (click)="cancelarFicha(reserva.id)"
-        >
-          ❌ Cancelar ficha
-=======
+  <button
+    class="btn-cancelar"
+    (click)="cancelarFicha(reserva.id)"
+  >
+    Cancelar ficha
+  </button>
 
-      <!-- AÇÕES -->
-      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
-        <button class="btn-cancelar" (click)="cancelarFicha(reserva.id)">
-          Cancelar ficha
->>>>>>> 8ec43528a4f22b027c6f97762315897b75540991
-        </button>
-    </div>
+</div>
+
 
 
     </div>
