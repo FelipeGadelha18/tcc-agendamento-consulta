@@ -49,6 +49,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./component/paciente/minhas-fichas/minhas-fichas.component')
                     .then((m) => m.MinhasFichasComponent),
             },
+            {
+                path: 'perfil',
+                loadComponent: () => import('./component/paciente/perfil/perfil.component')
+                    .then((m) => m.PerfilComponent),
+            },
         ]
     }
 ];
