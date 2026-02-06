@@ -7,9 +7,9 @@
 
 /* HEADER */
 .header {
-  background: #0b5fb3;
-  color: #fff;
-  padding: 16px 32px;
+  background:linear-gradient(#307BD2,#284C77, #0E2948);
+  color: #ece3e3;
+  padding: 30px 45px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,7 +30,7 @@
 
 /* CARD PADRÃO */
 .card {
-  background: #fff;
+  background: #f1eeeee3;
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
