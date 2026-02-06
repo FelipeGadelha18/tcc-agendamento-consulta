@@ -4,18 +4,30 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-reservar-ficha',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ToastModule,
+    ButtonModule,
+    MenuModule
+  ],
   templateUrl: './reservar-ficha.component.html',
   styleUrls: ['./reservar-ficha.component.scss'],
   providers: [MessageService]
 })
 export class ReservarFichaComponent implements OnInit {
+
+  items: MenuItem[] = []; // ✅ FALTAVA ISSO
 
   postos: any[] = [];
   postosFiltrados: any[] = [];
@@ -46,6 +58,8 @@ export class ReservarFichaComponent implements OnInit {
 
   ngOnInit() {
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+    this.configurarMenu();
 
     this.route.queryParams.subscribe(params => {
       if (params['postoId']) {
@@ -85,7 +99,6 @@ export class ReservarFichaComponent implements OnInit {
 
   reservarFicha() {
 
-    // 🔔 Validação de data obrigatória
     if (!this.dataSelecionada) {
       this.messageService.add({
         severity: 'warn',
@@ -112,8 +125,6 @@ export class ReservarFichaComponent implements OnInit {
           };
         },
         error: (err) => {
-
-          // ❌ Data já cadastrada
           if (err.status === 409 || err.status === 400) {
             this.messageService.add({
               severity: 'error',
@@ -137,5 +148,30 @@ export class ReservarFichaComponent implements OnInit {
 
   voltarInicio() {
     this.router.navigate(['/paciente/inicio']);
+  }
+
+  configurarMenu() {
+    this.items = [
+      {
+        label: 'Início',
+        icon: 'pi pi-home',
+        command: () => this.router.navigate(['/paciente/inicio'])
+      },
+      {
+        label: 'Minhas Fichas',
+        icon: 'pi pi-receipt',
+        command: () => this.router.navigate(['/paciente/minhas-fichas'])
+      },
+      {
+        label: 'Postos próximos',
+        icon: 'pi pi-map-marker',
+        command: () => this.router.navigate(['/paciente/postos-proximos'])
+      },
+      {
+        label: 'Perfil',
+        icon: 'pi pi-user',
+        command: () => this.router.navigate(['/paciente/perfil'])
+      }
+    ];
   }
 }

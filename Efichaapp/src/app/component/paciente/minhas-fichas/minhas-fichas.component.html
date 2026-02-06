@@ -1,5 +1,17 @@
 <header class="header"></header>
 
+<!-- MENU POPUP -->
+  <p-menu #menu [popup]="true" [model]="items"></p-menu>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-bars"
+    class="p-button-rounded p-button-text menu-btn"
+    aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
+
 <div class="container">
   <h2>Minhas Fichas</h2>
 
@@ -7,7 +19,7 @@
     Você ainda não possui fichas reservadas.
   </div>
 
-  <div class="lista">
+  <div class="lista" *ngIf="reservas.length > 0">
     <div class="card" *ngFor="let reserva of reservas">
 
       <h3>{{ reserva.postoSaude?.nome }}</h3>
@@ -24,36 +36,41 @@
         </div>
 
         <div class="status" [ngClass]="reserva.status?.toLowerCase()">
-          <i class="pi" [ngClass]="{
-            'pi-check-circle': reserva.status === 'CONFIRMADA',
-            'pi-times-circle': reserva.status === 'CANCELADA',
-            'pi-exclamation-circle': reserva.status === 'PENDENTE'}">
+          <i
+            class="pi"
+            [ngClass]="{
+              'pi-check-circle': reserva.status === 'CONFIRMADA',
+              'pi-times-circle': reserva.status === 'CANCELADA',
+              'pi-exclamation-circle': reserva.status === 'PENDENTE'
+            }">
           </i>
           <span>{{ reserva.status }}</span>
         </div>
 
       </div>
 
-     <!-- AÇÕES -->
-<div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+      <!-- AÇÕES -->
+      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
 
-  <button
-    class="btn-comprovante"
-    (click)="baixarComprovante(reserva.id)"
-  >
-    📄 Baixar comprovante
-  </button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-file-pdf"
+          label="Baixar comprovante"
+          class="p-button-sm p-button-outlined"
+          (click)="baixarComprovante(reserva.id)">
+        </button>
 
-  <button
-    class="btn-cancelar"
-    (click)="cancelarFicha(reserva.id)"
-  >
-    Cancelar ficha
-  </button>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          label="Cancelar ficha"
+          class="p-button-sm p-button-danger p-button-text"
+          (click)="cancelarFicha(reserva.id)">
+        </button>
 
-</div>
-
-
+      </div>
 
     </div>
   </div>

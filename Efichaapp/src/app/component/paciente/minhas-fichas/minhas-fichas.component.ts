@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+
 
 @Component({
   selector: 'app-minhas-fichas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule, MenuModule],
   templateUrl: './minhas-fichas.component.html',
   styleUrls: ['./minhas-fichas.component.scss']
 })
@@ -13,15 +19,46 @@ export class MinhasFichasComponent implements OnInit {
 
   reservas: any[] = [];
   pacienteLogado: any = null;
+  items: MenuItem[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
 
+    this.configurarMenu();
+
     if (this.pacienteLogado?.id) {
       this.carregarMinhasReservas();
     }
+  }
+
+  configurarMenu() {
+    this.items = [
+      {
+        label: 'Início',
+        icon: 'pi pi-home',
+        command: () => this.router.navigate(['/paciente/inicio'])
+      },
+      {
+        label: 'Reservar ficha',
+        icon: 'pi pi-calendar-plus',
+        command: () => this.router.navigate(['/paciente/reservar-ficha'])
+      },
+      {
+        label: 'Postos próximos',
+        icon: 'pi pi-map-marker',
+        command: () => this.router.navigate(['/paciente/postos-proximos'])
+      },
+      {
+        label: 'Perfil',
+        icon: 'pi pi-user',
+        command: () => this.router.navigate(['/paciente/perfil'])
+      }
+    ];
   }
 
   carregarMinhasReservas() {
@@ -54,7 +91,6 @@ export class MinhasFichasComponent implements OnInit {
       });
   }
 
-  // 🔹 NOVA FUNÇÃO: baixar comprovante PDF
   baixarComprovante(idReserva: number) {
     this.http
       .get(`http://localhost:8080/reservas/${idReserva}/comprovante`, {
@@ -74,5 +110,9 @@ export class MinhasFichasComponent implements OnInit {
         },
         error: () => alert('Erro ao baixar comprovante')
       });
+  }
+
+  voltarInicio() {
+    this.router.navigate(['/paciente/inicio']);
   }
 }

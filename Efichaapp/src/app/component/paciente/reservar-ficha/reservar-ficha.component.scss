@@ -113,23 +113,20 @@
   }
 }
 
-.btn-voltar {
-  width: 6rem;
-  padding: 14px;
-  margin-bottom: 20px;
+.menu-btn {
+  width: 4rem;
+  margin: 25px;
   background: #0052a3;
   color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: 0.3s;
 
 &:hover {
     background: #00a1d7;
+     color: white;
   }
 }
-
 .vazio {
   display: flex;
   align-items: center;

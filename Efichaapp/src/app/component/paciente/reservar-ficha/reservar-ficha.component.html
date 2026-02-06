@@ -6,10 +6,18 @@
 
   <div *ngIf="!reservaConfirmada">
 
-    <button class="btn-voltar" (click)="voltarInicio()" [disabled]="">
-      <i class="pi pi-arrow-left"></i>
-      Voltar
-    </button>
+    <!-- MENU POPUP -->
+  <p-menu #menu [popup]="true" [model]="items"></p-menu>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-bars"
+    class="p-button-rounded p-button-text menu-btn"
+    aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
+  
     <h1> Reservar Ficha</h1>
 
     <div class="content">
