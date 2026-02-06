@@ -1,0 +1,61 @@
+<div class="page-container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <h1>E-Ficha - Painel de Controle</h1>
+    <button class="btn sair">Sair</button>
+  </header>
+
+  <!-- CONTEÚDO -->
+  <main class="content">
+
+    <!-- TABELA -->
+    <section class="card table-card">
+      <div class="card-header">
+        <h2>Fichas do Dia</h2>
+        <button class="btn primary">Atualizar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>CPF</th>
+            <th>Nº Ficha</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let ficha of fichas">
+            <td>{{ ficha.nome }}</td>
+            <td>{{ ficha.cpf }}</td>
+            <td>{{ ficha.numero }}</td>
+            <td>
+              <span class="status aguardando">Aguardando</span>
+            </td>
+            <td class="acoes">
+              <button class="icon danger">✖</button>
+              <button class="icon success">✔</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- INFO POSTO -->
+    <section class="card info-card">
+      <h2>Informações do posto</h2>
+
+      <p><strong>Nome:</strong> URAP Roney Meireles</p>
+      <p><strong>Endereço:</strong> R. Gavião, 2-96 - Conj. Adalberto Sena</p>
+      <p><strong>Capacidade Diária:</strong> 30 Fichas</p>
+
+      <button class="btn primary">Editar</button>
+    </section>
+
+  </main>
+
+
+</div>

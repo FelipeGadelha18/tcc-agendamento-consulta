@@ -1,0 +1,140 @@
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f4f7fb;
+}
+
+/* HEADER */
+.header {
+  background: #0b5fb3;
+  color: #fff;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    font-size: 18px;
+  }
+}
+
+/* CONTEÚDO */
+.content {
+  flex: 1;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* CARD PADRÃO */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* TABELA */
+.table-card {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+
+    th {
+      text-align: left;
+      font-size: 13px;
+      color: #0b5fb3;
+      padding-bottom: 12px;
+    }
+
+    td {
+      padding: 12px 0;
+      font-size: 14px;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* STATUS */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #fff;
+
+  &.aguardando {
+    background: #1c7df0;
+  }
+}
+
+/* AÇÕES */
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+
+  &.danger {
+    background: #e63946;
+  }
+
+  &.success {
+    background: #2ecc71;
+  }
+}
+
+/* INFO CARD */
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  button {
+    align-self: center;
+    margin-top: 24px;
+  }
+}
+
+/* BOTÕES */
+.btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+
+  &.primary {
+    background: #1c7df0;
+    color: #fff;
+  }
+
+  &.sair {
+    background: #fff;
+    color: #0b5fb3;
+  }
+}
+
+/* FOOTER */
+.footer {
+  background: #0b5fb3;
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+  font-size: 12px;
+}

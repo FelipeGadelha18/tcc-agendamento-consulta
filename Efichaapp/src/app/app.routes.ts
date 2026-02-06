@@ -23,6 +23,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'painel-controle',
+        loadComponent: () => import('./component/adm/painel-controle/painel-controle.component')
+            .then((m) => m.PainelControleComponent),
+    },
+
+    {
         path: 'paciente',
         loadComponent: () => import('./restrito-layout/restrito-layout.component')
             .then((m) => m.RestritoLayoutComponent),
