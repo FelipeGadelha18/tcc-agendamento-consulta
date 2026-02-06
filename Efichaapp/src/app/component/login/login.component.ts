@@ -18,6 +18,7 @@ export class LoginComponent {
   
   cpf: string = '';
   senha: string = '';
+  tipoLogin: string = 'PACIENTE'; // PACIENTE ou ADM
 
   constructor(
     private router: Router,
@@ -35,9 +36,17 @@ export class LoginComponent {
       return;
     }
 
-    this.authService.login(this.cpf, this.senha).subscribe({
+    if (this.tipoLogin === 'PACIENTE') {
+      this.loginPaciente();
+    } else {
+      this.loginAdministrador();
+    }
+  }
+
+  loginPaciente() {
+    this.authService.loginPaciente(this.cpf, this.senha).subscribe({
       next: (response) => {
-        console.log('Login OK:', response);
+        console.log('Login PACIENTE OK:', response);
 
         // Salva dados no localStorage
         localStorage.setItem('usuario', JSON.stringify(response));
@@ -54,6 +63,27 @@ export class LoginComponent {
         });
       }
     });
+  }
 
+  loginAdministrador() {
+    this.authService.loginAdministrador(this.cpf, this.senha).subscribe({
+      next: (response) => {
+        console.log('Login ADM OK:', response);
+
+        // Salva dados no localStorage usando AuthService
+        this.authService.salvarAdministrador(response);
+
+        this.router.navigate(['/admin/painel-controle']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({
+          severity:'error',
+          summary:'Erro',
+          detail: 'CPF ou senha incorretos.'
+        });
+      }
+    });
   }
 }
+

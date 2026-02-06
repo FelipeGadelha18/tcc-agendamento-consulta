@@ -23,12 +23,6 @@ export const routes: Routes = [
     },
 
     {
-        path: 'painel-controle',
-        loadComponent: () => import('./component/adm/painel-controle/painel-controle.component')
-            .then((m) => m.PainelControleComponent),
-    },
-
-    {
         path: 'paciente',
         loadComponent: () => import('./restrito-layout/restrito-layout.component')
             .then((m) => m.RestritoLayoutComponent),
@@ -40,6 +34,7 @@ export const routes: Routes = [
                 loadComponent: () => import('./component/paciente/home/home.component')
                     .then(m => m.HomeComponent),
             },
+
             {
                 path: 'postos-proximos',
                 loadComponent: () => import('./component/paciente/postos-proximos/postos-proximos.component')
@@ -61,5 +56,19 @@ export const routes: Routes = [
                     .then((m) => m.PerfilComponent),
             },
         ]
+    },
+
+    {
+        path: 'admin',
+        canActivate: [AuthGuard],
+        data: { role: 'ADM' },
+        children: [
+            {
+                path: 'painel-controle',
+                loadComponent: () => import('./component/adm/painel-controle/painel-controle.component')
+                    .then((m) => m.PainelControleComponent),
+            }
+        ]
     }
 ];
+

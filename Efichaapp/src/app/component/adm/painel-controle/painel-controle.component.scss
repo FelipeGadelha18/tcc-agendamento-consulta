@@ -5,9 +5,11 @@
   background: #f4f7fb;
 }
 
-/* HEADER */
+/* ===================== */
+/* HEADER                */
+/* ===================== */
 .header {
-  background:linear-gradient(#307BD2,#284C77, #0E2948);
+  background: linear-gradient(#307BD2, #284C77, #0E2948);
   color: #ece3e3;
   padding: 30px 45px;
   display: flex;
@@ -19,7 +21,16 @@
   }
 }
 
-/* CONTEÚDO */
+/* TITULOS */
+.page-container h2 {
+  font-size: 35px;
+  color: #012f60;
+  margin-bottom: 8px;
+}
+
+/* ===================== */
+/* CONTEÚDO              */
+/* ===================== */
 .content {
   flex: 1;
   padding: 32px;
@@ -28,42 +39,66 @@
   gap: 24px;
 }
 
-/* CARD PADRÃO */
+/* ===================== */
+/* CARD PADRÃO           */
+/* ===================== */
 .card {
-  background: #f1eeeee3;
+  background: #f7f6f6;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(112, 111, 111, 0.479);
 }
 
-/* TABELA */
-.table-card {
-  table {
+/* HEADER DO CARD */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===================== */
+/* PRIME TABLE CUSTOM    */
+/* ===================== */
+:host ::ng-deep .p-table {
+  background: transparent;
+  border-radius: 12px;
+}
+
+:host ::ng-deep .p-table thead th {
+  border: none;
+  font-size: 13px;
+  color: #0b5fb3;
+  background: transparent;
+}
+
+:host ::ng-deep .p-table tbody td {
+  border: none;
+  padding: 12px 0;
+  font-size: 14px;
+}
+
+:host ::ng-deep .p-paginator {
+  border: none;
+  margin-top: 16px;
+}
+
+/* ===================== */
+/* FILTRO                */
+/* ===================== */
+.table-filter {
+  margin: 16px 0;
+
+  input {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 16px;
-
-    th {
-      text-align: left;
-      font-size: 13px;
-      color: #0b5fb3;
-      padding-bottom: 12px;
-    }
-
-    td {
-      padding: 12px 0;
-      font-size: 14px;
-    }
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
   }
 }
 
-/* STATUS */
+/* ===================== */
+/* STATUS                */
+/* ===================== */
 .status {
   padding: 6px 12px;
   border-radius: 20px;
@@ -75,7 +110,9 @@
   }
 }
 
-/* AÇÕES */
+/* ===================== */
+/* AÇÕES                 */
+/* ===================== */
 .acoes {
   display: flex;
   gap: 8px;
@@ -99,7 +136,9 @@
   }
 }
 
-/* INFO CARD */
+/* ===================== */
+/* INFO CARD             */
+/* ===================== */
 .info-card {
   display: flex;
   flex-direction: column;
@@ -111,30 +150,51 @@
   }
 }
 
-/* BOTÕES */
+/* ===================== */
+/* BOTÕES                */
+/* ===================== */
 .btn {
   padding: 8px 20px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
   font-size: 14px;
+  transition: background 0.2s ease;
 
   &.primary {
     background: #1c7df0;
     color: #fff;
+
+    &:hover {
+      background: #155ec0;
+    }
   }
 
   &.sair {
     background: #fff;
-    color: #0b5fb3;
+    color: #ff0303;
+
+    &:hover {
+      background: #ff0000;
+      color: #fffbfb;
+    }
   }
 }
 
-/* FOOTER */
-.footer {
-  background: #0b5fb3;
-  color: #fff;
-  text-align: center;
-  padding: 16px;
-  font-size: 12px;
+/* FOOTER                */
+.footer{
+
+    height: 40px;
+    background: linear-gradient(to right, #2b65a7, #284C77, #0E2948);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; 
+    width: 100%;
+    margin: 0px 0 0 0;
+
+    p{
+        color: #ffffff;
+        text-align: center;
+    }
 }
