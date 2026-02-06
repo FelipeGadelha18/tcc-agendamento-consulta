@@ -1,222 +1,224 @@
+/* ====== BASE ====== */
 .page {
-  width: 100%;
-  min-height: 100vh;
-  background: #f7f7f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  min-height: 100vh;
+  background: #f1f2f6;
+  font-family: 'Poppins', sans-serif;
   overflow: hidden;
-  padding: 40px;
 }
 
-// formas circulares 
+/* ====== SHAPES ====== */
 .shape {
   position: absolute;
-  background: #003c8d;
-  width: 460px;
-  height: 460px;
+  width: 360px;
+  height: 360px;
   border-radius: 50%;
+  background: #012f60;
   z-index: 1;
+
+  &.top-left {
+    top: -120px;
+    left: -120px;
+  }
+
+  &.bottom-right {
+    bottom: -120px;
+    right: -120px;
+  }
 }
 
-.shape.top-left {
-  top: -200px;
-  left: -200px;
-}
-
-.shape.bottom-right {
-  bottom: -200px;
-  right: -200px;
-}
-
+/* ====== CONTENT ====== */
 .content {
-  width: 100%;
-  max-width: 1200px;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  padding: 40px 60px;
+  gap: 120px;
   z-index: 2;
 }
 
-/* Card de cadastro */
-.card {
-  width: 420px;
-  background: #e5e2e2;
-  padding: 35px;
-  margin-bottom: 5px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-}
 
-/* Título do card */
-.card h2 {
-  text-align: center;
-  color: #012f60;
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 22px;
-}
-
-label {
-  display: block;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #333;
-}
-
-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-  margin-top: 4px;
-  font-size: 14px;
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-}
-
-.col {
-  flex: 1;
-}
-
-.btn {
-  width: 100%;
-  margin-top: 18px;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #0052a3;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.btn:hover {
-  background: #00a1d7;
-}
-
-.login-text {
-  text-align: center;
-  font-size: 13px;
-  margin-top: 12px;
-}
-
-.login-text a {
-  font-weight: 700;
-  color: #0059c9;
-}
-
-/* Texto Prefeitura */
-.right-text {
-   position: absolute;
-  right: 350px;
+/* ====== HEADER (PREFEITURA) ====== */
+.auth-header {
+  position: absolute;
   top: 35%;
   transform: translateY(-50%);
-  text-align: right;
   z-index: 3;
+  text-align: right; 
+  right: 8%;
+
+  h3 {
+    text-align: center;
+    font-size: 40px;
+    letter-spacing: 1px;
+    color: #0052a3;
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 90px;
+    font-weight: 700;
+    color: #012f60;
+    margin: 0;
+    line-height: 1.1;
+  }
 }
 
-.right-text h3 {
-  color: #0052a3;
-  font-size: 40px;
+/* ====== CARD ====== */
+.auth-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 460px;
+  padding: 35px 40px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2f3542;
+  }
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #57606f;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #ced6e0;
+    margin-bottom: 18px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #1e90ff;
+    }
+  }
+}
+
+/* ====== GRID ====== */
+.row {
+  display: flex;
+  gap: 15px;
+
+  .col {
+    flex: 1;
+  }
+
+  .flex1 {
+    flex: 1;
+  }
+
+  .flex2 {
+    flex: 2;
+  }
+}
+
+/* ====== BUTTON ====== */
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: #1e90ff;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+
+  &:hover {
+    background: #114579;
+  }
+}
+
+/* ====== LINK LOGIN ====== */
+.login-text {
   text-align: center;
-  letter-spacing: 1px;
-  font-weight: 400;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #57606f;
+
+  a {
+    color: #1e90ff;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.right-text h1 {
-  margin-top: -5px;
-  font-size: 96px;
-  text-align: center;
-  color: #003d80;
-  font-weight: 700;
-}
-
-/* RESPONSIVIDADE */
+/* ====== RESPONSIVO ====== */
 @media (max-width: 900px) {
+  .auth-header {
+    position: static;
+    text-align: center;
+    margin-bottom: 25px;
+
+    h1 {
+      font-size: 36px;
+    }
+    h3 {
+      font-size: 24px;
+    }
+    .shape{
+      display: none;
+    }
+  }
+
   .content {
     flex-direction: column;
-    gap: 40px;
-  }
-
-  .right-text {
-    padding-left: 0;
-  }
-
-  .shape.top-left {
-    display: none;
+    padding: 20px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
+  .page {
+    padding: 20px;
+    background: linear-gradient(#307BD2,#284C77, #0E2948);
+
+  }
+  .auth-card {
+    padding: 25px 22px;
+    background: #fdfdfdf1;
+    
+  }
+
+  .auth-header{
+    order: 0;
+    position: static;
+    transform: none;
+    margin-bottom: -2rem;
+    text-align: center;
+
+    h1 {
+      font-size: 60px;
+      color: #fdfdfd;
+    }
+    h3 {
+      font-size: 25px;
+      color: #fdfdfd;
+    }
+
+  }
+
   .row {
     flex-direction: column;
   }
 
-  .shape.bottom-right {
-    display: none;
-  }
-
-  .card {
-    width: 92%;
-  }
-
-  .right-text h1 {
-    font-size: 36px;
-  }
-}
-
-/* RESPONSIVIDADE PARA NOTEBOOK 14" (1366px) */
-@media (max-width: 1366px) {
-  
-  .page {
-    padding: 20px;
-  }
-
-  .content {
-    max-width: 1000px;
-    gap: 20px;
-  }
-
-  .card {
-    width: 380px;
-    padding: 28px;
-  }
-
-  /* Ajuste do texto da prefeitura */
-  .right-text {
-    right: 200px;
-    top: 40%;
-    transform: translateY(-50%);
-  }
-
-  .right-text h3 {
-    font-size: 32px;
-  }
-
-  .right-text h1 {
-    font-size: 70px;
-  }
-
-  /* Ajuste das formas para caberem melhor */
-  .shape {
-    width: 380px;
-    height: 380px;
-  }
-
-  .shape.top-left {
-    top: -150px;
-    left: -150px;
-  }
-
-  .shape.bottom-right {
-    bottom: -150px;
-    right: -150px;
-  }
+  .shape{
+      display: none;
+    }
 }

@@ -14,7 +14,7 @@
 
 /* CARD CENTRAL */
 .login-card {
-  background: #e5e2e2;
+  background: #fafafaec;
   width: 460px;
   padding: 60px 50px;
   border-radius: 14px;
@@ -139,34 +139,6 @@
   }
 }
 
-@media (max-width: 900px) {
-  .login-container {
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 0;
-    text-align: center;
-  }
-
-  .side-text {
-    position: static;
-    transform: none;
-    margin-top: 25px;
-    text-align: center;
-  }
-
-  .side-text h1 {
-    font-size: 65px;
-  }
-
-  .side-text h3 {
-    font-size: 30px;
-  }
-
-  .shape1 {
-    display: none;
-  }
-}
-
 @media (max-width: 600px) {
   .login-card {
     width: 90%;
@@ -188,20 +160,20 @@
 /* TELAS DE 14 POLEGADAS - 1366px */
 @media (max-width: 1400px) and (min-width: 1100px) {
   .login-container {
-    padding-left: 12%; /* diminui pra caber melhor */
+    padding-left: 12%;
   }
 
   .login-card {
-    transform: scale(0.95); /* reduz levemente para dar respiro */
+    transform: scale(0.95); 
   }
 
   .side-text {
-    right: 200px; /* aproxima mais */
+    right: 200px; 
     top: 40%;
   }
 
   .side-text h1 {
-    font-size: 82px; /* diminui só o necessário */
+    font-size: 82px;
   }
 
   .side-text h3 {
@@ -220,5 +192,44 @@
     height: 520px;
     bottom: -120px;
     right: -180px;
+  }
+}
+
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0;
+    text-align: center;
+    background: linear-gradient(#307BD2,#284C77, #0E2948);
+    // font-size: 20;
+  }
+
+  .side-text {
+    order: 1;          /* 👈 VEM PRIMEIRO */
+    position: static;
+    transform: none;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .login-card {
+    order: 2;
+    background: #fdfafafa;
+  }
+
+  .side-text h1 {
+    font-size: 55px;
+    color: #eeeff0;
+  }
+
+  .side-text h3 {
+    font-size: 25px;
+    color: #eeeff0;
+
+  }
+  .shape1 {
+    display: none;
+
   }
 }
