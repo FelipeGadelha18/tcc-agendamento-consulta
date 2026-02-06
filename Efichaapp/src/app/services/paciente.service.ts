@@ -21,4 +21,8 @@ export class PacienteService {
       senha: senha
     });
   }
+
+  getById(id: number | string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
 }

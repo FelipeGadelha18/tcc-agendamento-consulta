@@ -2,9 +2,26 @@
   padding: 15px;
 }
 
-h2 {
-  margin-bottom: 10px;
-  font-size: 20px;
+h1 {
+  // margin-bottom: 20px;
+  font-size: 45px;
+  color: #012f60;
+  text-align: center;
+}
+
+.menu-btn {
+  width: 4rem;
+  margin: 25px;
+  background: #0052a3;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: #00a1d7;
+    color: white;
+  }
 }
 
 #map {

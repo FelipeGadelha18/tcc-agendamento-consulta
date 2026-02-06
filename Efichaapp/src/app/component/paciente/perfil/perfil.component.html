@@ -1,34 +1,29 @@
 <div class="page-container">
 
-    <header class="header">
-        <div class="header-left">
-            <i class="pi pi-arrow-left"></i>
-            <span class="header-title">Voltar</span>
-        </div>
-
-    </header>
+    <header class="header"></header>
+    
 
     <section class="profile">
         <div class="avatar">
-            <img src="assets/jimin.jpg" alt="Avatar">
+        <img [src]="paciente.foto || 'assets/jimin.jpg'" alt="Avatar">
         </div>
-        <h2>João Silva</h2>
+      <h2>{{ paciente.nome || paciente.nomeCompleto || 'Usuário' }}</h2>
     </section>
 
      <!-- Informações -->
   <section class="info">
     <div class="info-row">
-      <div class="card">SUS: 123456789</div>
-      <div class="card">CPF: 123456789</div>
+      <div class="card">SUS: {{ paciente.sus || paciente.cartaoSus || '-' }}</div>
+      <div class="card">CPF: {{ paciente.cpf || paciente.cnpj || '-' }}</div>
     </div>
 
     <div class="info-row">
-      <button class="btn primary">
+      <button class="btn primary" (click)="editar()">
         <i class="pi pi-pencil"></i>
         Editar
       </button>
 
-      <button class="btn danger">
+      <button class="btn danger" (click)="sair()">
         <i class="pi pi-sign-out"></i>
         Sair
       </button>

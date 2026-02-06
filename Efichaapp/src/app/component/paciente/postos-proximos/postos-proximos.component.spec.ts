@@ -1,17 +1,20 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { MenuModule } from "primeng/menu";
 
 @Component({
   selector: 'app-postos-proximos',
   standalone: true,
-  imports: [HttpClientModule],
+  imports: [HttpClientModule, MenuModule],
   templateUrl: './postos-proximos.component.html',
   styleUrls: ['./postos-proximos.component.scss']
 })
 export class PostosProximosComponent implements AfterViewInit {
 
   private map: any;
+menu: any;
+items: any;
 
   constructor(private http: HttpClient) {}
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -15,6 +15,13 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./cadastro.component.scss']
 })
 export class CadastroComponent {
+
+  ngOnInit(): void {
+    const s: any = history.state?.paciente;
+    if (s) {
+      this.paciente = { ...this.paciente, ...s };
+    }
+  }
 
   sucesso = '';
   erro = '';

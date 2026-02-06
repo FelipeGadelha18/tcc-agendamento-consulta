@@ -1,5 +1,17 @@
 <div class="container">
-  <h2>Postos Próximos</h2>
+  <h1>Postos Próximos</h1>
+
+  <!-- MENU POPUP -->
+  <p-menu #menu [model]="items" popup></p-menu>
+
+  <button
+    pButton
+    type="button"
+    icon="pi pi-bars"
+    class="p-button-rounded p-button-text menu-btn"
+    aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
 
   <!-- Mapa -->
   <div id="map"></div>

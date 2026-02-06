@@ -48,4 +48,14 @@ public class PacienteController {
 
         return paciente;
     }
+
+    // BUSCAR POR ID
+    @GetMapping("/{id}")
+    public Paciente buscarPorId(@PathVariable Long id) {
+        Paciente p = service.buscarPorId(id);
+        if (p == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não encontrado");
+        }
+        return p;
+    }
 }

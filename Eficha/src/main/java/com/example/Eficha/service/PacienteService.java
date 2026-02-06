@@ -50,4 +50,11 @@ public class PacienteService {
         paciente.setSenha(null);
         return paciente;
     }
+
+    public Paciente buscarPorId(Long id) {
+        return repository.findById(id).map(p -> {
+            p.setSenha(null);
+            return p;
+        }).orElse(null);
+    }
 }

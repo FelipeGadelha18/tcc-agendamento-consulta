@@ -77,6 +77,17 @@
 }
 
 /* BOTÕES */
+section{
+    margin: 2rem 0 2rem 4rem;
+
+.buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+}
 .btn {
     border: none;
     padding: 15px 90px;
