@@ -9,14 +9,19 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-  const user = localStorage.getItem('tipoUsuario'); // PACIENTE
-    const expected = route.data['role'];
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    const roleEsperado = route.data['role'];
 
-    if (user === expected) {
+    if (!tipoUsuario) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    if (tipoUsuario === roleEsperado) {
       return true;
     }
 
-    // Se não tiver permissão, volta pro login
+    // Se tentar acessar rota errada
     this.router.navigate(['/login']);
     return false;
   }

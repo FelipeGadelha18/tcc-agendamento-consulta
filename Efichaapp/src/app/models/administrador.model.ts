@@ -1,7 +1,7 @@
 export interface Administrador {
   id: number;
-  nome: string;
+  nomeCompleto: string;
   cpf: string;
-  idPosto: number;
   email: string;
+  idPosto: number;
 }

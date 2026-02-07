@@ -27,10 +27,11 @@ export class AuthService {
   }
 
   salvarAdministrador(admin: Administrador): void {
-    localStorage.setItem('usuario', JSON.stringify(admin));
-    localStorage.setItem('tipoUsuario', 'ADM');
-    localStorage.setItem('idPosto', admin.idPosto.toString());
-  }
+  localStorage.setItem('usuario', JSON.stringify(admin));
+  localStorage.setItem('tipoUsuario', 'ADM');
+  localStorage.setItem('idPosto', String(admin.idPosto));
+}
+
 
   obterAdministrador(): Administrador | null {
     const admin = localStorage.getItem('usuario');
