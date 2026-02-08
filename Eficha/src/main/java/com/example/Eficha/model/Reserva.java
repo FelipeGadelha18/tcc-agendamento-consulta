@@ -17,14 +17,15 @@ public class Reserva {
     private LocalDate dataCriacao = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
-    private StatusReserva status;
+    @Column(nullable = false)
+    private StatusReserva status = StatusReserva.CONFIRMADA;
 
     @ManyToOne
-    @JoinColumn(name = "paciente_id")
+    @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "posto_saude_id")
+    @JoinColumn(name = "posto_saude_id", nullable = false)
     private PostoSaude postoSaude;
 
     public Reserva() {

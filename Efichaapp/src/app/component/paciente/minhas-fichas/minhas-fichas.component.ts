@@ -81,7 +81,7 @@ export class MinhasFichasComponent implements OnInit {
     }
 
     this.http
-      .put(`http://localhost:8080/reservas/cancelar/${idReserva}`, {})
+      .put(`http://localhost:8080/reservas/${idReserva}/cancelar/${this.pacienteLogado.id}`, {})
       .subscribe({
         next: () => {
           alert('Ficha cancelada com sucesso!');

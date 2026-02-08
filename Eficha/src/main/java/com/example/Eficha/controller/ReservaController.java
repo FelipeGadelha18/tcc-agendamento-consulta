@@ -1,10 +1,10 @@
 package com.example.Eficha.controller;
 
 import com.example.Eficha.model.Reserva;
-import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.ReservaRepository;
 import com.example.Eficha.repository.PostoSaudeRepository;
 import com.example.Eficha.service.ReservaPdfService;
+import com.example.Eficha.service.ReservaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,13 +30,16 @@ public class ReservaController {
     @Autowired
     private ReservaPdfService reservaPdfService;
 
+    @Autowired
+    private ReservaService reservaService;
+
     // 🔹 Listar todas as reservas
     @GetMapping
     public List<Reserva> listarReservas() {
         return reservaRepository.findAll();
     }
 
-    // 🔹 Criar reserva
+    // 🔹 Criar reserva (fluxo antigo - se ainda usar)
     @PostMapping
     public Reserva criarReserva(@RequestBody Reserva reserva) {
 
@@ -51,7 +54,7 @@ public class ReservaController {
             throw new RuntimeException("Você já possui uma reserva para esta data.");
         }
 
-        PostoSaude posto = postoSaudeRepository
+        var posto = postoSaudeRepository
                 .findById(reserva.getPostoSaude().getId())
                 .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
 
@@ -65,7 +68,7 @@ public class ReservaController {
         return reservaRepository.save(reserva);
     }
 
-    // 🔹 Listar reservas de um posto específico
+    // 🔹 Listar reservas por posto
     @GetMapping("/por-posto/{id}")
     public List<Reserva> listarReservasPorPosto(@PathVariable Long id) {
         return reservaRepository.findAll()
@@ -81,6 +84,19 @@ public class ReservaController {
                 .stream()
                 .filter(r -> r.getPaciente() != null && r.getPaciente().getId().equals(id))
                 .toList();
+    }
+
+    // 🔹 CANCELAR RESERVA
+    @PutMapping("/{reservaId}/cancelar/{pacienteId}")
+    public ResponseEntity<?> cancelarReserva(
+            @PathVariable Long reservaId,
+            @PathVariable Long pacienteId) {
+
+        reservaService.cancelarReserva(reservaId, pacienteId);
+
+        return ResponseEntity.ok().body(
+                java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
+        );
     }
 
     // 🔹 DOWNLOAD DO COMPROVANTE (PDF)
