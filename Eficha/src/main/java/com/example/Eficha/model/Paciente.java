@@ -33,6 +33,9 @@ public class Paciente {
     @Column(nullable = false, length = 60)
     private String senha;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String foto;
+
     public Paciente() {}
 
     public Paciente(String nomeCompleto, String cpf, String telefone, String email,
@@ -106,6 +109,14 @@ public class Paciente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
     
 }

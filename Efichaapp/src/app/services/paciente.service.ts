@@ -25,4 +25,8 @@ export class PacienteService {
   getById(id: number | string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
+
+  atualizar(id: number | string, paciente: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, paciente);
+  }
 }

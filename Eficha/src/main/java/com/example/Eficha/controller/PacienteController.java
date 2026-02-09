@@ -58,4 +58,10 @@ public class PacienteController {
         }
         return p;
     }
+
+    // ATUALIZAR PACIENTE
+    @PutMapping("/{id}")
+    public Paciente atualizar(@PathVariable Long id, @RequestBody Paciente pacienteAtualizado) {
+        return service.atualizar(id, pacienteAtualizado);
+    }
 }

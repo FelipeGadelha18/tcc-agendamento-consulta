@@ -57,4 +57,20 @@ public class PacienteService {
             return p;
         }).orElse(null);
     }
+
+    // ATUALIZAR PACIENTE
+    public Paciente atualizar(Long id, Paciente pacienteAtualizado) {
+        return repository.findById(id).map(paciente -> {
+            paciente.setNomeCompleto(pacienteAtualizado.getNomeCompleto());
+            paciente.setTelefone(pacienteAtualizado.getTelefone());
+            paciente.setEmail(pacienteAtualizado.getEmail());
+            paciente.setEndereco(pacienteAtualizado.getEndereco());
+            paciente.setNumeroCasa(pacienteAtualizado.getNumeroCasa());
+            paciente.setFoto(pacienteAtualizado.getFoto());
+            
+            Paciente atualizado = repository.save(paciente);
+            atualizado.setSenha(null);
+            return atualizado;
+        }).orElse(null);
+    }
 }

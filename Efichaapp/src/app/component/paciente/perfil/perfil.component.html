@@ -1,33 +1,106 @@
 <div class="page-container">
 
-    <header class="header"></header>
+    <header class="header">
+      <div class="header-left" (click)="voltarHome()">
+        <i class="pi pi-arrow-left"></i>
+        <span>Meu Perfil</span>
+      </div>
+    </header>
     
-
+    <!-- SEÇÃO PERFIL -->
     <section class="profile">
-        <div class="avatar">
-        <img [src]="paciente.foto || 'assets/jimin.jpg'" alt="Avatar">
+        <div class="avatar-container">
+          <div class="avatar">
+            <img [src]="photoPreview || paciente.foto || 'assets/user-default.png'" alt="Avatar">
+          </div>
+          <button *ngIf="editando" class="btn-upload" (click)="fileInput.click()">
+            <i class="pi pi-camera"></i>
+          </button>
+          <input #fileInput type="file" accept="image/*" (change)="onFotoSelecionada($event)" style="display: none">
         </div>
-      <h2>{{ paciente.nome || paciente.nomeCompleto || 'Usuário' }}</h2>
+        <h2>{{ paciente.nomeCompleto || 'Usuário' }}</h2>
+        <p class="subtitle" *ngIf="!editando">CPF: {{ paciente.cpf }}</p>
     </section>
 
-     <!-- Informações -->
-  <section class="info">
-    <div class="info-row">
-      <div class="card">SUS: {{ paciente.sus || paciente.cartaoSus || '-' }}</div>
-      <div class="card">CPF: {{ paciente.cpf || paciente.cnpj || '-' }}</div>
-    </div>
+    <!-- MODO VISUALIZAÇÃO -->
+    <section class="info" *ngIf="!editando">
+      <div class="info-card">
+        <div class="info-item">
+          <span class="label">📧 Email</span>
+          <p class="value">{{ paciente.email || '-' }}</p>
+        </div>
+        <div class="info-item">
+          <span class="label">📞 Telefone</span>
+          <p class="value">{{ paciente.telefone || '-' }}</p>
+        </div>
+      </div>
 
-    <div class="info-row">
-      <button class="btn primary" (click)="editar()">
-        <i class="pi pi-pencil"></i>
-        Editar
-      </button>
+      <div class="info-card">
+        <div class="info-item">
+          <span class="label">📍 Endereço</span>
+          <p class="value">{{ paciente.endereco || '-' }}</p>
+        </div>
+        <div class="info-item">
+          <span class="label">🏠 Número</span>
+          <p class="value">{{ paciente.numeroCasa || '-' }}</p>
+        </div>
+      </div>
 
-      <button class="btn danger" (click)="sair()">
-        <i class="pi pi-sign-out"></i>
-        Sair
-      </button>
-    </div>
-  </section>
+      <div class="buttons-row">
+        <button class="btn primary" (click)="editando = true">
+          <i class="pi pi-pencil"></i>
+          Editar Perfil
+        </button>
+
+        <button class="btn danger" (click)="sair()">
+          <i class="pi pi-sign-out"></i>
+          Sair
+        </button>
+      </div>
+    </section>
+
+    <!-- MODO EDIÇÃO -->
+    <section class="edit-form" *ngIf="editando">
+      <form (ngSubmit)="salvarPerfil()">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" [(ngModel)]="paciente.nomeCompleto" name="nomeCompleto" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="paciente.email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" [(ngModel)]="paciente.telefone" name="telefone" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Endereço</label>
+            <input type="text" [(ngModel)]="paciente.endereco" name="endereco" required>
+          </div>
+          <div class="form-group">
+            <label>Número da Casa</label>
+            <input type="text" [(ngModel)]="paciente.numeroCasa" name="numeroCasa" required>
+          </div>
+        </div>
+
+        <div class="buttons-row">
+          <button type="submit" class="btn primary" [disabled]="carregando">
+            <i class="pi pi-check"></i>
+            {{ carregando ? 'Salvando...' : 'Salvar Alterações' }}
+          </button>
+
+          <button type="button" class="btn secondary" (click)="cancelarEdicao()" [disabled]="carregando">
+            <i class="pi pi-times"></i>
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
 
 </div>
