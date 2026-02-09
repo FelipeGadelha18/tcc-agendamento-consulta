@@ -68,7 +68,7 @@ export class MinhasFichasComponent implements OnInit {
         next: (dados) => {
           this.reservas = dados.map(r => ({
             ...r,
-            status: r.status || 'CONFIRMADA'
+            status: r.status || 'PENDENTE' // Garantir que o status seja definido
           }));
         },
         error: () => alert('Erro ao carregar suas fichas')

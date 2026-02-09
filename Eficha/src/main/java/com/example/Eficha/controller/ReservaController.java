@@ -1,22 +1,26 @@
 package com.example.Eficha.controller;
 
 import com.example.Eficha.model.Reserva;
+import com.example.Eficha.model.StatusReserva;
+import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.ReservaRepository;
 import com.example.Eficha.repository.PostoSaudeRepository;
 import com.example.Eficha.service.ReservaPdfService;
 import com.example.Eficha.service.ReservaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/reservas")
@@ -35,62 +39,102 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
-    // 🔹 Listar todas as reservas
+    // 🔹 LISTAR TODAS
     @GetMapping
     public List<Reserva> listarReservas() {
         return reservaRepository.findAll();
     }
 
-    // 🔹 Criar reserva (fluxo antigo - se ainda usar)
+    // 🔹 CRIAR RESERVA (PACIENTE)
     @PostMapping
     public Reserva criarReserva(@RequestBody Reserva reserva) {
 
         if (reserva.getDataReserva() == null) {
-            throw new RuntimeException("Selecione uma data para a reserva.");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Selecione uma data para a reserva");
         }
 
         Long pacienteId = reserva.getPaciente().getId();
         LocalDate dataSelecionada = reserva.getDataReserva();
 
         if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, dataSelecionada)) {
-            throw new RuntimeException("Você já possui uma reserva para esta data.");
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Você já possui uma reserva para esta data");
         }
 
-        var posto = postoSaudeRepository
-                .findById(reserva.getPostoSaude().getId())
-                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+        // valida posto
+        postoSaudeRepository.findById(reserva.getPostoSaude().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Posto não encontrado"));
 
-        if (posto.getFichasDisponiveis() <= 0) {
-            throw new RuntimeException("Não há fichas disponíveis");
-        }
-
-        posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
-        postoSaudeRepository.save(posto);
+        // 🔥 STATUS INICIAL
+        reserva.setStatus(StatusReserva.AGUARDO);
 
         return reservaRepository.save(reserva);
     }
 
-    // 🔹 Listar reservas por posto
+    // 🔹 CONFIRMAR RESERVA (ADMIN)
+    @PutMapping("/{id}/confirmar")
+    public ResponseEntity<?> confirmarReserva(@PathVariable Long id) {
+
+        Reserva reserva = reservaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Reserva não encontrada"));
+
+        if (reserva.getStatus() != StatusReserva.AGUARDO) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Apenas reservas em AGUARDO podem ser confirmadas");
+        }
+
+        PostoSaude posto = reserva.getPostoSaude();
+
+        if (posto.getFichasDisponiveis() <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Não há fichas disponíveis para este posto");
+        }
+
+        // desconta ficha somente agora
+        posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
+        postoSaudeRepository.save(posto);
+
+        reserva.setStatus(StatusReserva.CONFIRMADA);
+        reservaRepository.save(reserva);
+
+        return ResponseEntity.ok(
+                java.util.Map.of("mensagem", "Reserva confirmada com sucesso"));
+    }
+
+    // 🔹 LISTAR POR POSTO
     @GetMapping("/por-posto/{id}")
     public List<Reserva> listarReservasPorPosto(@PathVariable Long id) {
         return reservaRepository.findAll()
                 .stream()
-                .filter(r -> r.getPostoSaude() != null && r.getPostoSaude().getId().equals(id))
+                .filter(r -> r.getPostoSaude() != null &&
+                             r.getPostoSaude().getId().equals(id))
                 .collect(Collectors.toList());
     }
 
-    // 🔹 Listar reservas por posto (paginado)
+    // 🔹 LISTAR POR POSTO (PAGINADO)
     @GetMapping("/por-posto/{id}/paged")
-    public Page<Reserva> listarReservasPorPostoPaged(@PathVariable Long id, Pageable pageable) {
+    public Page<Reserva> listarReservasPorPostoPaged(
+            @PathVariable Long id,
+            Pageable pageable) {
         return reservaRepository.findByPostoSaudeId(id, pageable);
     }
 
-    // 🔹 Listar reservas por paciente
+    // 🔹 LISTAR POR PACIENTE
     @GetMapping("/por-paciente/{id}")
     public List<Reserva> listarPorPaciente(@PathVariable Long id) {
         return reservaRepository.findAll()
                 .stream()
-                .filter(r -> r.getPaciente() != null && r.getPaciente().getId().equals(id))
+                .filter(r -> r.getPaciente() != null &&
+                             r.getPaciente().getId().equals(id))
                 .toList();
     }
 
@@ -102,12 +146,11 @@ public class ReservaController {
 
         reservaService.cancelarReserva(reservaId, pacienteId);
 
-        return ResponseEntity.ok().body(
-                java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
-        );
+        return ResponseEntity.ok(
+                java.util.Map.of("mensagem", "Reserva cancelada com sucesso"));
     }
 
-    // 🔹 DOWNLOAD DO COMPROVANTE (PDF)
+    // 🔹 DOWNLOAD COMPROVANTE
     @GetMapping("/{id}/comprovante")
     public ResponseEntity<byte[]> baixarComprovante(@PathVariable Long id) {
 

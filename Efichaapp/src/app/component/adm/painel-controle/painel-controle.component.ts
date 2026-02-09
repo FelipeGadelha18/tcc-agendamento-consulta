@@ -55,25 +55,46 @@ export class PainelControleComponent implements OnInit {
   }
 
   confirmarFicha(ficha: any) {
-    ficha.status = 'CONFIRMADA';
+    if (!ficha.id) {
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Ficha inválida' });
+      return;
+    }
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Ficha confirmada',
-      detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
+    this.reservaService.confirmarReserva(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Ficha confirmada',
+          detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
+        });
+        this.atualizarFichas(0, this.pageSize);
+      },
+      error: (err: any) => {
+        console.error('Erro ao confirmar reserva', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao confirmar ficha' });
+      }
     });
   }
 
   cancelarFicha(ficha: any) {
-    const index = this.fichas.indexOf(ficha);
-    if (index > -1) {
-      this.fichas.splice(index, 1);
+    if (!ficha.id || !ficha.pacienteId) {
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Ficha inválida' });
+      return;
     }
 
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Ficha cancelada',
-      detail: `A ficha de ${ficha.nome} foi cancelada`
+    this.reservaService.cancelarReserva(ficha.id, ficha.pacienteId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Ficha cancelada',
+          detail: `A ficha de ${ficha.nome} foi cancelada`
+        });
+        this.atualizarFichas(0, this.pageSize);
+      },
+      error: (err: any) => {
+        console.error('Erro ao cancelar reserva', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao cancelar ficha' });
+      }
     });
   }
 
@@ -95,10 +116,14 @@ export class PainelControleComponent implements OnInit {
         const content = res?.content ?? res;
         this.totalRecords = res?.totalElements ?? content.length;
         this.fichas = content.map((r: any, i: number) => ({
+          id: r.id,
+          pacienteId: r.paciente?.id,
           nome: r.paciente?.nomeCompleto || r.paciente?.nome || '—',
           cpf: r.paciente?.cpf || '—',
           numero: r.numero ?? r.id ?? (page * size) + i + 1,
-          status: r.status
+          status: r.status,
+          dataReserva: r.dataReserva ?? null,
+          posto: r.postoSaude?.nome || '—'
         }));
       },
       error: (err: any) => {

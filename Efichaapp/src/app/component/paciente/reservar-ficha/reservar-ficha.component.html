@@ -7,17 +7,12 @@
   <div *ngIf="!reservaConfirmada">
 
     <!-- MENU POPUP -->
-  <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    <p-menu #menu [popup]="true" [model]="items"></p-menu>
 
-  <button
-    pButton
-    type="button"
-    icon="pi pi-bars"
-    class="p-button-rounded p-button-text menu-btn"
-    aria-label="Abrir menu"
-    (click)="menu.toggle($event)">
-  </button>
-  
+    <button pButton type="button" icon="pi pi-bars" class="p-button-rounded p-button-text menu-btn"
+      aria-label="Abrir menu" (click)="menu.toggle($event)">
+    </button>
+
     <h1> Reservar Ficha</h1>
 
     <div class="content">
@@ -63,13 +58,19 @@
         <div class="datas">
           <label>Selecione a data:</label>
 
-          <select [(ngModel)]="dataSelecionada">
-            <option value="">Selecione</option>
-            <option *ngFor="let data of datasDisponiveis" [value]="data">
-              {{ data | date:'dd/MM/yyyy' }}
-            </option>
-          </select>
+          <p-calendar
+            [(ngModel)]="dataSelecionada"
+            [minDate]="minDate"
+            [disabledDays]="diasBloqueados"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            placeholder="Escolha a data">
+          </p-calendar>
+
+
         </div>
+
+
 
         <button class="btn-reservar" (click)="reservarFicha()" [disabled]="postoSelecionado.fichasDisponiveis === 0">
           Reservar ficha

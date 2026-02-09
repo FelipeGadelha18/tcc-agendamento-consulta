@@ -18,7 +18,7 @@ public class Reserva {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusReserva status = StatusReserva.CONFIRMADA;
+    private StatusReserva status = StatusReserva.AGUARDO;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)

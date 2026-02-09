@@ -8,6 +8,10 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 
+import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
+
+
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
@@ -19,7 +23,9 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     ToastModule,
     ButtonModule,
-    MenuModule
+    MenuModule,
+    CalendarModule,
+    DatePickerModule,
   ],
   templateUrl: './reservar-ficha.component.html',
   styleUrls: ['./reservar-ficha.component.scss'],
@@ -36,13 +42,12 @@ export class ReservarFichaComponent implements OnInit {
   termoBusca = '';
   pacienteLogado: any = null;
 
-  datasDisponiveis: string[] = [
-    '2025-10-01',
-    '2025-10-02',
-    '2025-10-03'
-  ];
+  dataSelecionada: Date | null = null;
+  minDate: Date = new Date();
+  diasBloqueados: number[] = [0, 6];
 
-  dataSelecionada = '';
+
+
 
   reservaConfirmada = false;
   dadosConfirmacao: any = null;
@@ -54,7 +59,7 @@ export class ReservarFichaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -94,7 +99,7 @@ export class ReservarFichaComponent implements OnInit {
 
   selecionarPosto(posto: any) {
     this.postoSelecionado = posto;
-    this.dataSelecionada = '';
+    this.dataSelecionada = null;
   }
 
   reservarFicha() {
@@ -108,15 +113,36 @@ export class ReservarFichaComponent implements OnInit {
       return;
     }
 
+    if (!this.pacienteLogado?.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Usuário não autenticado'
+      });
+      return;
+    }
+
+    if (!this.postoSelecionado?.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Selecione um posto de saúde'
+      });
+      return;
+    }
+
     const reserva = {
-      dataReserva: this.dataSelecionada,
+      dataReserva: this.dataSelecionada.toISOString().split('T')[0],
       paciente: { id: this.pacienteLogado.id },
       postoSaude: { id: this.postoSelecionado.id }
     };
 
+    console.log('Enviando reserva:', reserva);
+
     this.http.post<any>('http://localhost:8080/reservas', reserva)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('Reserva criada com sucesso:', response);
           this.reservaConfirmada = true;
           this.dadosConfirmacao = {
             data: this.dataSelecionada,
@@ -125,19 +151,13 @@ export class ReservarFichaComponent implements OnInit {
           };
         },
         error: (err) => {
-          if (err.status === 409 || err.status === 400) {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Data indisponível',
-              detail: 'Você já possui uma ficha reservada para esta data'
-            });
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: 'Não foi possível reservar a ficha'
-            });
-          }
+          console.error('Erro ao reservar:', err);
+          const mensagem = err.error?.message || err.error || 'Não foi possível reservar a ficha';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: mensagem
+          });
         }
       });
   }

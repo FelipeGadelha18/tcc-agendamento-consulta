@@ -35,4 +35,14 @@ export class ReservaService {
   listarPorPostoPaginado(postoId: number, page: number = 0, size: number = 10) {
     return this.http.get<any>(`${this.apiUrl}/por-posto/${postoId}/paged?page=${page}&size=${size}`);
   }
+
+  // 🔹 Confirmar reserva (ADMIN)
+  confirmarReserva(reservaId: number) {
+    return this.http.put(`${this.apiUrl}/${reservaId}/confirmar`, {});
+  }
+
+  // 🔹 Cancelar reserva
+  cancelarReserva(reservaId: number, pacienteId: number) {
+    return this.http.put(`${this.apiUrl}/${reservaId}/cancelar/${pacienteId}`, {});
+  }
 }
