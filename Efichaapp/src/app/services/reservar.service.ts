@@ -25,4 +25,14 @@ export class ReservaService {
       { responseType: 'blob' }
     );
   }
+
+  // 🔹 Listar reservas por posto
+  listarPorPosto(postoId: number) {
+    return this.http.get<any[]>(`${this.apiUrl}/por-posto/${postoId}`);
+  }
+
+  // 🔹 Listar reservas por posto (paginado)
+  listarPorPostoPaginado(postoId: number, page: number = 0, size: number = 10) {
+    return this.http.get<any>(`${this.apiUrl}/por-posto/${postoId}/paged?page=${page}&size=${size}`);
+  }
 }

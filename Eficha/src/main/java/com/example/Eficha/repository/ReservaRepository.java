@@ -1,5 +1,7 @@
 package com.example.Eficha.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.Eficha.model.Reserva;
 import com.example.Eficha.model.PostoSaude;
@@ -22,6 +24,9 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     // Buscar reservas por posto + data
     List<Reserva> findByPostoSaudeAndDataReserva(PostoSaude postoSaude, LocalDate dataReserva);
+
+    // Buscar reservas por posto id (paginado)
+    Page<Reserva> findByPostoSaudeId(Long postoId, Pageable pageable);
 
     // Buscar por status (ex: CONFIRMADA)
     List<Reserva> findByStatus(StatusReserva status);

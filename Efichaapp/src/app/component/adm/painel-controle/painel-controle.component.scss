@@ -108,6 +108,12 @@
   &.aguardando {
     background: #1c7df0;
   }
+  &.confirmada {
+    background: #2ecc71;
+  }
+  &.cancelada {
+    background: #e63946;
+  }
 }
 
 /* ===================== */

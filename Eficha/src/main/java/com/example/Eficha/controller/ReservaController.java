@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/reservas")
@@ -75,6 +77,12 @@ public class ReservaController {
                 .stream()
                 .filter(r -> r.getPostoSaude() != null && r.getPostoSaude().getId().equals(id))
                 .collect(Collectors.toList());
+    }
+
+    // 🔹 Listar reservas por posto (paginado)
+    @GetMapping("/por-posto/{id}/paged")
+    public Page<Reserva> listarReservasPorPostoPaged(@PathVariable Long id, Pageable pageable) {
+        return reservaRepository.findByPostoSaudeId(id, pageable);
     }
 
     // 🔹 Listar reservas por paciente

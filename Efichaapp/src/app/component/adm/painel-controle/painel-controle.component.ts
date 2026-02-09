@@ -11,9 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
 import { Administrador } from '../../../models/administrador.model';
-
-
-
+import { ReservaService } from '../../../services/reservar.service';
 
 @Component({
   selector: 'app-painel-controle',
@@ -28,136 +26,94 @@ import { Administrador } from '../../../models/administrador.model';
   ],
   providers: [MessageService],
   templateUrl: './painel-controle.component.html',
-  styleUrl: './painel-controle.component.scss'
+  styleUrls: ['./painel-controle.component.scss']
 })
 
 export class PainelControleComponent implements OnInit {
   administrador: Administrador | null = null;
   idPosto: number | null = null;
 
+  fichas: any[] = [];
+  totalRecords: number = 0;
+  pageSize: number = 5;
+
   constructor(
     private messageService: MessageService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private reservaService: ReservaService
   ) {}
 
   ngOnInit(): void {
     this.administrador = this.authService.obterAdministrador();
     this.idPosto = this.authService.obterIdPosto();
+    this.atualizarFichas(0, this.pageSize);
   }
-
-  fichas = [
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-    { nome: 'Maria Eduarda', cpf: '999.999.999-89', numero: 1, status: 'Aguardando' },
-    { nome: 'João Silva', cpf: '888.888.888-77', numero: 2, status: 'Aguardando' },
-    { nome: 'Ana Costa', cpf: '777.777.777-66', numero: 3, status: 'Aguardando' },
-  ];
 
   onGlobalFilter(event: any, dt: any) {
     dt.filterGlobal(event.target.value, 'contains');
   }
 
   confirmarFicha(ficha: any) {
-    ficha.status = 'Confirmada';
+    ficha.status = 'CONFIRMADA';
 
     this.messageService.add({
-    severity: 'success',
-    summary: 'Ficha confirmada',
-    detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
-  });
-}
-
+      severity: 'success',
+      summary: 'Ficha confirmada',
+      detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
+    });
+  }
 
   cancelarFicha(ficha: any) {
-  const index = this.fichas.indexOf(ficha);
-  if (index > -1) {
-    this.fichas.splice(index, 1);
+    const index = this.fichas.indexOf(ficha);
+    if (index > -1) {
+      this.fichas.splice(index, 1);
+    }
+
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Ficha cancelada',
+      detail: `A ficha de ${ficha.nome} foi cancelada`
+    });
   }
 
-  this.messageService.add({
-    severity: 'warn',
-    summary: 'Ficha cancelada',
-    detail: `A ficha de ${ficha.nome} foi cancelada`
-  });
-}
+  sair(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
-sair(): void {
-  this.authService.logout();
-  this.router.navigate(['/login']);
-}
+  atualizarFichas(page: number = 0, size: number = this.pageSize) {
+    console.log('Atualizando fichas... page=', page, 'size=', size);
+    if (!this.idPosto) {
+      this.fichas = [];
+      this.totalRecords = 0;
+      return;
+    }
 
-  atualizarFichas() {
-    // Recarrega os dados da tabela
-    console.log('Atualizando fichas...');
-    // Aqui você pode chamar um serviço para buscar dados atualizados do backend
-    // this.fichasService.obterFichas().subscribe(fichas => {
-    //   this.fichas = fichas;
-    // });
+    this.reservaService.listarPorPostoPaginado(this.idPosto, page, size).subscribe({
+      next: (res: any) => {
+        const content = res?.content ?? res;
+        this.totalRecords = res?.totalElements ?? content.length;
+        this.fichas = content.map((r: any, i: number) => ({
+          nome: r.paciente?.nomeCompleto || r.paciente?.nome || '—',
+          cpf: r.paciente?.cpf || '—',
+          numero: r.numero ?? r.id ?? (page * size) + i + 1,
+          status: r.status
+        }));
+      },
+      error: (err: any) => {
+        console.error('Erro ao carregar reservas', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao carregar reservas' });
+      }
+    });
+  }
+
+  onLazyLoad(event: any) {
+    const page = Math.floor(event.first / event.rows);
+    const size = event.rows;
+    this.pageSize = size;
+    this.atualizarFichas(page, size);
   }
 }
+
 
