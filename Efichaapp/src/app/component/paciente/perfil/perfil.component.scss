@@ -146,6 +146,14 @@
         font-weight: 500;
         word-break: break-word;
       }
+
+        &.right {
+          text-align: center;
+        }
+
+        &.left {
+          text-align: center;
+        }
     }
   }
 

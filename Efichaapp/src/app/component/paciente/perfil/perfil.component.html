@@ -25,23 +25,23 @@
     <!-- MODO VISUALIZAÇÃO -->
     <section class="info" *ngIf="!editando">
       <div class="info-card">
-        <div class="info-item">
-          <span class="label">📧 Email</span>
+        <div class="info-item left">
+          <span class="label pi pi-envelope"> Email</span>
           <p class="value">{{ paciente.email || '-' }}</p>
         </div>
-        <div class="info-item">
-          <span class="label">📞 Telefone</span>
+        <div class="info-item right">
+          <span class="label pi pi-phone"> Telefone</span>
           <p class="value">{{ paciente.telefone || '-' }}</p>
         </div>
       </div>
 
       <div class="info-card">
-        <div class="info-item">
-          <span class="label">📍 Endereço</span>
+        <div class="info-item left">
+          <span class="label pi pi-map-marker"> Endereço</span>
           <p class="value">{{ paciente.endereco || '-' }}</p>
         </div>
-        <div class="info-item">
-          <span class="label">🏠 Número</span>
+        <div class="info-item right">
+          <span class="label pi pi-home"> Número</span>
           <p class="value">{{ paciente.numeroCasa || '-' }}</p>
         </div>
       </div>
