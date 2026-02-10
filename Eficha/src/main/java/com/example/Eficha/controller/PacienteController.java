@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Eficha.dto.LoginRequest;
+import com.example.Eficha.dto.LoginResponse;
 import com.example.Eficha.model.Paciente;
 import com.example.Eficha.service.PacienteService;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,35 +23,21 @@ public class PacienteController {
         this.service = service;
     }
 
-    // CADASTRAR PACIENTE
     @PostMapping
-    public Paciente cadastrar(@RequestBody Paciente paciente) {
-        Paciente salvo = service.salvar(paciente);
-        salvo.setSenha(null);
-        return salvo;
+    public Paciente cadastrar(@Valid @RequestBody Paciente paciente) {
+        return service.salvar(paciente);
     }
 
-    // LISTAR PACIENTES
     @GetMapping
     public List<Paciente> listar() {
         return service.listar();
     }
 
-    // LOGIN DO PACIENTE
     @PostMapping("/login")
-    public Paciente login(@RequestBody LoginRequest login) {
-
-        Paciente paciente = service.login(login);
-
-        if (paciente == null) {
-            // CPF não encontrado ou senha incorreta
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "CPF ou senha incorretos");
-        }
-
-        return paciente;
+    public LoginResponse login(@Valid @RequestBody LoginRequest login) {
+        return service.login(login);
     }
 
-    // BUSCAR POR ID
     @GetMapping("/{id}")
     public Paciente buscarPorId(@PathVariable Long id) {
         Paciente p = service.buscarPorId(id);
@@ -59,7 +47,6 @@ public class PacienteController {
         return p;
     }
 
-    // ATUALIZAR PACIENTE
     @PutMapping("/{id}")
     public Paciente atualizar(@PathVariable Long id, @RequestBody Paciente pacienteAtualizado) {
         return service.atualizar(id, pacienteAtualizado);

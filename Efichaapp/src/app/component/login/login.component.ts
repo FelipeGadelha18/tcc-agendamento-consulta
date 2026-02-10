@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, LoginResponse } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,8 @@ export class LoginComponent {
   
   cpf: string = '';
   senha: string = '';
-  tipoLogin: string = 'PACIENTE'; // PACIENTE ou ADM
+  tipoLogin: string = 'PACIENTE';
+  carregando: boolean = false;
 
   constructor(
     private router: Router,
@@ -36,6 +37,15 @@ export class LoginComponent {
       return;
     }
 
+    if (this.cpf.replace(/\D/g, '').length !== 11) {
+      this.messageService.add({
+        severity:'warn',
+        summary: 'Atenção',
+        detail: 'CPF deve ter 11 dígitos.'
+      });
+      return;
+    }
+
     if (this.tipoLogin === 'PACIENTE') {
       this.loginPaciente();
     } else {
@@ -44,43 +54,50 @@ export class LoginComponent {
   }
 
   loginPaciente() {
+    this.carregando = true;
     this.authService.loginPaciente(this.cpf, this.senha).subscribe({
-      next: (response) => {
-        console.log('Login PACIENTE OK:', response);
-
-        // Salva dados no localStorage
-        localStorage.setItem('usuario', JSON.stringify(response));
-        localStorage.setItem('tipoUsuario', 'PACIENTE');
-
-        this.router.navigate(['/paciente/inicio']);
+      next: (response: LoginResponse) => {
+        this.authService.salvarLoginPaciente(response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: `Bem-vindo ${response.nome}!`
+        });
+        setTimeout(() => this.router.navigate(['/paciente/inicio']), 500);
+        this.carregando = false;
       },
       error: (err) => {
         console.error(err);
+        this.carregando = false;
         this.messageService.add({
           severity:'error',
           summary:'Erro',
-          detail: 'CPF ou senha incorretos.'
+          detail: err?.error?.message || 'CPF ou senha incorretos.'
         });
       }
     });
   }
 
   loginAdministrador() {
+    this.carregando = true;
     this.authService.loginAdministrador(this.cpf, this.senha).subscribe({
-      next: (response) => {
-        console.log('Login ADM OK:', response);
-
-        // Salva dados no localStorage usando AuthService
+      next: (response: LoginResponse) => {
         this.authService.salvarAdministrador(response);
-
-        this.router.navigate(['/admin/painel-controle']);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: `Bem-vindo ${response.nome}!`
+        });
+        setTimeout(() => this.router.navigate(['/admin/painel-controle']), 500);
+        this.carregando = false;
       },
       error: (err) => {
         console.error(err);
+        this.carregando = false;
         this.messageService.add({
           severity:'error',
           summary:'Erro',
-          detail: 'CPF ou senha incorretos.'
+          detail: err?.error?.message || 'CPF ou senha incorretos.'
         });
       }
     });
