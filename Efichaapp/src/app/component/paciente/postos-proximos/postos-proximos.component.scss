@@ -11,10 +11,12 @@ h1 {
 
 .menu-btn {
   width: 4rem;
+  height: 4rem;
+  aspect-ratio: 1;
   margin: 25px;
   background: #0052a3;
   color: white;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: 0.3s;
 

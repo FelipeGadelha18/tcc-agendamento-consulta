@@ -115,6 +115,8 @@
 
 .menu-btn {
   width: 4rem;
+  height: 4rem;
+  aspect-ratio: 1;
   margin: 25px;
   background: #0052a3;
   color: white;
@@ -122,9 +124,9 @@
   cursor: pointer;
   transition: 0.3s;
 
-&:hover {
+  &:hover {
     background: #00a1d7;
-     color: white;
+    color: white;
   }
 }
 .vazio {
