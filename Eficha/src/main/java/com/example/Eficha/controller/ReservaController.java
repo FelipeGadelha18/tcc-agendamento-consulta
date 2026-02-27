@@ -64,7 +64,14 @@ public class ReservaController {
             throw new RuntimeException("Não há fichas disponíveis");
         }
 
+        // verifica disponibilidade de data
+        if (posto.getDatasDisponiveis() == null || !posto.getDatasDisponiveis().contains(dataSelecionada)) {
+            throw new RuntimeException("Data não disponível");
+        }
+
+        // decrementa fichas e remove a data usada
         posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
+        posto.getDatasDisponiveis().remove(dataSelecionada);
         postoSaudeRepository.save(posto);
 
         return reservaRepository.save(reserva);

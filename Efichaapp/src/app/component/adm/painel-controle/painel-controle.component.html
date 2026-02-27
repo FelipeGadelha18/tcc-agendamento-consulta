@@ -2,30 +2,30 @@
 
   <p-toast></p-toast>
 
-
   <!-- HEADER -->
   <header class="header">
     <h1>E-Ficha - Painel de Controle</h1>
     <button class="btn sair" (click)="sair()">
-        <i class="pi pi-sign-out"></i>
-        Sair
-      </button>
+      <i class="pi pi-sign-out"></i>
+      Sair
+    </button>
   </header>
 
   <!-- CONTEÚDO -->
   <main class="content">
 
-    <!-- TABELA -->
-    <section class="card table-card">
+    <!-- TABELA (SPAN COLUMNS) -->
+    <section class="card table-card" style="grid-column: 1 / -1;">
       <div class="card-header">
-        <h2>Fichas do Dia</h2>
-        <button class="btn primary" (click)="atualizarFichas()">Atualizar</button>
+        <h2>📋 Fichas do Dia</h2>
+        <button class="btn primary" (click)="atualizarFichas()">
+          <i class="pi pi-refresh"></i> Atualizar
+        </button>
       </div>
 
       <!-- FILTRO GLOBAL -->
       <div class="table-filter">
-        <input pInputText type="text" placeholder="Pesquisar..." (input)="onGlobalFilter($event, dt)" />
-
+        <input pInputText type="text" placeholder="🔍 Pesquisar por nome, CPF ou nº..." (input)="onGlobalFilter($event, dt)" />
       </div>
 
       <p-table #dt [value]="fichas" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20]"
@@ -34,51 +34,93 @@
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="nome">
-              Paciente <p-sortIcon field="nome"></p-sortIcon>
+              <i class="pi pi-user"></i> Paciente <p-sortIcon field="nome"></p-sortIcon>
             </th>
             <th pSortableColumn="cpf">
-              CPF <p-sortIcon field="cpf"></p-sortIcon>
+              <i class="pi pi-id-card"></i> CPF <p-sortIcon field="cpf"></p-sortIcon>
             </th>
             <th pSortableColumn="numero">
-              Nº Ficha <p-sortIcon field="numero"></p-sortIcon>
+              <i class="pi pi-ticket"></i> Nº Ficha <p-sortIcon field="numero"></p-sortIcon>
             </th>
-            <th>Status</th>
-            <th>Ações</th>
+            <th><i class="pi pi-flag"></i> Status</th>
+            <th><i class="pi pi-cog"></i> Ações</th>
           </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-ficha>
           <tr>
-            <td>{{ ficha.nome }}</td>
+            <td><strong>{{ ficha.nome }}</strong></td>
             <td>{{ ficha.cpf }}</td>
-            <td>{{ ficha.numero }}</td>
+            <td><strong>{{ ficha.numero }}</strong></td>
             <td>
               <span [ngClass]="'status ' + (ficha.status || '').toLowerCase()">
+                <i class="pi" [ngClass]="{
+                  'pi-check-circle': ficha.status === 'CONFIRMADA',
+                  'pi-times-circle': ficha.status === 'CANCELADA',
+                  'pi-exclamation-circle': ficha.status === 'PENDENTE',
+                  'pi-clock': ficha.status === 'AGUARDANDO'
+                }"></i>
                 {{ ficha.status }}
               </span>
             </td>
             <td class="acoes">
-              <button class="icon danger" (click)="cancelarFicha(ficha)"> <i class="pi pi-times"></i></button>
-              <button class="icon success" (click)="confirmarFicha(ficha)"><i class="pi pi-check"></i></button>
+              <button class="icon danger" (click)="cancelarFicha(ficha)" title="Cancelar">
+                <i class="pi pi-times"></i>
+              </button>
+              <button class="icon success" (click)="confirmarFicha(ficha)" title="Confirmar">
+                <i class="pi pi-check"></i>
+              </button>
             </td>
           </tr>
         </ng-template>
       </p-table>
     </section>
 
-
     <!-- INFO POSTO -->
     <section class="card info-card">
-      <h2>Informações do posto</h2>
+      <h2>🏥 Informações do Posto</h2>
 
-      <p><strong>Nome:</strong> URAP Roney Meireles</p>
-      <p><strong>Endereço:</strong> R. Gavião, 2-96 - Conj. Adalberto Sena</p>
-      <p><strong>Capacidade Diária:</strong> 30 Fichas</p>
+      <p>
+        <strong>Nome:</strong>
+        <span>URAP Roney Meireles</span>
+      </p>
+      <p>
+        <strong>Endereço:</strong>
+        <span>R. Gavião, 2-96 - Conj. Adalberto Sena</span>
+      </p>
+      <p>
+        <strong>Capacidade Diária:</strong>
+        <span>30 Fichas</span>
+      </p>
 
-      <button class="btn primary">Editar</button>
+      <!-- GERENCIAMENTO DE DATAS -->
+      <div class="datas-admin">
+        <h3>
+          <i class="pi pi-calendar"></i>
+          Datas Disponíveis
+        </h3>
+        <ul>
+          <li *ngFor="let d of datasDisponiveis">
+            <strong>{{ d | date:'dd/MM/yyyy' }}</strong>
+            <button class="icon danger" (click)="excluirData(d)" title="Excluir data">
+              <i class="pi pi-trash"></i>
+            </button>
+          </li>
+          <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
+        </ul>
+        <div class="add-data">
+          <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
+          <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
+            <i class="pi pi-plus"></i> Adicionar
+          </button>
+        </div>
+      </div>
     </section>
   </main>
 </div>
+
 <div class="footer">
-    <p>&copy; Todos os direitos reservados a Prefeitura de Rio Branco.</p>
+  <p>
+    <i class="pi pi-shield"></i> &copy; Todos os direitos reservados a Prefeitura de Rio Branco.
+  </p>
 </div>

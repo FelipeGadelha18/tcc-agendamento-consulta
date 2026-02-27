@@ -1,6 +1,9 @@
 package com.example.Eficha.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posto_saude")
@@ -18,6 +21,11 @@ public class PostoSaude {
     private String telefone;
     private int totalFichas;
     private int fichasDisponiveis;
+
+    @ElementCollection
+    @CollectionTable(name = "posto_datas_disponiveis", joinColumns = @JoinColumn(name = "posto_id"))
+    @Column(name = "data_disponivel")
+    private List<LocalDate> datasDisponiveis = new ArrayList<>();
 
     public PostoSaude() {
     }
@@ -104,5 +112,13 @@ public class PostoSaude {
 
     public void setFichasDisponiveis(int fichasDisponiveis) {
         this.fichasDisponiveis = fichasDisponiveis;
+    }
+
+    public List<LocalDate> getDatasDisponiveis() {
+        return datasDisponiveis;
+    }
+
+    public void setDatasDisponiveis(List<LocalDate> datasDisponiveis) {
+        this.datasDisponiveis = datasDisponiveis;
     }
 }

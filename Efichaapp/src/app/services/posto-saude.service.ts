@@ -14,4 +14,18 @@ export class PostoSaudeService {
   listar(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/listar`);
   }
+
+  listarDatas(postoId: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/${postoId}/datas`);
+  }
+
+  adicionarData(postoId: number, data: string) {
+    // envia objeto para compatibilidade com DTO do backend
+    return this.http.post(`${this.apiUrl}/${postoId}/datas`, { data });
+  }
+
+  removerData(postoId: number, data: string) {
+    // date deve ser string ISO, encodeURIComponent para segurança
+    return this.http.delete(`${this.apiUrl}/${postoId}/datas/${encodeURIComponent(data)}`);
+  }
 }

@@ -68,6 +68,7 @@
             <option *ngFor="let data of datasDisponiveis" [value]="data">
               {{ data | date:'dd/MM/yyyy' }}
             </option>
+            <option *ngIf="datasDisponiveis.length === 0" disabled>Sem datas disponíveis</option>
           </select>
         </div>
 

@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { PostoSaudeService } from '../../../services/posto-saude.service';
 
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -36,11 +37,7 @@ export class ReservarFichaComponent implements OnInit {
   termoBusca = '';
   pacienteLogado: any = null;
 
-  datasDisponiveis: string[] = [
-    '2025-10-01',
-    '2025-10-02',
-    '2025-10-03'
-  ];
+  datasDisponiveis: string[] = [];
 
   dataSelecionada = '';
 
@@ -53,7 +50,8 @@ export class ReservarFichaComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private postoService: PostoSaudeService
   ) {}
 
   ngOnInit() {
@@ -68,6 +66,10 @@ export class ReservarFichaComponent implements OnInit {
     });
 
     this.carregarPostos();
+    // se veio id do querystring, busque também as datas
+    if (this.postoIdRecebido) {
+      this.postoService.listarDatas(this.postoIdRecebido).subscribe(d => this.datasDisponiveis = d);
+    }
   }
 
   carregarPostos() {
@@ -79,6 +81,11 @@ export class ReservarFichaComponent implements OnInit {
         if (this.postoIdRecebido) {
           this.postoSelecionado =
             this.postos.find(p => p.id === this.postoIdRecebido);
+          if (this.postoSelecionado) {
+            this.postoService.listarDatas(this.postoSelecionado.id).subscribe(dates => {
+              this.datasDisponiveis = dates;
+            });
+          }
         }
       });
   }
@@ -95,6 +102,13 @@ export class ReservarFichaComponent implements OnInit {
   selecionarPosto(posto: any) {
     this.postoSelecionado = posto;
     this.dataSelecionada = '';
+    // buscar datas disponíveis do posto
+    this.postoService.listarDatas(posto.id).subscribe(dates => {
+      this.datasDisponiveis = dates;
+    }, err => {
+      console.error('erro ao buscar datas', err);
+      this.datasDisponiveis = [];
+    });
   }
 
   reservarFicha() {
