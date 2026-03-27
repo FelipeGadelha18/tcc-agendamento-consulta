@@ -159,6 +159,40 @@
     }
   }
 }
+/* ====== CAMPO SENHA ====== */
+.campo-senha {
+  position: relative;
+  width: 100%;
+
+  input {
+    width: 100%;
+    padding: 12px 40px 12px 14px; // espaço pro ícone
+    border-radius: 8px;
+    border: 1px solid #ced6e0;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #1e90ff;
+    }
+  }
+
+  i {
+    position: absolute;
+    right: 12px;
+    top: 40%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #57606f;
+    transition: color 0.2s;
+  }
+
+  i:hover {
+    color: #1e90ff;
+  }
+}
 
 /* ====== RESPONSIVO ====== */
 @media (max-width: 900px) {

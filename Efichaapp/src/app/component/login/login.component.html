@@ -25,7 +25,8 @@
 
       <div class="input-group">
         <i class="pi pi-lock icon"></i>
-        <input type="password" [(ngModel)]="senha" name="senha" placeholder="Senha" />
+        <input type="password" [(ngModel)]="senha" name="senha" placeholder="Senha" [type]="mostrarSenha ? 'text' : 'password'" />
+        <i class="pi icon" [ngClass]="mostrarSenha ? 'pi pi-eye' : 'pi pi-eye-slash' " (click)="toggleMostrarSenha()"></i>
       </div>
 
       <button class="login-btn">Entrar</button>

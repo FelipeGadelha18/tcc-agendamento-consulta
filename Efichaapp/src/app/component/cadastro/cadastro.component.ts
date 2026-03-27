@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./cadastro.component.scss']
 })
 export class CadastroComponent {
+senha: any;
 
   ngOnInit(): void {
     const s: any = history.state?.paciente;
@@ -100,5 +101,10 @@ export class CadastroComponent {
         });
       }
     });
+  }
+  mostrarSenha: boolean = false;
+
+  toggleMostrarSenha() {
+    this.mostrarSenha = !this.mostrarSenha;
   }
 }

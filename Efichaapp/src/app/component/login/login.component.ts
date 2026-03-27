@@ -114,5 +114,11 @@ export class LoginComponent {
       }
     });
   }
+
+  mostrarSenha: boolean = false;
+
+  toggleMostrarSenha() {
+    this.mostrarSenha = !this.mostrarSenha;
+  }
 }
 
