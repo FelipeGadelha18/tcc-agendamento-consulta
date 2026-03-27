@@ -27,6 +27,17 @@ export class LoginComponent {
     private authService: AuthService
   ) {}
 
+  formatarCpf() {
+    let cpf = this.cpf.replace(/\D/g, '');
+    if (cpf.length > 11) {
+      cpf = cpf.substring(0, 11);
+    }
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    cpf = cpf.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    this.cpf = cpf;
+  }
+
   entrar() {
     if (!this.cpf || !this.senha) {
       this.messageService.add({
@@ -37,7 +48,8 @@ export class LoginComponent {
       return;
     }
 
-    if (this.cpf.replace(/\D/g, '').length !== 11) {
+    const cpfLimpo = this.cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
       this.messageService.add({
         severity:'warn',
         summary: 'Atenção',
@@ -47,15 +59,15 @@ export class LoginComponent {
     }
 
     if (this.tipoLogin === 'PACIENTE') {
-      this.loginPaciente();
+      this.loginPaciente(cpfLimpo);
     } else {
-      this.loginAdministrador();
+      this.loginAdministrador(cpfLimpo);
     }
   }
 
-  loginPaciente() {
+  loginPaciente(cpfLimpo: string) {
     this.carregando = true;
-    this.authService.loginPaciente(this.cpf, this.senha).subscribe({
+    this.authService.loginPaciente(cpfLimpo, this.senha).subscribe({
       next: (response: LoginResponse) => {
         this.authService.salvarLoginPaciente(response);
         this.messageService.add({
@@ -78,9 +90,9 @@ export class LoginComponent {
     });
   }
 
-  loginAdministrador() {
+  loginAdministrador(cpfLimpo: string) {
     this.carregando = true;
-    this.authService.loginAdministrador(this.cpf, this.senha).subscribe({
+    this.authService.loginAdministrador(cpfLimpo, this.senha).subscribe({
       next: (response: LoginResponse) => {
         this.authService.salvarAdministrador(response);
         this.messageService.add({

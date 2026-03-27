@@ -42,6 +42,17 @@ export class CadastroComponent {
     private messageService: MessageService,
   ) {}
 
+  formatarCpf() {
+    let cpf = this.paciente.cpf.replace(/\D/g, '');
+    if (cpf.length > 11) {
+      cpf = cpf.substring(0, 11);
+    }
+    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+    cpf = cpf.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    cpf = cpf.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    this.paciente.cpf = cpf;
+  }
+
   salvar() {
     if (
       !this.paciente.nomeCompleto ||
@@ -57,7 +68,19 @@ export class CadastroComponent {
       return;
     }
 
-    this.pacienteService.cadastrar(this.paciente).subscribe({
+    const cpfLimpo = this.paciente.cpf.replace(/\D/g, '');
+    if (cpfLimpo.length !== 11) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'CPF deve ter 11 dígitos.'
+      });
+      return;
+    }
+
+    const pacienteParaEnviar = { ...this.paciente, cpf: cpfLimpo };
+
+    this.pacienteService.cadastrar(pacienteParaEnviar).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'success',

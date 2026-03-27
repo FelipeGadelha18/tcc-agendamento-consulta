@@ -20,7 +20,7 @@
 
       <div class="input-group">
         <i class="pi pi-user icon"></i>
-        <input type="text" [(ngModel)]="cpf" name="cpf" placeholder="CPF"/>
+        <input type="text" [(ngModel)]="cpf" name="cpf" placeholder="CPF" (input)="formatarCpf()"/>
       </div>
 
       <div class="input-group">
