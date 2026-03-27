@@ -85,9 +85,38 @@ public class ReservaService {
                 .findByIdAndPacienteId(reservaId, pacienteId)
                 .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
 
-        // Impede cancelamento duplicado
+        executarCancelamento(reserva);
+    }
+
+    public void cancelarReservaPorAdministrador(Long reservaId) {
+        Reserva reserva = reservaRepository
+                .findById(reservaId)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+
+        executarCancelamento(reserva);
+    }
+
+    public void confirmarReservaPorAdministrador(Long reservaId) {
+        Reserva reserva = reservaRepository
+                .findById(reservaId)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+
         if (reserva.getStatus() == StatusReserva.CANCELADA) {
-            throw new RuntimeException("Esta reserva já foi cancelada");
+            throw new RuntimeException("Reserva cancelada não pode ser reativada pelo administrador");
+        }
+
+        if (reserva.getStatus() == StatusReserva.CONFIRMADA) {
+            return;
+        }
+
+        reserva.setStatus(StatusReserva.CONFIRMADA);
+        reservaRepository.save(reserva);
+    }
+
+    private void executarCancelamento(Reserva reserva) {
+        // Se já está cancelada, ignora (idempotência)
+        if (reserva.getStatus() == StatusReserva.CANCELADA) {
+            return;
         }
 
         // Atualiza status

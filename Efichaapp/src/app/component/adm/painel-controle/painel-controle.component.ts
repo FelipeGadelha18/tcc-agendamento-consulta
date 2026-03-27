@@ -68,25 +68,53 @@ export class PainelControleComponent implements OnInit {
   }
 
   confirmarFicha(ficha: any) {
-    ficha.status = 'CONFIRMADA';
+    if (ficha.status === 'CANCELADA') {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Operação não permitida',
+        detail: `A ficha de ${ficha.nome} está cancelada e não pode ser reativada.`
+      });
+      return;
+    }
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Ficha confirmada',
-      detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
+    this.reservaService.confirmarReservaAdministrador(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Ficha confirmada',
+          detail: `A ficha de ${ficha.nome} foi confirmada com sucesso`
+        });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao confirmar ficha', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.mensagem || 'Falha ao confirmar ficha'
+        });
+      }
     });
   }
 
   cancelarFicha(ficha: any) {
-    const index = this.fichas.indexOf(ficha);
-    if (index > -1) {
-      this.fichas.splice(index, 1);
+    if (!confirm(`Deseja realmente cancelar a ficha de ${ficha.nome}?`)) {
+      return;
     }
 
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'Ficha cancelada',
-      detail: `A ficha de ${ficha.nome} foi cancelada`
+    this.reservaService.cancelarReservaAdministrador(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Ficha cancelada',
+          detail: `A ficha de ${ficha.nome} foi cancelada`
+        });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao cancelar ficha', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao cancelar ficha' });
+      }
     });
   }
 
@@ -108,6 +136,8 @@ export class PainelControleComponent implements OnInit {
         const content = res?.content ?? res;
         this.totalRecords = res?.totalElements ?? content.length;
         this.fichas = content.map((r: any, i: number) => ({
+          id: r.id,
+          pacienteId: r.paciente?.id,
           nome: r.paciente?.nomeCompleto || r.paciente?.nome || '—',
           cpf: r.paciente?.cpf || '—',
           numero: r.numero ?? r.id ?? (page * size) + i + 1,

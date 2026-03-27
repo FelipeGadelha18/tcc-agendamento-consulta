@@ -64,10 +64,10 @@
               </span>
             </td>
             <td class="acoes">
-              <button class="icon danger" (click)="cancelarFicha(ficha)" title="Cancelar">
+              <button class="icon danger" (click)="cancelarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'" title="Cancelar">
                 <i class="pi pi-times"></i>
               </button>
-              <button class="icon success" (click)="confirmarFicha(ficha)" title="Confirmar">
+              <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'" title="Confirmar">
                 <i class="pi pi-check"></i>
               </button>
             </td>

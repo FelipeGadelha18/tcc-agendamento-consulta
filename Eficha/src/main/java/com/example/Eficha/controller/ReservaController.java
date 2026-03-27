@@ -101,7 +101,7 @@ public class ReservaController {
                 .toList();
     }
 
-    // 🔹 CANCELAR RESERVA
+    // 🔹 CANCELAR RESERVA - PACIENTE
     @PutMapping("/{reservaId}/cancelar/{pacienteId}")
     public ResponseEntity<?> cancelarReserva(
             @PathVariable Long reservaId,
@@ -111,6 +111,28 @@ public class ReservaController {
 
         return ResponseEntity.ok().body(
                 java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
+        );
+    }
+
+    // 🔹 CANCELAR RESERVA - ADMINISTRADOR
+    @PutMapping("/{reservaId}/cancelar")
+    public ResponseEntity<?> cancelarReservaPorAdministrador(@PathVariable Long reservaId) {
+
+        reservaService.cancelarReservaPorAdministrador(reservaId);
+
+        return ResponseEntity.ok().body(
+                java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
+        );
+    }
+
+    // 🔹 CONFIRMAR RESERVA - ADMINISTRADOR
+    @PutMapping("/{reservaId}/confirmar")
+    public ResponseEntity<?> confirmarReservaPorAdministrador(@PathVariable Long reservaId) {
+
+        reservaService.confirmarReservaPorAdministrador(reservaId);
+
+        return ResponseEntity.ok().body(
+                java.util.Map.of("mensagem", "Reserva confirmada com sucesso")
         );
     }
 
