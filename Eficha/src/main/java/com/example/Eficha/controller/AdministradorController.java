@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/administradores")
-@CrossOrigin(origins = "*")
 public class AdministradorController {
 
     private final AdministradorService service;

@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/reservas")
-@CrossOrigin(origins = "*")
 public class ReservaController {
 
     @Autowired
@@ -110,8 +109,7 @@ public class ReservaController {
         reservaService.cancelarReserva(reservaId, pacienteId);
 
         return ResponseEntity.ok().body(
-                java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
-        );
+                java.util.Map.of("mensagem", "Reserva cancelada com sucesso"));
     }
 
     // 🔹 CANCELAR RESERVA - ADMINISTRADOR
@@ -121,8 +119,7 @@ public class ReservaController {
         reservaService.cancelarReservaPorAdministrador(reservaId);
 
         return ResponseEntity.ok().body(
-                java.util.Map.of("mensagem", "Reserva cancelada com sucesso")
-        );
+                java.util.Map.of("mensagem", "Reserva cancelada com sucesso"));
     }
 
     // 🔹 CONFIRMAR RESERVA - ADMINISTRADOR
@@ -132,8 +129,7 @@ public class ReservaController {
         reservaService.confirmarReservaPorAdministrador(reservaId);
 
         return ResponseEntity.ok().body(
-                java.util.Map.of("mensagem", "Reserva confirmada com sucesso")
-        );
+                java.util.Map.of("mensagem", "Reserva confirmada com sucesso"));
     }
 
     // 🔹 DOWNLOAD DO COMPROVANTE (PDF)

@@ -12,7 +12,6 @@ import com.example.Eficha.repository.PostoSaudeRepository;
 
 @RestController
 @RequestMapping("/postos")
-@CrossOrigin(origins = "http://localhost:4200")
 public class PostoSaudeController {
 
     @Autowired
