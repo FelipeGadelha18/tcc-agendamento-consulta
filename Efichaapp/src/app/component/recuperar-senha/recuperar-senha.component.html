@@ -16,15 +16,15 @@
 
             <div class="input-group">
                 <i class="pi pi-lock icon"></i>
-                <input [type]="mostrarSenha1 ? 'text' : 'password'" [(ngModel)]="novaSenha" name="novaSenha" placeholder="Nova Senha" />
-                <i class="pi toggle-icon" [ngClass]="mostrarSenha1 ? 'pi-eye-slash' : 'pi-eye'" (click)="alternarVisibilidadeSenha1()"></i>
+                <input [type]="mostrarSenha1 ? 'text' : 'password'" [(ngModel)]="novaSenha" name="novaSenha"
+                    placeholder="Nova Senha" />
+                <i class="pi toggle-icon" [ngClass]="mostrarSenha1 ? 'pi-eye-slash' : 'pi-eye'"
+                    (click)="alternarVisibilidadeSenha1()"></i>
             </div>
 
             <div *ngIf="novaSenha" class="senha-strength">
                 <div class="strength-meter">
-                    <div 
-                        class="strength-meter-fill" 
-                        [style.width.%]="avaliarForcaSenha().nivel * 33.33"
+                    <div class="strength-meter-fill" [style.width.%]="avaliarForcaSenha().nivel * 33.33"
                         [style.backgroundColor]="avaliarForcaSenha().cor">
                     </div>
                 </div>
@@ -35,8 +35,10 @@
 
             <div class="input-group">
                 <i class="pi pi-lock icon"></i>
-                <input [type]="mostrarSenha2 ? 'text' : 'password'" [(ngModel)]="confirmarSenha" name="confirmarSenha" placeholder="Confirmar Senha" />
-                <i class="pi toggle-icon" [ngClass]="mostrarSenha2 ? 'pi-eye-slash' : 'pi-eye'" (click)="alternarVisibilidadeSenha2()"></i>
+                <input [type]="mostrarSenha2 ? 'text' : 'password'" [(ngModel)]="confirmarSenha" name="confirmarSenha"
+                    placeholder="Confirmar Senha" />
+                <i class="pi toggle-icon" [ngClass]="mostrarSenha2 ? 'pi-eye-slash' : 'pi-eye'"
+                    (click)="alternarVisibilidadeSenha2()"></i>
             </div>
 
             <button class="login-btn" [disabled]="carregando">
