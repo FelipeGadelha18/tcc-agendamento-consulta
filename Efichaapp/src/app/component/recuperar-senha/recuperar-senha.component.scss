@@ -39,6 +39,7 @@
     padding: 15px 20px;
     margin-bottom: 18px;
     border: 1px solid rgba(0, 0, 0, 0.08);
+    position: relative;
 }
 
 .icon {
@@ -53,6 +54,48 @@
     font-size: 15px;
     width: 100%;
     background: none;
+    padding-right: 10px;
+}
+
+.toggle-icon {
+    font-size: 18px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-left: auto;
+    padding-left: 10px;
+    flex-shrink: 0;
+}
+
+.toggle-icon:hover {
+    color: #0052a3;
+}
+
+.senha-strength {
+    margin-bottom: 18px;
+    padding: 0 20px;
+
+    .strength-meter {
+        width: 100%;
+        height: 6px;
+        background: #e8eaed;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 6px;
+
+        .strength-meter-fill {
+            height: 100%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            border-radius: 3px;
+        }
+    }
+
+    .strength-text {
+        font-size: 12px;
+        font-weight: 600;
+        display: block;
+        text-transform: capitalize;
+    }
 }
 
 /* BOTÃO */

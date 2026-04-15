@@ -19,6 +19,8 @@ export class RecuperarSenhaComponent {
     cpf: string = '';
     novaSenha: string = '';
     confirmarSenha: string = '';
+    mostrarSenha1: boolean = false;
+    mostrarSenha2: boolean = false;
     carregando: boolean = false;
 
     constructor(
@@ -26,6 +28,42 @@ export class RecuperarSenhaComponent {
         private messageService: MessageService,
         private authService: AuthService
     ) { }
+
+    alternarVisibilidadeSenha1() {
+        this.mostrarSenha1 = !this.mostrarSenha1;
+    }
+
+    alternarVisibilidadeSenha2() {
+        this.mostrarSenha2 = !this.mostrarSenha2;
+    }
+
+    avaliarForcaSenha(): { forca: string; nivel: number; cor: string } {
+        if (!this.novaSenha) {
+            return { forca: '', nivel: 0, cor: '#ddd' };
+        }
+
+        let nivel = 0;
+        const senha = this.novaSenha;
+
+        // Verifica comprimento
+        if (senha.length >= 8) nivel++;
+        if (senha.length >= 12) nivel++;
+
+        // Verifica tipos de caracteres
+        if (/[a-z]/.test(senha)) nivel++;
+        if (/[A-Z]/.test(senha)) nivel++;
+        if (/[0-9]/.test(senha)) nivel++;
+        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(senha)) nivel++;
+
+        // Mapeia para níveis: 1-2 = Fraca, 3-4 = Média, 5+ = Forte
+        if (nivel <= 2) {
+            return { forca: 'Fraca', nivel: 1, cor: '#ef4444' };
+        } else if (nivel <= 4) {
+            return { forca: 'Média', nivel: 2, cor: '#f59e0b' };
+        } else {
+            return { forca: 'Forte', nivel: 3, cor: '#10b981' };
+        }
+    }
 
     formatarCpf() {
         let cpf = this.cpf.replace(/\D/g, '');
