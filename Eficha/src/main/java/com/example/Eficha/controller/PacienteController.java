@@ -6,6 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Eficha.dto.LoginRequest;
 import com.example.Eficha.dto.LoginResponse;
+import com.example.Eficha.dto.RecuperarSenhaRequest;
 import com.example.Eficha.model.Paciente;
 import com.example.Eficha.service.PacienteService;
 
@@ -49,5 +50,10 @@ public class PacienteController {
     @PutMapping("/{id}")
     public Paciente atualizar(@PathVariable Long id, @RequestBody Paciente pacienteAtualizado) {
         return service.atualizar(id, pacienteAtualizado);
+    }
+
+    @PostMapping("/recuperar-senha")
+    public Paciente recuperarSenha(@Valid @RequestBody RecuperarSenhaRequest request) {
+        return service.recuperarSenha(request);
     }
 }

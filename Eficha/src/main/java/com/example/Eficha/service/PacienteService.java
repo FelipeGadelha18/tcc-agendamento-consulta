@@ -2,6 +2,7 @@ package com.example.Eficha.service;
 
 import com.example.Eficha.dto.LoginRequest;
 import com.example.Eficha.dto.LoginResponse;
+import com.example.Eficha.dto.RecuperarSenhaRequest;
 import com.example.Eficha.exception.UnauthorizedException;
 import com.example.Eficha.model.Paciente;
 import com.example.Eficha.repository.PacienteRepository;
@@ -98,5 +99,22 @@ public class PacienteService {
             atualizado.setSenha(null);
             return atualizado;
         }).orElse(null);
+    }
+
+    public Paciente recuperarSenha(RecuperarSenhaRequest request) {
+        if (!CpfValidator.isValidCpf(request.getCpf())) {
+            throw new IllegalArgumentException("CPF inválido");
+        }
+
+        Paciente paciente = repository.findByCpf(request.getCpf());
+
+        if (paciente == null) {
+            throw new UnauthorizedException("CPF não encontrado no banco de dados");
+        }
+
+        paciente.setSenha(encoder.encode(request.getNovaSenha()));
+        Paciente atualizado = repository.save(paciente);
+        atualizado.setSenha(null);
+        return atualizado;
     }
 }

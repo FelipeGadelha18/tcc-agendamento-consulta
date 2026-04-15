@@ -34,6 +34,13 @@ export class AuthService {
     });
   }
 
+  recuperarSenha(cpf: string, novaSenha: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/pacientes/recuperar-senha`, {
+      cpf: cpf,
+      novaSenha: novaSenha
+    });
+  }
+
   salvarLoginPaciente(response: LoginResponse): void {
     localStorage.setItem('usuario', JSON.stringify({
       id: response.id,

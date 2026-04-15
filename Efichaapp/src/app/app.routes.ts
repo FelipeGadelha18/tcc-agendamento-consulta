@@ -17,6 +17,12 @@ export const routes: Routes = [
     },
 
     {
+        path: 'recuperar-senha',
+        loadComponent: () => import('./component/recuperar-senha/recuperar-senha.component')
+            .then((m) => m.RecuperarSenhaComponent),
+    },
+
+    {
         path: 'cadastro',
         loadComponent: () => import('./component/cadastro/cadastro.component')
             .then((m) => m.CadastroComponent),
