@@ -52,9 +52,9 @@
         </div>
 
         <label>Senha:</label>
-        <input type="password" name="senha"
-               [(ngModel)]="paciente.senha" required />
-
+          <div style="width: 100%;">
+              <p-password [(ngModel)]="senha" name="senha" [toggleMask]="true" required />
+          </div>
         <button type="submit" class="btn">Salvar</button>
 
         <p class="login-text">

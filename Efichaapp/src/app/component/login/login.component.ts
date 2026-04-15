@@ -6,10 +6,18 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService, LoginResponse } from '../../services/auth.service';
 
+import { PasswordModule } from 'primeng/password';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ToastModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink, 
+    ToastModule,
+    PasswordModule
+  ],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -17,7 +25,7 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
 export class LoginComponent {
   
   cpf: string = '';
-  senha: string = '';
+  senha!: string;
   tipoLogin: string = 'PACIENTE';
   carregando: boolean = false;
 

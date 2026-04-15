@@ -89,6 +89,18 @@
     display: block;
   }
 
+   p-password {
+      width: 100%;
+      max-width: 100%;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: #1e90ff;
+      }
+  }
+
   input {
     width: 100%;
     padding: 12px 14px;

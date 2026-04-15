@@ -6,15 +6,19 @@ import { PacienteService } from '../../services/paciente.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
+import { PasswordModule } from 'primeng/password';
+
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ToastModule],
+  imports: [CommonModule, FormsModule, RouterLink, ToastModule, PasswordModule],
   providers: [MessageService],
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
 })
 export class CadastroComponent {
+  
+  senha!: string;
 
   ngOnInit(): void {
     const s: any = history.state?.paciente;
