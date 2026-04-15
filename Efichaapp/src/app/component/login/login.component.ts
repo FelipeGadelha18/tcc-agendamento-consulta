@@ -6,26 +6,24 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService, LoginResponse } from '../../services/auth.service';
 
-import { PasswordModule } from 'primeng/password';
-
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    RouterLink, 
-    ToastModule,
-    PasswordModule
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    ToastModule
   ],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  
+
   cpf: string = '';
   senha!: string;
+  mostrarSenha: boolean = false;
   tipoLogin: string = 'PACIENTE';
   carregando: boolean = false;
 
@@ -33,7 +31,11 @@ export class LoginComponent {
     private router: Router,
     private messageService: MessageService,
     private authService: AuthService
-  ) {}
+  ) { }
+
+  alternarVisibilidadeSenha() {
+    this.mostrarSenha = !this.mostrarSenha;
+  }
 
   formatarCpf() {
     let cpf = this.cpf.replace(/\D/g, '');
@@ -49,7 +51,7 @@ export class LoginComponent {
   entrar() {
     if (!this.cpf || !this.senha) {
       this.messageService.add({
-        severity:'warn',
+        severity: 'warn',
         summary: 'Atenção',
         detail: 'CPF e Senha são obrigatórios.'
       });
@@ -59,7 +61,7 @@ export class LoginComponent {
     const cpfLimpo = this.cpf.replace(/\D/g, '');
     if (cpfLimpo.length !== 11) {
       this.messageService.add({
-        severity:'warn',
+        severity: 'warn',
         summary: 'Atenção',
         detail: 'CPF deve ter 11 dígitos.'
       });
@@ -90,8 +92,8 @@ export class LoginComponent {
         console.error(err);
         this.carregando = false;
         this.messageService.add({
-          severity:'error',
-          summary:'Erro',
+          severity: 'error',
+          summary: 'Erro',
           detail: err?.error?.message || 'CPF ou senha incorretos.'
         });
       }
@@ -115,8 +117,8 @@ export class LoginComponent {
         console.error(err);
         this.carregando = false;
         this.messageService.add({
-          severity:'error',
-          summary:'Erro',
+          severity: 'error',
+          summary: 'Erro',
           detail: err?.error?.message || 'CPF ou senha incorretos.'
         });
       }

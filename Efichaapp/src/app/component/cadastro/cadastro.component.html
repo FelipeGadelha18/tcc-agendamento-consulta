@@ -52,9 +52,23 @@
         </div>
 
         <label>Senha:</label>
-          <div style="width: 100%;">
-              <p-password [(ngModel)]="senha" name="senha" [toggleMask]="true" required />
+        <div class="input-wrapper">
+          <input [type]="mostrarSenha ? 'text' : 'password'" [(ngModel)]="senha" name="senha" required />
+          <i class="pi toggle-icon" [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'" (click)="alternarVisibilidadeSenha()"></i>
+        </div>
+
+        <div *ngIf="senha" class="senha-strength">
+          <div class="strength-meter">
+            <div 
+              class="strength-meter-fill" 
+              [style.width.%]="avaliarForcaSenha().nivel * 33.33"
+              [style.backgroundColor]="avaliarForcaSenha().cor">
+            </div>
           </div>
+          <span class="strength-text" [style.color]="avaliarForcaSenha().cor">
+            Força: {{ avaliarForcaSenha().forca }}
+          </span>
+        </div>
         <button type="submit" class="btn">Salvar</button>
 
         <p class="login-text">

@@ -47,6 +47,19 @@
   color: #555;
 }
 
+.toggle-icon {
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+  margin-left: auto;
+  padding-left: 10px;
+}
+
+.toggle-icon:hover {
+  color: #0052a3;
+}
+
 .input-group input {
   border: none;
   outline: none;
@@ -112,7 +125,7 @@
   top: 35%;
   transform: translateY(-50%);
   z-index: 3;
-  text-align: right; 
+  text-align: right;
 }
 
 .side-text h1 {
@@ -169,6 +182,7 @@
     display: none;
   }
 }
+
 /* TELAS DE 14 POLEGADAS - 1366px */
 @media (max-width: 1400px) and (min-width: 1100px) {
   .login-container {
@@ -176,11 +190,11 @@
   }
 
   .login-card {
-    transform: scale(0.95); 
+    transform: scale(0.95);
   }
 
   .side-text {
-    right: 200px; 
+    right: 200px;
     top: 40%;
   }
 
@@ -213,11 +227,12 @@
     justify-content: center;
     padding-left: 0;
     text-align: center;
-    background: linear-gradient(#307BD2,#284C77, #0E2948);
+    background: linear-gradient(#307BD2, #284C77, #0E2948);
   }
 
   .side-text {
-    order: 1;          /* 👈 VEM PRIMEIRO */
+    order: 1;
+    /* 👈 VEM PRIMEIRO */
     position: static;
     transform: none;
     margin-bottom: 2rem;
@@ -239,6 +254,7 @@
     color: #eeeff0;
 
   }
+
   .shape1 {
     display: none;
 

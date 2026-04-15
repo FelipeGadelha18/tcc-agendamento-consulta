@@ -6,12 +6,10 @@ import { PacienteService } from '../../services/paciente.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
-import { PasswordModule } from 'primeng/password';
-
 @Component({
   selector: 'app-cadastro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ToastModule, PasswordModule],
+  imports: [CommonModule, FormsModule, RouterLink, ToastModule],
   providers: [MessageService],
   templateUrl: './cadastro.component.html',
   styleUrls: ['./cadastro.component.scss']
@@ -19,6 +17,39 @@ import { PasswordModule } from 'primeng/password';
 export class CadastroComponent {
   
   senha!: string;
+  mostrarSenha: boolean = false;
+
+  alternarVisibilidadeSenha() {
+    this.mostrarSenha = !this.mostrarSenha;
+  }
+
+  avaliarForcaSenha(): { forca: string; nivel: number; cor: string } {
+    if (!this.senha) {
+      return { forca: '', nivel: 0, cor: '#ddd' };
+    }
+
+    let nivel = 0;
+    const senha = this.senha;
+
+    // Verifica comprimento
+    if (senha.length >= 8) nivel++;
+    if (senha.length >= 12) nivel++;
+
+    // Verifica tipos de caracteres
+    if (/[a-z]/.test(senha)) nivel++;
+    if (/[A-Z]/.test(senha)) nivel++;
+    if (/[0-9]/.test(senha)) nivel++;
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(senha)) nivel++;
+
+    // Mapeia para níveis: 1-2 = Fraca, 3-4 = Média, 5+ = Forte
+    if (nivel <= 2) {
+      return { forca: 'Fraca', nivel: 1, cor: '#ef4444' };
+    } else if (nivel <= 4) {
+      return { forca: 'Média', nivel: 2, cor: '#f59e0b' };
+    } else {
+      return { forca: 'Forte', nivel: 3, cor: '#10b981' };
+    }
+  }
 
   ngOnInit(): void {
     const s: any = history.state?.paciente;
