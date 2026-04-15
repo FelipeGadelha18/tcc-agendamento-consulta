@@ -18,7 +18,7 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   loginPaciente(cpf: string, senha: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/pacientes/login`, {

@@ -94,7 +94,7 @@ public class PacienteService {
             paciente.setEndereco(pacienteAtualizado.getEndereco());
             paciente.setNumeroCasa(pacienteAtualizado.getNumeroCasa());
             paciente.setFoto(pacienteAtualizado.getFoto());
-            
+
             Paciente atualizado = repository.save(paciente);
             atualizado.setSenha(null);
             return atualizado;
