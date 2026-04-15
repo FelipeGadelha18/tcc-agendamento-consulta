@@ -18,50 +18,43 @@
       <form (ngSubmit)="salvar()">
 
         <label>Nome completo:</label>
-        <input type="text" name="nome"
-               [(ngModel)]="paciente.nomeCompleto" required />
+        <input type="text" name="nome" [(ngModel)]="paciente.nomeCompleto" required />
 
         <div class="row">
           <div class="col">
             <label>CPF:</label>
-            <input type="text" name="cpf"
-                   [(ngModel)]="paciente.cpf" required (input)="formatarCpf()"/>
+            <input type="text" name="cpf" [(ngModel)]="paciente.cpf" required (input)="formatarCpf()" />
           </div>
           <div class="col">
             <label>Telefone:</label>
-            <input type="text" name="telefone"
-                   [(ngModel)]="paciente.telefone" required />
+            <input type="text" name="telefone" [(ngModel)]="paciente.telefone" required />
           </div>
         </div>
 
         <label>E-mail:</label>
-        <input type="email" name="email"
-               [(ngModel)]="paciente.email" required />
+        <input type="email" name="email" [(ngModel)]="paciente.email" required />
 
         <div class="row">
           <div class="col flex2">
             <label>Endereço:</label>
-            <input type="text" name="endereco"
-                   [(ngModel)]="paciente.endereco" required />
+            <input type="text" name="endereco" [(ngModel)]="paciente.endereco" required />
           </div>
           <div class="col flex1">
             <label>Nº:</label>
-            <input type="text" name="numeroCasa"
-                   [(ngModel)]="paciente.numeroCasa" required />
+            <input type="text" name="numeroCasa" [(ngModel)]="paciente.numeroCasa" required />
           </div>
         </div>
 
         <label>Senha:</label>
         <div class="input-wrapper">
           <input [type]="mostrarSenha ? 'text' : 'password'" [(ngModel)]="senha" name="senha" required />
-          <i class="pi toggle-icon" [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'" (click)="alternarVisibilidadeSenha()"></i>
+          <i class="pi toggle-icon" [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'"
+            (click)="alternarVisibilidadeSenha()"></i>
         </div>
 
         <div *ngIf="senha" class="senha-strength">
           <div class="strength-meter">
-            <div 
-              class="strength-meter-fill" 
-              [style.width.%]="avaliarForcaSenha().nivel * 33.33"
+            <div class="strength-meter-fill" [style.width.%]="avaliarForcaSenha().nivel * 33.33"
               [style.backgroundColor]="avaliarForcaSenha().cor">
             </div>
           </div>

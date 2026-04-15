@@ -46,7 +46,7 @@
   top: 35%;
   transform: translateY(-50%);
   z-index: 3;
-  text-align: right; 
+  text-align: right;
   right: 8%;
 
   h3 {
@@ -221,10 +221,12 @@
     h1 {
       font-size: 36px;
     }
+
     h3 {
       font-size: 24px;
     }
-    .shape{
+
+    .shape {
       display: none;
     }
   }
@@ -238,16 +240,17 @@
 @media (max-width: 480px) {
   .page {
     padding: 20px;
-    background: linear-gradient(#307BD2,#284C77, #0E2948);
+    background: linear-gradient(#307BD2, #284C77, #0E2948);
 
   }
+
   .auth-card {
     padding: 25px 22px;
     background: #fdfdfdf1;
-    
+
   }
 
-  .auth-header{
+  .auth-header {
     order: 0;
     position: static;
     transform: none;
@@ -258,6 +261,7 @@
       font-size: 60px;
       color: #fdfdfd;
     }
+
     h3 {
       font-size: 25px;
       color: #fdfdfd;
@@ -269,7 +273,7 @@
     flex-direction: column;
   }
 
-  .shape{
-      display: none;
-    }
+  .shape {
+    display: none;
+  }
 }

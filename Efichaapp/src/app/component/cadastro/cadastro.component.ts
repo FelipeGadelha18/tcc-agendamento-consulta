@@ -15,7 +15,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./cadastro.component.scss']
 })
 export class CadastroComponent {
-  
+
   senha!: string;
   mostrarSenha: boolean = false;
 
@@ -75,7 +75,7 @@ export class CadastroComponent {
     private pacienteService: PacienteService,
     private router: Router,
     private messageService: MessageService,
-  ) {}
+  ) { }
 
   formatarCpf() {
     let cpf = this.paciente.cpf.replace(/\D/g, '');
