@@ -13,7 +13,6 @@
 
   <!-- CONTEÚDO -->
   <main class="content">
-
     <!-- TABELA (SPAN COLUMNS) -->
     <section class="card table-card" style="grid-column: 1 / -1;">
       <div class="card-header">
@@ -77,20 +76,19 @@
     </section>
 
     <!-- INFO POSTO -->
-    <section class="card info-card">
+    <section class="info-card">
       <h2>🏥 Informações do Posto</h2>
-
       <p>
         <strong>Nome:</strong>
-        <span>URAP Roney Meireles</span>
+        <span>{{ posto?.nome }}</span>
       </p>
       <p>
         <strong>Endereço:</strong>
-        <span>R. Gavião, 2-96 - Conj. Adalberto Sena</span>
+        <span>{{ posto?.endereco }}</span>
       </p>
       <p>
         <strong>Capacidade Diária:</strong>
-        <span>30 Fichas</span>
+        <span>{{ posto?.capacidadeDiaria }}</span>
       </p>
 
       <!-- GERENCIAMENTO DE DATAS -->

@@ -1,12 +1,27 @@
 @import "primeicons/primeicons.css";
 @import "leaflet/dist/leaflet.css";
 
+:root{
+  --primary: #1976d2;
+  --primaryDark: #1565c0;
+  --success: #4caf50;
+  --danger: #f44336;
+  --warning: #ff9800;
+  --bg-light: #f5f7fa;
+  --bg-white: #f3f3f3;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+}
+
+
 
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #e5e2e2e6;
+  background-color: var(--bg-light);
 }
 
 
