@@ -89,6 +89,8 @@ export class CadastroComponent {
   }
 
   salvar() {
+    this.paciente.senha = this.senha;
+
     if (
       !this.paciente.nomeCompleto ||
       !this.paciente.cpf ||
