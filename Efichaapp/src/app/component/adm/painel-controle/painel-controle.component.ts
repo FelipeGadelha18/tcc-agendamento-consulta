@@ -10,10 +10,13 @@ import { InputTextModule } from 'primeng/inputtext';
 
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../../services/auth.service';
 import { Administrador } from '../../../models/administrador.model';
+
+import { AuthService } from '../../../services/auth.service';
 import { ReservaService } from '../../../services/reservar.service';
 import { PostoSaudeService } from '../../../services/posto-saude.service';
+import { PainelControlePostoService } from '../../../services/painel-controle-posto.service';
+
 
 @Component({
   selector: 'app-painel-controle',
@@ -40,24 +43,28 @@ export class PainelControleComponent implements OnInit {
   totalRecords: number = 0;
   pageSize: number = 5;
 
-  // datas que podem ser adicionadas pelo administrador
   datasDisponiveis: string[] = [];
   novaData: string = '';
+
+  posto: any = null;
 
   constructor(
     private messageService: MessageService,
     private router: Router,
     private authService: AuthService,
     private reservaService: ReservaService,
-    private postoService: PostoSaudeService
+    private postoService: PostoSaudeService,
+    private painelPostoService: PainelControlePostoService
   ) {}
 
   ngOnInit(): void {
     this.administrador = this.authService.obterAdministrador();
     this.idPosto = this.authService.obterIdPosto();
     this.atualizarFichas(0, this.pageSize);
+    this.painelPostoService.getPostos().subscribe(postos => {
+      this.posto = postos.find(p => p.id === this.idPosto) || null;
+    });
 
-    // carregar datas disponíveis atuais
     if (this.idPosto) {
       this.postoService.listarDatas(this.idPosto).subscribe(d => this.datasDisponiveis = d);
     }
