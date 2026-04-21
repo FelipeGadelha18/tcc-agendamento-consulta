@@ -55,7 +55,7 @@ export class PainelControleComponent implements OnInit {
     private reservaService: ReservaService,
     private postoService: PostoSaudeService,
     private painelPostoService: PainelControlePostoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.administrador = this.authService.obterAdministrador();

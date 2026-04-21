@@ -15,7 +15,7 @@ export interface Posto {
 
 export class PainelControlePostoService {
 
-  private apiUrl = 'http://localhost:8080/postos';
+  private apiUrl = 'http://localhost:8080/postos/listar';
 
   getPostos(): Observable<Posto[]> {
     return this.http.get<Posto[]>(this.apiUrl);
