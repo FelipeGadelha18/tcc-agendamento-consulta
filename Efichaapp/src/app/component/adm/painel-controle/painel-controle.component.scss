@@ -1,12 +1,4 @@
-// PAGE CONTAINER
-.page-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef7 100%);
-}
-
-/* HEADER*/
+//HEADER
 .header {
   background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
   color: #ffffff;
@@ -23,14 +15,22 @@
   }
 }
 
-/* TÍTULOS*/
-.page-container h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1565c0;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+// PAGE CONTAINER
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8eef7 100%);
+
+  /* TÍTULOS*/
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1565c0;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 }
 
 /* CONTEÚDO*/
@@ -220,9 +220,10 @@
 /* INFO CARD*/
 .info-card {
   display: flex;
-  flex-direction: column;
+  flex-direction:column;
+  margin: 35px ;
   padding: 28px;
-  width: 170%;
+  width: 95%;
   background: var(--bg-white);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
