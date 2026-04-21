@@ -79,4 +79,14 @@ public class PostoSaudeController {
         }
         return ResponseEntity.ok().build();
     }
+
+    // 🔹 resetar fichas disponíveis para o total
+    @PutMapping("/{id}/resetar-fichas")
+    public ResponseEntity<?> resetarFichas(@PathVariable Long id) {
+        var posto = postoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+        posto.setFichasDisponiveis(posto.getTotalFichas());
+        postoRepository.save(posto);
+        return ResponseEntity.ok("Fichas resetadas com sucesso!");
+    }
 }

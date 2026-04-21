@@ -195,6 +195,34 @@ export class PainelControleComponent implements OnInit {
       }
     });
   }
+
+  resetarFichas() {
+    if (!this.idPosto) return;
+    if (!confirm('Deseja realmente resetar as fichas disponíveis para o total?')) {
+      return;
+    }
+    this.postoService.resetarFichas(this.idPosto).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Fichas resetadas',
+          detail: 'As fichas disponíveis foram resetadas para o total.'
+        });
+        // Atualizar o posto para refletir as mudanças
+        this.painelPostoService.getPostos().subscribe(postos => {
+          this.posto = postos.find(p => p.id === this.idPosto) || null;
+        });
+      },
+      error: (err: any) => {
+        console.error('Erro ao resetar fichas', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Falha ao resetar fichas.'
+        });
+      }
+    });
+  }
 }
 
 

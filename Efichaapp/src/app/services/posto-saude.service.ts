@@ -9,7 +9,7 @@ export class PostoSaudeService {
 
   private apiUrl = 'http://localhost:8080/postos';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   listar(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/listar`);
@@ -27,5 +27,9 @@ export class PostoSaudeService {
   removerData(postoId: number, data: string) {
     // date deve ser string ISO, encodeURIComponent para segurança
     return this.http.delete(`${this.apiUrl}/${postoId}/datas/${encodeURIComponent(data)}`);
+  }
+
+  resetarFichas(postoId: number): Observable<string> {
+    return this.http.put(`${this.apiUrl}/${postoId}/resetar-fichas`, {}, { responseType: 'text' });
   }
 }

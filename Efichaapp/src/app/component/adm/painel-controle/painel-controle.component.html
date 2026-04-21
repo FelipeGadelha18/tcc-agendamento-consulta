@@ -93,6 +93,13 @@
         <strong>Quantidade de Fichas:</strong>
         <span>{{ posto?.totalFichas }}</span>
       </p>
+      <p>
+        <strong>Fichas Disponíveis:</strong>
+        <span>{{ posto?.fichasDisponiveis }}</span>
+      </p>
+      <button class="btn warning" (click)="resetarFichas()" title="Resetar fichas">
+        <i class="pi pi-refresh"></i> Resetar Fichas
+      </button>
 
       <!-- GERENCIAMENTO DE DATAS -->
       <div class="datas-admin">
