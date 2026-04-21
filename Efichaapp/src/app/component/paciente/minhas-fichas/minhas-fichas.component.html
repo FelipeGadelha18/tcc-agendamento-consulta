@@ -72,6 +72,12 @@
 
       </div>
 
+      <!-- MENSAGEM PARA FICHAS CANCELADAS -->
+      <div class="mensagem-cancelamento" *ngIf="reserva.status === 'CANCELADA'">
+        <i class="pi pi-info-circle"></i>
+        <span>Esta ficha foi cancelada. Entre em contato com o posto para mais informações.</span>
+      </div>
+
     </div>
   </div>
 </div>
