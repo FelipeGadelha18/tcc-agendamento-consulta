@@ -77,7 +77,6 @@
         </ng-template>
       </p-table>
     </section>
-<<<<<<< HEAD
 
     <!-- INFO POSTO -->
     <section class="info-card">
@@ -125,48 +124,7 @@
         </div>
       </div>
     </section>
-=======
->>>>>>> 92873fa124d301a40c19c07be0b1ba71d16d2fc0
   </main>
-  <!-- INFO POSTO -->
-  <section class="info-card">
-    <h2>🏥 Informações do Posto</h2>
-    <p>
-      <strong>Nome:</strong>
-      <span>{{ posto?.nome }}</span>
-    </p>
-    <p>
-      <strong>Endereço:</strong>
-      <span>{{ posto?.endereco }}</span>
-    </p>
-    <p>
-      <strong>Quantidade de Fichas:</strong>
-      <span>{{ posto?.totalFichas }}</span>
-    </p>
-
-    <!-- GERENCIAMENTO DE DATAS -->
-    <div class="datas-admin">
-      <h3>
-        <i class="pi pi-calendar"></i>
-        Datas Disponíveis
-      </h3>
-      <ul>
-        <li *ngFor="let d of datasDisponiveis">
-          <strong>{{ d | date:'dd/MM/yyyy' }}</strong>
-          <button class="icon danger" (click)="excluirData(d)" title="Excluir data">
-            <i class="pi pi-trash"></i>
-          </button>
-        </li>
-        <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
-      </ul>
-      <div class="add-data">
-        <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
-        <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
-          <i class="pi pi-plus"></i> Adicionar
-        </button>
-      </div>
-    </div>
-  </section>
 </div>
 
 <div class="footer">
