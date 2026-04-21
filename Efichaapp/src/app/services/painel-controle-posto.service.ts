@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient  } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Posto {
-  id:number;
+  id: number;
   nome: string;
   endereco: string;
   capacidadeDiaria: number;

@@ -24,12 +24,13 @@
 
       <!-- FILTRO GLOBAL -->
       <div class="table-filter">
-        <input pInputText type="text" placeholder="🔍 Pesquisar por nome, CPF ou nº..." (input)="onGlobalFilter($event, dt)" />
+        <input pInputText type="text" placeholder="🔍 Pesquisar por nome, CPF ou nº..."
+          (input)="onGlobalFilter($event, dt)" />
       </div>
 
       <p-table #dt [value]="fichas" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[5, 10, 20]"
-        [responsiveLayout]="'scroll'" [globalFilterFields]="['nome', 'cpf', 'numero', 'status']"
-        [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [totalRecords]="totalRecords">
+        [responsiveLayout]="'scroll'" [globalFilterFields]="['nome', 'cpf', 'numero', 'status']" [lazy]="true"
+        (onLazyLoad)="onLazyLoad($event)" [totalRecords]="totalRecords">
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="nome">
@@ -63,10 +64,12 @@
               </span>
             </td>
             <td class="acoes">
-              <button class="icon danger" (click)="cancelarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'" title="Cancelar">
+              <button class="icon danger" (click)="cancelarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
+                title="Cancelar">
                 <i class="pi pi-times"></i>
               </button>
-              <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'" title="Confirmar">
+              <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
+                title="Confirmar">
                 <i class="pi pi-check"></i>
               </button>
             </td>
