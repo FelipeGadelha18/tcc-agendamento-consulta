@@ -8,7 +8,7 @@ export class ReservaService {
 
   private apiUrl = 'http://localhost:8080/reservas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // 🔹 Criar reserva
   reservarFicha(pacienteId: number, postoId: number) {

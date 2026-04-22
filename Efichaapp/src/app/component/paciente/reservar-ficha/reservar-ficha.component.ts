@@ -54,7 +54,7 @@ export class ReservarFichaComponent implements OnInit {
     private messageService: MessageService,
     private postoService: PostoSaudeService,
     private reservarService: ReservaService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
