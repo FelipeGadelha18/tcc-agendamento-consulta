@@ -12,9 +12,9 @@ export class ReservaService {
 
   // 🔹 Criar reserva
   reservarFicha(pacienteId: number, postoId: number) {
-    return this.http.post(this.apiUrl, {
-      paciente: { id: pacienteId },
-      postoSaude: { id: postoId }
+    return this.http.post(this.apiUrl + '/nova', {
+      pacienteId: pacienteId,
+      postoId: postoId
     });
   }
 

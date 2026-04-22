@@ -40,6 +40,20 @@ public class ReservaController {
         return reservaRepository.findAll();
     }
 
+    // 🔹 NOVO ENDPOINT - Reservar ficha (fluxo novo com status PENDENTE)
+    @PostMapping("/nova")
+    public ResponseEntity<?> reservarNovaFicha(@RequestBody java.util.Map<String, Long> payload) {
+        Long pacienteId = payload.get("pacienteId");
+        Long postoId = payload.get("postoId");
+
+        try {
+            var resposta = reservaService.reservarFicha(pacienteId, postoId);
+            return ResponseEntity.ok(resposta);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(java.util.Map.of("erro", e.getMessage()));
+        }
+    }
+
     // 🔹 Criar reserva (fluxo antigo - se ainda usar)
     @PostMapping
     public Reserva criarReserva(@RequestBody Reserva reserva) {

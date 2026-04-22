@@ -17,8 +17,8 @@ public class Reserva {
     private LocalDate dataCriacao = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusReserva status = StatusReserva.CONFIRMADA;
+    @Column(nullable = false, length = 15)
+    private StatusReserva status = StatusReserva.PENDENTE;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)
@@ -32,7 +32,7 @@ public class Reserva {
     }
 
     public Reserva(Long id, LocalDate dataReserva, LocalDate dataCriacao,
-                   StatusReserva status, Paciente paciente, PostoSaude postoSaude) {
+            StatusReserva status, Paciente paciente, PostoSaude postoSaude) {
         this.id = id;
         this.dataReserva = dataReserva;
         this.dataCriacao = dataCriacao;

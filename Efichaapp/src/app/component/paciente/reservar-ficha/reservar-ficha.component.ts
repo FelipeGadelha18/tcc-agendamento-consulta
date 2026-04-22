@@ -8,6 +8,7 @@ import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { PostoSaudeService } from '../../../services/posto-saude.service';
+import { ReservaService } from '../../../services/reservar.service';
 
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -51,7 +52,8 @@ export class ReservarFichaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private postoService: PostoSaudeService
+    private postoService: PostoSaudeService,
+    private reservarService: ReservaService
   ) {}
 
   ngOnInit() {
@@ -113,37 +115,36 @@ export class ReservarFichaComponent implements OnInit {
 
   reservarFicha() {
 
-    if (!this.dataSelecionada) {
+    if (!this.postoSelecionado) {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Data obrigatória',
-        detail: 'Selecione uma data para reservar a ficha'
+        summary: 'Posto obrigatório',
+        detail: 'Selecione um posto para reservar a ficha'
       });
       return;
     }
 
-    const reserva = {
-      dataReserva: this.dataSelecionada,
-      paciente: { id: this.pacienteLogado.id },
-      postoSaude: { id: this.postoSelecionado.id }
-    };
-
-    this.http.post<any>('http://localhost:8080/reservas', reserva)
+    this.reservarService.reservarFicha(this.pacienteLogado.id, this.postoSelecionado.id)
       .subscribe({
-        next: () => {
+        next: (resposta: any) => {
           this.reservaConfirmada = true;
           this.dadosConfirmacao = {
-            data: this.dataSelecionada,
+            data: new Date(),
             horario: '08:00',
             posto: this.postoSelecionado.nome
           };
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: resposta.mensagem
+          });
         },
         error: (err) => {
-          if (err.status === 409 || err.status === 400) {
+          if (err.status === 400 || err.status === 409) {
             this.messageService.add({
               severity: 'error',
-              summary: 'Data indisponível',
-              detail: 'Você já possui uma ficha reservada para esta data'
+              summary: 'Erro na reserva',
+              detail: err.error?.erro || 'Não foi possível reservar a ficha'
             });
           } else {
             this.messageService.add({

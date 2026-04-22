@@ -45,12 +45,12 @@ public class ReservaService {
             throw new RuntimeException("Não há fichas disponíveis neste posto.");
         }
 
-        // Cria reserva
+        // Cria reserva com status PENDENTE
         Reserva reserva = new Reserva();
         reserva.setDataReserva(hoje);
         reserva.setPaciente(paciente);
         reserva.setPostoSaude(posto);
-        reserva.setStatus(StatusReserva.CONFIRMADA);
+        reserva.setStatus(StatusReserva.PENDENTE);
 
         reservaRepository.save(reserva);
 
@@ -60,7 +60,7 @@ public class ReservaService {
 
         // Retorno
         Map<String, Object> resposta = new HashMap<>();
-        resposta.put("mensagem", "Reserva feita com sucesso!");
+        resposta.put("mensagem", "Reserva feita com sucesso! Aguardando confirmação do administrador.");
         resposta.put("dataReserva", reserva.getDataReserva());
         resposta.put("nomePaciente", paciente.getNomeCompleto());
         resposta.put("posto", Map.of(
@@ -69,8 +69,7 @@ public class ReservaService {
                 "bairro", posto.getBairro(),
                 "cidade", posto.getCidade(),
                 "estado", posto.getEstado(),
-                "telefone", posto.getTelefone()
-        ));
+                "telefone", posto.getTelefone()));
         resposta.put("fichasRestantes", posto.getFichasDisponiveis());
 
         return resposta;
@@ -101,22 +100,40 @@ public class ReservaService {
                 .findById(reservaId)
                 .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
 
+        // Não permite confirmar reservas canceladas ou utilizadas
         if (reserva.getStatus() == StatusReserva.CANCELADA) {
             throw new RuntimeException("Reserva cancelada não pode ser reativada pelo administrador");
         }
 
+        if (reserva.getStatus() == StatusReserva.UTILIZADA) {
+            throw new RuntimeException("Reserva utilizada não pode ser alterada");
+        }
+
+        // Se já está confirmada, não faz nada
         if (reserva.getStatus() == StatusReserva.CONFIRMADA) {
             return;
         }
 
-        reserva.setStatus(StatusReserva.CONFIRMADA);
-        reservaRepository.save(reserva);
+        // Permite confirmar reservas pendentes
+        if (reserva.getStatus() == StatusReserva.PENDENTE) {
+            reserva.setStatus(StatusReserva.CONFIRMADA);
+            reservaRepository.save(reserva);
+            return;
+        }
+
+        // Para qualquer outro status futuro, lança exceção
+        throw new RuntimeException("Status inválido para confirmação: " + reserva.getStatus());
     }
 
     private void executarCancelamento(Reserva reserva) {
         // Se já está cancelada, ignora (idempotência)
         if (reserva.getStatus() == StatusReserva.CANCELADA) {
             return;
+        }
+
+        // Não permite cancelar reservas já utilizadas
+        if (reserva.getStatus() == StatusReserva.UTILIZADA) {
+            throw new RuntimeException("Não é possível cancelar uma ficha já utilizada");
         }
 
         // Atualiza status
