@@ -1,17 +1,30 @@
 package com.example.Eficha.service;
-
-import com.example.Eficha.model.Reserva;
-import com.example.Eficha.repository.ReservaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
-import com.lowagie.text.pdf.draw.LineSeparator;
-
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.Eficha.model.Reserva;
+import com.example.Eficha.repository.ReservaRepository;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.draw.LineSeparator;
+
 
 @Service
 public class ReservaPdfService {
@@ -72,6 +85,19 @@ public class ReservaPdfService {
             adicionarLinha(tabela, "Status:", "CONFIRMADA", subtituloFont, textoFont);
 
             document.add(tabela);
+
+           String cpf = reserva.getPaciente().getCpf();
+           
+           QRCodeWriter writer = new QRCodeWriter();
+           BitMatrix matrix = writer.encode(cpf, BarcodeFormat.QR_CODE, 150, 150);
+           
+           ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+           MatrixToImageWriter.writeToStream(matrix, "PNG", pngOutputStream);
+           
+           Image qrImage = Image.getInstance(pngOutputStream.toByteArray());
+           qrImage.setAlignment(Element.ALIGN_CENTER);
+           
+           document.add(qrImage);
 
             // 🟦 DESTAQUE
             Paragraph destaque = new Paragraph(
