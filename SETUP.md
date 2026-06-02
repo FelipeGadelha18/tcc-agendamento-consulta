@@ -147,7 +147,7 @@ http://localhost/phpmyadmin
 2. Nome do banco:
 
 ```sql
-agendamento_saude
+tcc_agendamento
 ```
 
 3. Clique em **Criar**.
@@ -158,12 +158,12 @@ agendamento_saude
 
 Após criar o banco:
 
-1. Selecione o banco `agendamento_saude`.
+1. Selecione o banco `tcc_agendamento`.
 2. Clique em **Importar**.
 3. Escolha o arquivo:
 
 ```text
-database.sql
+tcc_agendamento.sql
 ```
 
 4. Clique em **Executar**.
@@ -246,7 +246,7 @@ ng version
 Entre na pasta do projeto Angular:
 
 ```bash
-cd frontend
+cd Efichaapp
 ```
 
 Instale as dependências:
@@ -274,7 +274,7 @@ http://localhost:4200
 Entre na pasta do projeto Spring:
 
 ```bash
-cd backend
+cd Eficha
 ```
 
 Instale as dependências:
@@ -403,14 +403,14 @@ http://localhost:8080
 ```text
 Projeto
 │
-├── backend
+├── Eficha
 │   ├── src
 │   ├── pom.xml
 │
-├── frontend
+├── Efichaapp
 │   ├── src
 │   ├── package.json
 │
 └── database
-    └── database.sql
+    └── tcc_agendamento.sql
 ```

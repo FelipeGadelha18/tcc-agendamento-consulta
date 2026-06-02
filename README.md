@@ -68,14 +68,14 @@ cd tcc-agendamento-consulta
 ### Instalar dependências do Back-end
 
 ```bash
-cd backend
+cd Eficha
 mvn clean install
 ```
 
 ### Instalar dependências do Front-end
 
 ```bash
-cd frontend
+cd Efichaapp
 npm install
 ```
 
@@ -110,16 +110,16 @@ http://localhost:8080
 ```text
 tcc-agendamento-consulta/
 │
-├── backend/
+├── Eficha/
 │   ├── src/
 │   ├── pom.xml
 │
-├── frontend/
+├── Efichaapp/
 │   ├── src/
 │   ├── package.json
 │
 ├── database/
-│   └── database.sql
+│   └── tcc_agendamento.sql
 │
 ├── SETUP.md
 │
