@@ -99,7 +99,7 @@ Bash
 npm install -g @angular/cli@19
 
 ### 4. MySQL
-Download: [link suspeito removido] ou o MySQL Installer para Windows.
+Download:
 
 ```bash
 https://www.apachefriends.org/pt_br/download.html
