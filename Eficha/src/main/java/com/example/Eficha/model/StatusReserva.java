@@ -3,6 +3,8 @@ package com.example.Eficha.model;
 public enum StatusReserva {
     PENDENTE,
     CONFIRMADA,
-    CANCELADA,
-    UTILIZADA
+    CHAMADO,
+    UTILIZADA,
+    NO_SHOW,
+    CANCELADA
 }

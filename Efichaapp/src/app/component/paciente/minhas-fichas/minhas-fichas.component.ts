@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { ReservaService } from '../../../services/reservar.service';
 
 
 @Component({
@@ -23,8 +24,9 @@ export class MinhasFichasComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
+    private reservaService: ReservaService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.pacienteLogado = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -62,13 +64,13 @@ export class MinhasFichasComponent implements OnInit {
   }
 
   carregarMinhasReservas() {
-    this.http
-      .get<any[]>(`http://localhost:8080/reservas/por-paciente/${this.pacienteLogado.id}`)
+    this.reservaService.listarPorPaciente(this.pacienteLogado.id)
       .subscribe({
         next: (dados) => {
           this.reservas = dados.map(r => ({
             ...r,
-            status: r.status || 'CONFIRMADA'
+            status: r.status || 'CONFIRMADA',
+            posicaoNaFila: r.posicaoNaFila || null
           }));
         },
         error: () => alert('Erro ao carregar suas fichas')

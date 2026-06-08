@@ -104,6 +104,69 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  chamarProximo() {
+    if (!this.idPosto) {
+      return;
+    }
+    this.reservaService.chamarProximo(this.idPosto).subscribe({
+      next: (res: any) => {
+        const reserva = res.reserva ?? res;
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Próximo chamado',
+          detail: `O paciente ${reserva.paciente?.nomeCompleto || reserva.paciente?.nome} foi chamado.`
+        });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao chamar próximo', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao chamar próximo paciente' });
+      }
+    });
+  }
+
+  registrarCheckin(ficha: any) {
+    this.reservaService.registrarCheckin(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Check-in', detail: `Check-in de ${ficha.nome} registrado.` });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao registrar check-in', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao registrar check-in' });
+      }
+    });
+  }
+
+  finalizarAtendimento(ficha: any) {
+    this.reservaService.finalizarAtendimento(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Atendimento', detail: `Atendimento de ${ficha.nome} registrado.` });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao finalizar atendimento', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao finalizar atendimento' });
+      }
+    });
+  }
+
+  marcarNoShow(ficha: any) {
+    if (!confirm(`Deseja marcar como não compareceu a ficha de ${ficha.nome}?`)) {
+      return;
+    }
+    this.reservaService.marcarNoShow(ficha.id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'warn', summary: 'No-show', detail: `Ficha de ${ficha.nome} marcada como no-show.` });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao marcar no-show', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao marcar no-show' });
+      }
+    });
+  }
+
   cancelarFicha(ficha: any) {
     if (!confirm(`Deseja realmente cancelar a ficha de ${ficha.nome}?`)) {
       return;
@@ -148,6 +211,8 @@ export class PainelControleComponent implements OnInit {
           nome: r.paciente?.nomeCompleto || r.paciente?.nome || '—',
           cpf: r.paciente?.cpf || '—',
           numero: r.numero ?? r.id ?? (page * size) + i + 1,
+          dataReserva: r.dataReserva,
+          posicaoNaFila: r.posicaoNaFila,
           status: r.status
         }));
       },

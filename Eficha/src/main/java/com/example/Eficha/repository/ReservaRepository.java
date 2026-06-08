@@ -30,4 +30,10 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     // Buscar por status (ex: CONFIRMADA)
     List<Reserva> findByStatus(StatusReserva status);
+
+    // Buscar próximas reservas por posto
+    List<Reserva> findByPostoSaudeIdAndStatusInOrderByDataCriacaoAsc(Long postoId, List<StatusReserva> statuses);
+
+    // Buscar reservas por paciente e data
+    List<Reserva> findByPacienteIdAndDataReserva(Long pacienteId, LocalDate dataReserva);
 }

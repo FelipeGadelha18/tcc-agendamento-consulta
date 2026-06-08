@@ -17,9 +17,14 @@
     <section class="card table-card" style="grid-column: 1 / -1;">
       <div class="card-header">
         <h2>📋 Fichas do Dia</h2>
-        <button class="btn primary" (click)="atualizarFichas()">
-          <i class="pi pi-refresh"></i> Atualizar
-        </button>
+        <div class="header-actions">
+          <button class="btn secondary" (click)="chamarProximo()">
+            <i class="pi pi-users"></i> Chamar Próximo
+          </button>
+          <button class="btn primary" (click)="atualizarFichas()">
+            <i class="pi pi-refresh"></i> Atualizar
+          </button>
+        </div>
       </div>
 
       <!-- FILTRO GLOBAL -->
@@ -42,6 +47,8 @@
             <th pSortableColumn="numero">
               <i class="pi pi-ticket"></i> Nº Ficha <p-sortIcon field="numero"></p-sortIcon>
             </th>
+            <th><i class="pi pi-calendar"></i> Data</th>
+            <th><i class="pi pi-sort-numeric-down"></i> Posição</th>
             <th><i class="pi pi-flag"></i> Status</th>
             <th><i class="pi pi-cog"></i> Ações</th>
           </tr>
@@ -52,13 +59,16 @@
             <td><strong>{{ ficha.nome }}</strong></td>
             <td>{{ ficha.cpf }}</td>
             <td><strong>{{ ficha.numero }}</strong></td>
+            <td>{{ ficha.dataReserva | date:'dd/MM/yyyy' }}</td>
+            <td>{{ ficha.posicaoNaFila || '—' }}</td>
             <td>
               <span [ngClass]="'status ' + (ficha.status || '').toLowerCase()">
                 <i class="pi" [ngClass]="{
                   'pi-check-circle': ficha.status === 'CONFIRMADA',
                   'pi-times-circle': ficha.status === 'CANCELADA',
                   'pi-exclamation-circle': ficha.status === 'PENDENTE',
-                  'pi-clock': ficha.status === 'AGUARDANDO'
+                  'pi-clock': ficha.status === 'CHAMADO',
+                  'pi-ban': ficha.status === 'NO_SHOW'
                 }"></i>
                 {{ ficha.status }}
               </span>
@@ -71,6 +81,18 @@
               <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
                 title="Confirmar">
                 <i class="pi pi-check"></i>
+              </button>
+              <button class="icon warning" (click)="registrarCheckin(ficha)"
+                [disabled]="ficha.status !== 'CHAMADO' && ficha.status !== 'CONFIRMADA'" title="Check-in">
+                <i class="pi pi-sign-in"></i>
+              </button>
+              <button class="icon info" (click)="finalizarAtendimento(ficha)"
+                [disabled]="ficha.status !== 'CHAMADO' && ficha.status !== 'CONFIRMADA'" title="Finalizar Atendimento">
+                <i class="pi pi-flag"></i>
+              </button>
+              <button class="icon secondary" (click)="marcarNoShow(ficha)"
+                [disabled]="ficha.status === 'CANCELADA' || ficha.status === 'NO_SHOW'" title="Marcar No-show">
+                <i class="pi pi-ban"></i>
               </button>
             </td>
           </tr>

@@ -7,17 +7,12 @@
   <div *ngIf="!reservaConfirmada">
 
     <!-- MENU POPUP -->
-  <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    <p-menu #menu [popup]="true" [model]="items"></p-menu>
 
-  <button
-    pButton
-    type="button"
-    icon="pi pi-bars"
-    class="p-button-text menu-btn"
-    aria-label="Abrir menu"
-    (click)="menu.toggle($event)">
-  </button>
-  
+    <button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn" aria-label="Abrir menu"
+      (click)="menu.toggle($event)">
+    </button>
+
     <h1> Reservar Ficha</h1>
 
     <div class="content">
@@ -72,7 +67,9 @@
           </select>
         </div>
 
-        <button class="btn-reservar" (click)="reservarFicha()" [disabled]="postoSelecionado.fichasDisponiveis === 0">
+
+        <button class="btn-reservar" (click)="reservarFicha()"
+          [disabled]="postoSelecionado.fichasDisponiveis === 0 || !dataSelecionada">
           Reservar ficha
         </button>
       </div>
@@ -98,8 +95,8 @@
         <p>📅 <strong>Data:</strong>
           {{ dadosConfirmacao.data | date:'dd/MM/yyyy' }}
         </p>
-        <p>⏰ <strong>Horário:</strong>
-          {{ dadosConfirmacao.horario }}
+        <p>🔢 <strong>Posição na fila:</strong>
+          {{ dadosConfirmacao.posicaoFila || 'A definir' }}
         </p>
         <p>📍 <strong>Unidade:</strong>
           {{ dadosConfirmacao.posto }}

@@ -10,15 +10,23 @@ export class ReservaService {
 
   constructor(private http: HttpClient) { }
 
-  // 🔹 Criar reserva
-  reservarFicha(pacienteId: number, postoId: number) {
+  reservarFicha(pacienteId: number, postoId: number, dataReserva: string) {
     return this.http.post(this.apiUrl + '/nova', {
-      pacienteId: pacienteId,
-      postoId: postoId
+      pacienteId,
+      postoId,
+      dataReserva
     });
   }
 
-  // 🔹 Baixar comprovante em PDF
+  emitirFichaManual(nomeCompleto: string, cpf: string, postoId: number, dataReserva: string) {
+    return this.http.post(this.apiUrl + '/manual', {
+      nomeCompleto,
+      cpf,
+      postoId,
+      dataReserva
+    });
+  }
+
   baixarComprovante(reservaId: number) {
     return this.http.get(
       `${this.apiUrl}/${reservaId}/comprovante`,
@@ -26,28 +34,43 @@ export class ReservaService {
     );
   }
 
-  // 🔹 Listar reservas por posto
   listarPorPosto(postoId: number) {
     return this.http.get<any[]>(`${this.apiUrl}/por-posto/${postoId}`);
   }
 
-  // 🔹 Listar reservas por posto (paginado)
   listarPorPostoPaginado(postoId: number, page: number = 0, size: number = 10) {
     return this.http.get<any>(`${this.apiUrl}/por-posto/${postoId}/paged?page=${page}&size=${size}`);
   }
 
-  // 🔹 Cancelar reserva (paciente)
+  listarPorPaciente(pacienteId: number) {
+    return this.http.get<any[]>(`${this.apiUrl}/por-paciente/${pacienteId}`);
+  }
+
   cancelarReserva(reservaId: number, pacienteId: number) {
     return this.http.put(`${this.apiUrl}/${reservaId}/cancelar/${pacienteId}`, {});
   }
 
-  // 🔹 Cancelar reserva (administrador)
   cancelarReservaAdministrador(reservaId: number) {
     return this.http.put(`${this.apiUrl}/${reservaId}/cancelar`, {});
   }
 
-  // 🔹 Confirmar reserva (administrador)
   confirmarReservaAdministrador(reservaId: number) {
     return this.http.put(`${this.apiUrl}/${reservaId}/confirmar`, {});
+  }
+
+  chamarProximo(postoId: number) {
+    return this.http.put(`${this.apiUrl}/posto/${postoId}/chamar-proximo`, {});
+  }
+
+  registrarCheckin(reservaId: number) {
+    return this.http.put(`${this.apiUrl}/${reservaId}/checkin`, {});
+  }
+
+  finalizarAtendimento(reservaId: number) {
+    return this.http.put(`${this.apiUrl}/${reservaId}/finalizar`, {});
+  }
+
+  marcarNoShow(reservaId: number) {
+    return this.http.put(`${this.apiUrl}/${reservaId}/no-show`, {});
   }
 }

@@ -30,11 +30,19 @@
           <span>{{ reserva.dataReserva | date:'dd/MM/yyyy' }}</span>
         </div>
 
+
+        <div class="info-item" *ngIf="reserva.posicaoNaFila">
+          <i class="pi pi-sort-numeric-down"></i>
+          <span>Posição: {{ reserva.posicaoNaFila }}</span>
+        </div>
+
         <div class="status" [ngClass]="reserva.status?.toLowerCase()">
           <i class="pi" [ngClass]="{
               'pi-check-circle': reserva.status === 'CONFIRMADA',
               'pi-times-circle': reserva.status === 'CANCELADA',
-              'pi-exclamation-circle': reserva.status === 'PENDENTE'
+              'pi-exclamation-circle': reserva.status === 'PENDENTE',
+              'pi-clock': reserva.status === 'CHAMADO',
+              'pi-ban': reserva.status === 'NO_SHOW'
             }">
           </i>
           <span>{{ reserva.status }}</span>

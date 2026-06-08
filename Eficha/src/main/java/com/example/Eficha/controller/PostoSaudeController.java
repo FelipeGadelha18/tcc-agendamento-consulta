@@ -80,6 +80,74 @@ public class PostoSaudeController {
         return ResponseEntity.ok().build();
     }
 
+    // 🔹 bloquear uma data para o posto
+    @PostMapping("/{id}/bloquear-data")
+    public ResponseEntity<?> bloquearData(@PathVariable Long id, @RequestBody DataDTO dto) {
+        var posto = postoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+        LocalDate data;
+        try {
+            data = LocalDate.parse(dto.data);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body("Formato de data inválido");
+        }
+        if (posto.getDatasBloqueadas() == null) {
+            posto.setDatasBloqueadas(new ArrayList<>());
+        }
+        if (!posto.getDatasBloqueadas().contains(data)) {
+            posto.getDatasBloqueadas().add(data);
+            posto.getDatasDisponiveis().remove(data);
+            postoRepository.save(posto);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    // 🔹 listar datas bloqueadas
+    @GetMapping("/{id}/datas-bloqueadas")
+    public List<LocalDate> listarDatasBloqueadas(@PathVariable Long id) {
+        return postoRepository.findById(id)
+                .map(PostoSaude::getDatasBloqueadas)
+                .orElse(List.of());
+    }
+
+    // 🔹 desbloquear uma data
+    @DeleteMapping("/{id}/bloquear-data/{data}")
+    public ResponseEntity<?> desbloquearData(@PathVariable Long id, @PathVariable String data) {
+        var posto = postoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+        if (posto.getDatasBloqueadas() != null) {
+            try {
+                LocalDate dt = LocalDate.parse(data);
+                posto.getDatasBloqueadas().remove(dt);
+                postoRepository.save(posto);
+            } catch (Exception ex) {
+                return ResponseEntity.badRequest().body("Formato de data inválido");
+            }
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    // 🔹 atualizar políticas do posto
+    public static class PoliticaDTO {
+        public Integer limiteFichasPorCpf;
+        public Integer prazoCancelamentoHoras;
+    }
+
+    @PutMapping("/{id}/policies")
+    public ResponseEntity<?> atualizarPoliticas(@PathVariable Long id, @RequestBody PoliticaDTO dto) {
+        var posto = postoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+
+        if (dto.limiteFichasPorCpf != null) {
+            posto.setLimiteFichasPorCpf(Math.max(1, dto.limiteFichasPorCpf));
+        }
+        if (dto.prazoCancelamentoHoras != null) {
+            posto.setPrazoCancelamentoHoras(Math.max(1, dto.prazoCancelamentoHoras));
+        }
+        postoRepository.save(posto);
+        return ResponseEntity.ok().build();
+    }
+
     // 🔹 resetar fichas disponíveis para o total
     @PutMapping("/{id}/resetar-fichas")
     public ResponseEntity<?> resetarFichas(@PathVariable Long id) {

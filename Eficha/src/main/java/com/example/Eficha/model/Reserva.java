@@ -20,6 +20,9 @@ public class Reserva {
     @Column(nullable = false, length = 15)
     private StatusReserva status = StatusReserva.PENDENTE;
 
+    @Transient
+    private Integer posicaoNaFila;
+
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
@@ -71,6 +74,14 @@ public class Reserva {
 
     public void setStatus(StatusReserva status) {
         this.status = status;
+    }
+
+    public Integer getPosicaoNaFila() {
+        return posicaoNaFila;
+    }
+
+    public void setPosicaoNaFila(Integer posicaoNaFila) {
+        this.posicaoNaFila = posicaoNaFila;
     }
 
     public Paciente getPaciente() {

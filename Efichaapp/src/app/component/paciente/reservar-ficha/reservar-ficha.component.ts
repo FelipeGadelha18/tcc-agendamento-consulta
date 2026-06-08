@@ -104,6 +104,7 @@ export class ReservarFichaComponent implements OnInit {
   selecionarPosto(posto: any) {
     this.postoSelecionado = posto;
     this.dataSelecionada = '';
+
     // buscar datas disponíveis do posto
     this.postoService.listarDatas(posto.id).subscribe(dates => {
       this.datasDisponiveis = dates;
@@ -124,14 +125,23 @@ export class ReservarFichaComponent implements OnInit {
       return;
     }
 
-    this.reservarService.reservarFicha(this.pacienteLogado.id, this.postoSelecionado.id)
+    if (!this.dataSelecionada) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Data obrigatória',
+        detail: 'Selecione uma data para a ficha'
+      });
+      return;
+    }
+
+    this.reservarService.reservarFicha(this.pacienteLogado.id, this.postoSelecionado.id, this.dataSelecionada)
       .subscribe({
         next: (resposta: any) => {
           this.reservaConfirmada = true;
           this.dadosConfirmacao = {
-            data: new Date(),
-            horario: '08:00',
-            posto: this.postoSelecionado.nome
+            data: resposta.dataReserva || this.dataSelecionada,
+            posto: this.postoSelecionado.nome,
+            posicaoFila: resposta.posicaoFila
           };
           this.messageService.add({
             severity: 'success',
@@ -140,19 +150,11 @@ export class ReservarFichaComponent implements OnInit {
           });
         },
         error: (err) => {
-          if (err.status === 400 || err.status === 409) {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro na reserva',
-              detail: err.error?.erro || 'Não foi possível reservar a ficha'
-            });
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: 'Não foi possível reservar a ficha'
-            });
-          }
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro na reserva',
+            detail: err.error?.erro || 'Não foi possível reservar a ficha'
+          });
         }
       });
   }
