@@ -46,6 +46,70 @@ Desenvolver uma aplicação web que permite que usuários realizem o agendamento
 * Node.js 22
 * HTML5
 * CSS3
+---
+
+
+## ⚙️ Pré-requisitos e Instalação
+Antes de começar, você precisará instalar as seguintes ferramentas em sua máquina. Siga o mini-tutorial abaixo para cada uma delas:
+
+### 1. Git (Para clonar o projeto)
+Download: Acesse o site oficial do Git:
+
+```bash
+https://git-scm.com/install/
+```
+
+Como Instalar: * Windows/macOS: Baixe o instalador e siga o avançar padrão ("Next" até o fim).
+
+Linux (Ubuntu/Debian): Execute no terminal: sudo apt install git
+
+Verificação: Abra seu terminal e digite git --version para confirmar.
+
+### 2. Java JDK 25
+Download: Acesse o site da Oracle:
+
+```bash
+https://www.oracle.com/java/technologies/downloads/
+```
+
+Como Instalar:
+
+Baixe o instalador de acordo com o seu sistema operacional e execute-o.
+
+Dica para Windows: Certifique-se de marcar a opção de adicionar o Java às variáveis de ambiente (PATH), ou configure a variável JAVA_HOME manualmente após a instalação.
+
+Verificação: No terminal, digite java -version.
+
+### 3. Node.js (Versão 22) & npm
+Download: Acesse o site oficial do Node.js (Procure pela aba "Downloads" e selecione a versão 22 LTS).
+
+```bash
+https://nodejs.org/pt-br
+```
+
+Como Instalar:
+
+Execute o instalador baixado. O gerenciador de pacotes npm será instalado automaticamente junto com o Node.
+
+Verificação: No terminal, use node -v e npm -v.
+
+Angular CLI: Com o Node instalado, instale a interface de linha de comando do Angular globalmente rodando:
+
+Bash
+npm install -g @angular/cli@19
+
+### 4. MySQL
+Download: [link suspeito removido] ou o MySQL Installer para Windows.
+
+```bash
+https://www.apachefriends.org/pt_br/download.html
+```
+
+Como Instalar:
+
+Avance pelas etapas recomendadas (instalação do Servidor + MySQL Workbench).
+
+Atenção: Durante o processo, será solicitado que você defina uma senha para o usuário root. Guarde essa senha, pois ela será necessária para configurar a conexão do banco no Spring Boot (application.properties).
 
 ---
 
