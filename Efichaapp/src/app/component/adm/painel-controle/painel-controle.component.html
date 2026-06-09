@@ -74,23 +74,25 @@
               </span>
             </td>
             <td class="acoes">
+               <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
+                title="Confirmar">
+                <i class="pi pi-check"></i>
+              </button>
+
               <button class="icon danger" (click)="cancelarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
                 title="Cancelar">
                 <i class="pi pi-times"></i>
               </button>
-              <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
-                title="Confirmar">
-                <i class="pi pi-check"></i>
-              </button>
-              <button class="icon warning" (click)="registrarCheckin(ficha)"
+             
+              <button class="icon Check-in" (click)="registrarCheckin(ficha)"
                 [disabled]="ficha.status !== 'CHAMADO' && ficha.status !== 'CONFIRMADA'" title="Check-in">
                 <i class="pi pi-sign-in"></i>
               </button>
-              <button class="icon info" (click)="finalizarAtendimento(ficha)"
+              <button class="icon finalizarAtendimento" (click)="finalizarAtendimento(ficha)"
                 [disabled]="ficha.status !== 'CHAMADO' && ficha.status !== 'CONFIRMADA'" title="Finalizar Atendimento">
                 <i class="pi pi-flag"></i>
               </button>
-              <button class="icon secondary" (click)="marcarNoShow(ficha)"
+              <button class="icon No-show" (click)="marcarNoShow(ficha)"
                 [disabled]="ficha.status === 'CANCELADA' || ficha.status === 'NO_SHOW'" title="Marcar No-show">
                 <i class="pi pi-ban"></i>
               </button>

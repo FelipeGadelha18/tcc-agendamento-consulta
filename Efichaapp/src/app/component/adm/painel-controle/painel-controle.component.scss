@@ -215,6 +215,21 @@
   &.success {
     background: linear-gradient(135deg, var(--success) 0%, #45a049 100%);
   }
+
+  &.Check-in {
+    background: linear-gradient(135deg, var(--checker) 0%, #e06908 100%);
+    color: var(--bg-white);
+  }
+
+  &.finalizarAtendimento {
+    background: linear-gradient(135deg, var(--bg-purple) 0%, #8a7da0 100%);
+    color: var(--bg-white);
+  }
+
+  &.No-show {
+    background: linear-gradient(135deg, #9e9e9e 0%, #616161 100%);
+    color: var(--bg-white);
+  }
 }
 
 /* INFO CARD*/
@@ -272,6 +287,11 @@
   letter-spacing: 0.5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  }
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -288,23 +308,35 @@
 
   &.primary {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primaryDark) 100%);
-    color: #fff;
+    color: var(--bg-white);
+  }
+
+  &.secondary {
+    color: var(--primary);
+    margin-right: 8px;
+    box-shadow: 0 0 0 2px var(--primary);
+    background: transparent;
   }
 
   &.success {
     background: linear-gradient(135deg, var(--success) 0%, #45a049 100%);
-    color: #fff;
+    color: var(--bg-white);
   }
 
   &.sair {
     background: linear-gradient(135deg, var(--danger) 0%, #e53935 100%);
-    color: #fff;
+    color: var(--bg-white);
     margin-left: auto;
   }
 
   &.warning {
     background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-    color: #fff;
+    color: var(--bg-white);
+  }
+
+  &.naoSei {
+    background: linear-gradient(135deg, #9e9e9e 0%, #616161 100%);
+    color: var(--bg-white);
   }
 }
 
@@ -404,7 +436,7 @@
 /* FOOTER                */
 .footer {
   background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-  color: #fff;
+  color: var(--bg-white);
   padding: 24px 40px;
   text-align: center;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
