@@ -105,22 +105,27 @@ export class PainelControleComponent implements OnInit {
   }
 
   chamarProximo() {
-    if (!this.idPosto) {
-      return;
-    }
+    if (!this.idPosto) return;
+
     this.reservaService.chamarProximo(this.idPosto).subscribe({
       next: (res: any) => {
         const reserva = res.reserva ?? res;
+
         this.messageService.add({
           severity: 'info',
-          summary: 'Próximo chamado',
-          detail: `O paciente ${reserva.paciente?.nomeCompleto || reserva.paciente?.nome} foi chamado.`
+          summary: 'Próximo paciente chamado',
+          detail: `O paciente ${reserva.paciente?.nomeCompleto || reserva.paciente?.nome} foi chamado com sucesso.`
         });
+
         this.atualizarFichas();
       },
       error: (err: any) => {
         console.error('Erro ao chamar próximo', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao chamar próximo paciente' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.erro || 'Falha ao chamar próximo paciente'
+        });
       }
     });
   }
@@ -128,12 +133,21 @@ export class PainelControleComponent implements OnInit {
   registrarCheckin(ficha: any) {
     this.reservaService.registrarCheckin(ficha.id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Check-in', detail: `Check-in de ${ficha.nome} registrado.` });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Check-in registrado',
+          detail: `O check-in de ${ficha.nome} foi registrado com sucesso.`
+        });
+
         this.atualizarFichas();
       },
       error: (err: any) => {
         console.error('Erro ao registrar check-in', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao registrar check-in' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.erro || 'Falha ao registrar check-in'
+        });
       }
     });
   }
@@ -141,49 +155,70 @@ export class PainelControleComponent implements OnInit {
   finalizarAtendimento(ficha: any) {
     this.reservaService.finalizarAtendimento(ficha.id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Atendimento', detail: `Atendimento de ${ficha.nome} registrado.` });
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Atendimento finalizado',
+          detail: `O atendimento de ${ficha.nome} foi finalizado com sucesso.`
+        });
+
         this.atualizarFichas();
       },
       error: (err: any) => {
         console.error('Erro ao finalizar atendimento', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao finalizar atendimento' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.erro || 'Falha ao finalizar atendimento'
+        });
       }
     });
   }
 
   marcarNoShow(ficha: any) {
-    if (!confirm(`Deseja marcar como não compareceu a ficha de ${ficha.nome}?`)) {
-      return;
-    }
+    
     this.reservaService.marcarNoShow(ficha.id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'warn', summary: 'No-show', detail: `Ficha de ${ficha.nome} marcada como no-show.` });
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Paciente não compareceu',
+          detail: `A ficha de ${ficha.nome} foi marcada como não compareceu.`
+        });
+
         this.atualizarFichas();
       },
       error: (err: any) => {
         console.error('Erro ao marcar no-show', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.erro || 'Falha ao marcar no-show' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.erro || 'Falha ao marcar no-show'
+        });
       }
     });
   }
 
   cancelarFicha(ficha: any) {
-    if (!confirm(`Deseja realmente cancelar a ficha de ${ficha.nome}?`)) {
-      return;
-    }
+    // if (!confirm(`Deseja realmente cancelar a ficha de ${ficha.nome}?`)) {
+    //   return;
+    // }
 
     this.reservaService.cancelarReservaAdministrador(ficha.id).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'warn',
           summary: 'Ficha cancelada',
-          detail: `A ficha de ${ficha.nome} foi cancelada`
+          detail: `A ficha de ${ficha.nome} foi cancelada com sucesso.`
         });
+
         this.atualizarFichas();
       },
       error: (err: any) => {
         console.error('Erro ao cancelar ficha', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao cancelar ficha' });
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.mensagem || 'Falha ao cancelar ficha'
+        });
       }
     });
   }
@@ -263,9 +298,13 @@ export class PainelControleComponent implements OnInit {
 
   resetarFichas() {
     if (!this.idPosto) return;
-    if (!confirm('Deseja realmente resetar as fichas disponíveis para o total?')) {
-      return;
-    }
+
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Processando',
+      detail: 'Resetando fichas disponíveis...'
+    });
+
     this.postoService.resetarFichas(this.idPosto).subscribe({
       next: () => {
         this.messageService.add({
@@ -273,13 +312,14 @@ export class PainelControleComponent implements OnInit {
           summary: 'Fichas resetadas',
           detail: 'As fichas disponíveis foram resetadas para o total.'
         });
-        // Atualizar o posto para refletir as mudanças
+
         this.painelPostoService.getPostos().subscribe(postos => {
           this.posto = postos.find(p => p.id === this.idPosto) || null;
         });
       },
       error: (err: any) => {
         console.error('Erro ao resetar fichas', err);
+
         this.messageService.add({
           severity: 'error',
           summary: 'Erro',
