@@ -30,4 +30,41 @@ h1 {
   width: 100%;
   height: 75vh;
   border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(1, 47, 96, 0.16);
+}
+
+:host ::ng-deep .map-marker-wrapper {
+  background: transparent;
+  border: none;
+}
+
+:host ::ng-deep .map-marker {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 82, 163, 0.18), 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+:host ::ng-deep .map-marker--ativo {
+  background: #0ea5e9;
+}
+
+:host ::ng-deep .map-marker--indisponivel {
+  background: #f97316;
+}
+
+:host ::ng-deep .map-popup {
+  min-width: 180px;
+  font-family: inherit;
+  line-height: 1.35;
+}
+
+:host ::ng-deep .map-popup strong {
+  color: #012f60;
+}
+
+:host ::ng-deep .map-popup small {
+  color: #0f766e;
+  font-weight: 600;
 }

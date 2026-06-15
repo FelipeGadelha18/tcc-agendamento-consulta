@@ -19,6 +19,8 @@ public class PostoSaude {
     private String cidade;
     private String estado;
     private String telefone;
+    private Double latitude;
+    private Double longitude;
     private int totalFichas;
     private int fichasDisponiveis;
     private int limiteFichasPorCpf = 1;
@@ -38,7 +40,7 @@ public class PostoSaude {
     }
 
     public PostoSaude(Long id, String nome, String endereco, String bairro, String cidade, String estado,
-            String telefone, int totalFichas, int fichasDisponiveis) {
+            String telefone, Double latitude, Double longitude, int totalFichas, int fichasDisponiveis) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
@@ -46,6 +48,8 @@ public class PostoSaude {
         this.cidade = cidade;
         this.estado = estado;
         this.telefone = telefone;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.totalFichas = totalFichas;
         this.fichasDisponiveis = fichasDisponiveis;
     }
@@ -104,6 +108,22 @@ public class PostoSaude {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public int getTotalFichas() {

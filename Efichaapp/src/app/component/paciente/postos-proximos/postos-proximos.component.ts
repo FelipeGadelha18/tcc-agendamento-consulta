@@ -30,6 +30,7 @@ export class PostosProximosComponent implements AfterViewInit {
 
   private map!: L.Map;
   private marcadorUsuario!: L.Marker;
+  private marcadoresPostos: L.Marker[] = [];
 
   constructor(
     private http: HttpClient,
@@ -108,18 +109,65 @@ export class PostosProximosComponent implements AfterViewInit {
 
   carregarPostos() {
     this.http.get<any[]>('http://localhost:8080/postos/listar')
-      .subscribe(postos => {
-        postos.forEach(posto => {
-          const enderecoCompleto =
-            `${posto.endereco}, ${posto.bairro}, ${posto.cidade}, ${posto.estado}`;
+      .subscribe(async postos => {
+        this.limparMarcadoresPostos();
 
-          this.geocodificarEndereco(enderecoCompleto)
-            .then(coords => {
-              const marker = L.marker([coords.lat, coords.lon]).addTo(this.map);
-              marker.bindPopup(`<b>${posto.nome}</b><br>${enderecoCompleto}`);
-            });
-        });
+        const marcacoes = await Promise.all(postos.map(async posto => {
+          const enderecoCompleto = `${posto.endereco || ''}, ${posto.bairro || ''}, ${posto.cidade || ''}, ${posto.estado || ''}`.replace(/,\s+/g, ', ').replace(/, $/, '');
+
+          const coords = this.obterCoordenadasDoPosto(posto);
+          const ponto = coords ?? await this.geocodificarEndereco(enderecoCompleto);
+          if (!ponto) {
+            return null;
+          }
+
+          const marker = L.marker([ponto.lat, ponto.lon], {
+            icon: this.criarIconePosto(posto.fichasDisponiveis > 0)
+          }).addTo(this.map);
+
+          marker.bindPopup(`
+            <div class="map-popup">
+              <strong>${posto.nome}</strong><br>
+              <span>${enderecoCompleto || 'Endereço não informado'}</span><br>
+              <small>Fichas disponíveis: ${posto.fichasDisponiveis ?? 0}</small>
+            </div>
+          `);
+
+          this.marcadoresPostos.push(marker);
+          return marker;
+        }));
+
+        const coordsValidas = marcacoes.filter((m): m is L.Marker => Boolean(m));
+        if (coordsValidas.length > 0) {
+          const group = L.featureGroup(coordsValidas);
+          this.map.fitBounds(group.getBounds().pad(0.2));
+        }
       });
+  }
+
+  private obterCoordenadasDoPosto(posto: any): { lat: number; lon: number } | null {
+    const lat = Number(posto.latitude ?? posto.lat);
+    const lon = Number(posto.longitude ?? posto.lon);
+
+    if (Number.isFinite(lat) && Number.isFinite(lon) && lat !== 0 && lon !== 0) {
+      return { lat, lon };
+    }
+
+    return null;
+  }
+
+  private criarIconePosto(disponivel: boolean) {
+    return L.divIcon({
+      html: `<div class="map-marker ${disponivel ? 'map-marker--ativo' : 'map-marker--indisponivel'}"></div>`,
+      className: 'map-marker-wrapper',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+  }
+
+  private limparMarcadoresPostos() {
+    this.marcadoresPostos.forEach(marker => this.map.removeLayer(marker));
+    this.marcadoresPostos = [];
   }
 
   async geocodificarEndereco(endereco: string): Promise<{ lat: number; lon: number }> {
