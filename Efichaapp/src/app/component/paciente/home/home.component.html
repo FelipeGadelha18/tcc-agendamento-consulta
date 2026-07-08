@@ -1,17 +1,48 @@
-<div class="container-home">
+<div class="home">
 
-    <header class="header" id="header">
-        <h1 class="title">E-FICHA</h1>
-        <h2 class="subtitle">Organização e cuidado com você</h2>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">E-FICHA</div>
+
+        <div class="user">
+            <i class="pi pi-user"></i>
+            <span>{{ usuario?.nome }}</span>
+
+            <button class="btn sair" (click)="sair()">
+                <i class="pi pi-sign-out"></i>
+                Sair
+            </button>
+        </div>
+    </nav>
+
+    <!-- Banner -->
+    <header class="header">
+        <h1>Olá, {{ usuario?.nome }}!</h1>
+        <p>Bem-vinda ao E-Ficha</p>
     </header>
 
-</div>
+    <!-- Cards -->
+    <div class="cards-container">
 
+        <div class="card" *ngFor="let card of cards" [routerLink]="card.route">
+            <i [ngClass]="card.icon"></i>
+            <h3 [innerHTML]="card.title"></h3>
+        </div>
 
-<div class="cards-container">
-    <div class="card" *ngFor="let card of cards"
-        [routerLink]="card.route">
-        <i [ngClass]="card.icon"></i>
-        <h3 [innerHTML]="card.title"></h3>
+    </div>
+
+    <!-- Próxima consulta -->
+    <div class="consulta">
+
+        <h2>Próxima Consulta</h2>
+
+        <div class="info">
+            <p><i class="pi pi-map-marker"></i> UBS Roney Mereiles</p>
+            <p><i class="pi pi-calendar"></i> Quinta-feira, 24/07/2026</p>
+            <p><i class="pi pi-clock"></i> 08:00</p>
+        </div>
+
+        <button>Ver detalhes</button>
+
     </div>
 </div>

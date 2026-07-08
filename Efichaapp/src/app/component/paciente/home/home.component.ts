@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule, NgForOf, NgClass } from '@angular/common';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
+import { AuthService, LoginResponse } from '../../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -10,6 +11,22 @@ import { RouterLink } from "@angular/router";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+
+  usuario: LoginResponse | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.usuario = this.authService.obterUsuario();
+  }
+
+  sair(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   cards = [
     { icon: 'pi pi-map-marker', title: 'Postos<br>Próximos', route: '/paciente/postos-proximos' },

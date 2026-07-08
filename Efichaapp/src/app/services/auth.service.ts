@@ -20,6 +20,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+  obterUsuario(): LoginResponse | null {
+    const usuario = localStorage.getItem('usuario');
+    return usuario ? JSON.parse(usuario) : null;
+  }
+
   loginPaciente(cpf: string, senha: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/pacientes/login`, {
       cpf: cpf,
