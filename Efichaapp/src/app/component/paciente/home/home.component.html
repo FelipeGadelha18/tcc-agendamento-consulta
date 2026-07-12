@@ -36,11 +36,17 @@
 
         <h2>Próxima Consulta</h2>
 
-        <div class="info">
-            <p><i class="pi pi-map-marker"></i> UBS Roney Mereiles</p>
-            <p><i class="pi pi-calendar"></i> Quinta-feira, 24/07/2026</p>
-            <p><i class="pi pi-clock"></i> 08:00</p>
+        <div *ngIf="proximaReserva as reserva; else semReserva" class="info">
+            <p><i class="pi pi-map-marker"></i> {{ reserva.postoSaude?.nome || 'Posto não informado' }}</p>
+            <p><i class="pi pi-calendar"></i> {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</p>
+            <p *ngIf="reserva.status"><i class="pi pi-info-circle"></i> Status: {{ reserva.status }}</p>
         </div>
+
+        <ng-template #semReserva>
+            <div class="info vazio">
+                <p>Ainda não existe reserva!</p>
+            </div>
+        </ng-template>
 
         <button>Ver detalhes</button>
 

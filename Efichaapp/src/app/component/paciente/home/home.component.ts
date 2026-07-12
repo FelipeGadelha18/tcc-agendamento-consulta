@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgForOf, NgClass } from '@angular/common';
 import { Router, RouterLink } from "@angular/router";
 import { AuthService, LoginResponse } from '../../../services/auth.service';
+import { ReservaService } from '../../../services/reservar.service';
 
 @Component({
   standalone: true,
@@ -10,17 +11,42 @@ import { AuthService, LoginResponse } from '../../../services/auth.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
   usuario: LoginResponse | null = null;
+  proximaReserva: any = null;
 
   constructor(
     private authService: AuthService,
+    private reservaService: ReservaService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     this.usuario = this.authService.obterUsuario();
+
+    if (this.usuario?.id) {
+      this.carregarProximaReserva();
+    }
+  }
+
+  carregarProximaReserva(): void {
+    this.reservaService.listarPorPaciente(this.usuario!.id).subscribe({
+      next: (reservas) => {
+        this.proximaReserva = this.obterProximaReserva(reservas);
+      },
+      error: () => {
+        this.proximaReserva = null;
+      }
+    });
+  }
+
+  private obterProximaReserva(reservas: any[]): any {
+    const reservasValidas = (reservas || [])
+      .filter((reserva) => reserva?.dataReserva && !['CANCELADA', 'NO_SHOW', 'UTILIZADA'].includes(reserva?.status?.toUpperCase?.() ?? ''))
+      .sort((a, b) => (a.dataReserva > b.dataReserva ? 1 : -1));
+
+    return reservasValidas[0] ?? null;
   }
 
   sair(): void {
