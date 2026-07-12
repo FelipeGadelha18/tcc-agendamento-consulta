@@ -8,6 +8,7 @@
 .home {
     width: 100%;
     background: #ececec;
+    padding-bottom: 50px;
 }
 
 
@@ -172,6 +173,10 @@
 
 @media (max-width: 768px) {
 
+    .home {
+        padding-bottom: 30px;
+    }
+
     .navbar {
         height: auto;
         padding: 15px;
@@ -233,6 +238,10 @@
 }
 
 @media (max-width: 480px) {
+
+    .home {
+        padding-bottom: 20px;
+    }
 
     .header {
 
