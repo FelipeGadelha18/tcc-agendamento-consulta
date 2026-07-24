@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BrowserQRCodeReader } from '@zxing/browser';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -36,6 +37,8 @@ import { PainelControlePostoService } from '../../../services/painel-controle-po
 })
 
 export class PainelControleComponent implements OnInit {
+  @ViewChild('scannerPreview') scannerPreview!: ElementRef<HTMLVideoElement>;
+
   administrador: Administrador | null = null;
   idPosto: number | null = null;
 
@@ -47,6 +50,13 @@ export class PainelControleComponent implements OnInit {
   novaData: string = '';
 
   posto: any = null;
+  scannerAtivo = false;
+  scannerLoading = false;
+  scannerStatus = 'Aguardando leitura do QR Code do comprovante.';
+  reservaEscaneada: any = null;
+  private qrReader?: BrowserQRCodeReader;
+  private scannerControls: { stop?: () => void } | null = null;
+  private mediaStream?: MediaStream;
 
   constructor(
     private messageService: MessageService,
@@ -72,6 +82,106 @@ export class PainelControleComponent implements OnInit {
 
   onGlobalFilter(event: any, dt: any) {
     dt.filterGlobal(event.target.value, 'contains');
+  }
+
+  async alternarScannerQr() {
+    if (this.scannerAtivo) {
+      this.pararLeituraQr();
+      return;
+    }
+
+    this.scannerAtivo = false;
+    this.scannerLoading = true;
+    this.scannerStatus = 'Solicitando acesso à câmera...';
+    this.reservaEscaneada = null;
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    try {
+      if (!this.scannerPreview?.nativeElement) {
+        throw new Error('Elemento de vídeo não encontrado.');
+      }
+
+      const videoDevices = await BrowserQRCodeReader.listVideoInputDevices();
+      const deviceId = videoDevices.length ? videoDevices[0].deviceId : undefined;
+
+      if (!deviceId) {
+        throw new Error('Nenhuma câmera disponível.');
+      }
+
+      this.qrReader = new BrowserQRCodeReader();
+      this.scannerControls = await this.qrReader.decodeFromVideoDevice(
+        deviceId,
+        this.scannerPreview.nativeElement,
+        (result, error) => {
+          if (result) {
+            const codigoEscaneado = result.getText();
+            this.scannerStatus = `QR lido com sucesso: ${codigoEscaneado}`;
+            this.buscarReservaPorQr(codigoEscaneado);
+            this.pararLeituraQr();
+          }
+
+          if (error && !result) {
+            console.debug('Leitura do QR em andamento...', error);
+          }
+        }
+      );
+
+      this.scannerAtivo = true;
+      this.scannerLoading = false;
+      this.scannerStatus = 'Câmera ativa. Aponte o QR Code do comprovante para o visor.';
+    } catch (err) {
+      console.error('Erro ao iniciar scanner QR', err);
+      this.scannerAtivo = false;
+      this.scannerLoading = false;
+      this.scannerStatus = 'Não foi possível acessar a câmera do dispositivo.';
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Câmera indisponível',
+        detail: 'Verifique as permissões da câmera e tente novamente.'
+      });
+    }
+  }
+
+  private pararLeituraQr() {
+    this.scannerControls?.stop?.();
+    this.scannerControls = null;
+
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+      this.mediaStream = undefined;
+    }
+
+    if (this.scannerPreview?.nativeElement) {
+      this.scannerPreview.nativeElement.srcObject = null;
+    }
+
+    this.scannerAtivo = false;
+    this.scannerLoading = false;
+    this.scannerStatus = 'Câmera desligada.';
+  }
+
+  private buscarReservaPorQr(codigoQr: string) {
+    this.reservaService.buscarReservaPorQr(codigoQr).subscribe({
+      next: (reserva: any) => {
+        this.reservaEscaneada = reserva;
+        const nomePaciente = reserva?.paciente?.nomeCompleto || reserva?.paciente?.nome || 'Paciente';
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Agendamento identificado',
+          detail: `${nomePaciente} foi localizado pelo QR Code do comprovante.`
+        });
+        this.atualizarFichas();
+      },
+      error: (err: any) => {
+        console.error('Erro ao localizar reserva por QR', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'QR inválido',
+          detail: err?.error?.erro || 'Não foi possível localizar a reserva pelo QR informado.'
+        });
+      }
+    });
   }
 
   confirmarFicha(ficha: any) {
@@ -175,7 +285,7 @@ export class PainelControleComponent implements OnInit {
   }
 
   marcarNoShow(ficha: any) {
-    
+
     this.reservaService.marcarNoShow(ficha.id).subscribe({
       next: () => {
         this.messageService.add({

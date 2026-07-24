@@ -77,7 +77,7 @@ public class ReservaService {
         reserva.setPostoSaude(posto);
         reserva.setStatus(StatusReserva.PENDENTE);
 
-        reservaRepository.save(reserva);
+        reserva = reservaRepository.save(reserva);
 
         posto.setFichasDisponiveis(posto.getFichasDisponiveis() - 1);
         postoRepository.save(posto);
@@ -86,6 +86,7 @@ public class ReservaService {
 
         Map<String, Object> resposta = new HashMap<>();
         resposta.put("mensagem", "Reserva feita com sucesso! A ficha está aguardando confirmação do posto.");
+        resposta.put("reservaId", reserva.getId());
         resposta.put("dataReserva", reserva.getDataReserva());
         resposta.put("posicaoFila", posicao);
         resposta.put("nomePaciente", paciente.getNomeCompleto());
@@ -254,6 +255,35 @@ public class ReservaService {
         }
 
         return reservarFicha(paciente.getId(), postoId, dataReserva);
+    }
+
+    public Reserva buscarReservaPorCodigo(String codigo) {
+        if (codigo == null || codigo.isBlank()) {
+            throw new RuntimeException("Código QR inválido.");
+        }
+
+        String codigoNormalizado = codigo.trim();
+
+        if (codigoNormalizado.startsWith("reserva:")) {
+            try {
+                Long reservaId = Long.parseLong(codigoNormalizado.substring("reserva:".length()).trim());
+                return reservaRepository.findById(reservaId)
+                        .orElseThrow(() -> new RuntimeException("Reserva não encontrada para o código informado."));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Código QR inválido.");
+            }
+        }
+
+        Paciente paciente = pacienteRepository.findByCpf(codigoNormalizado);
+        if (paciente == null) {
+            throw new RuntimeException("Reserva não encontrada para o código informado.");
+        }
+
+        return reservaRepository.findByPacienteId(paciente.getId())
+                .stream()
+                .sorted(Comparator.comparing(Reserva::getDataReserva).reversed())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada para o código informado."));
     }
 
     private void executarCancelamento(Reserva reserva) {

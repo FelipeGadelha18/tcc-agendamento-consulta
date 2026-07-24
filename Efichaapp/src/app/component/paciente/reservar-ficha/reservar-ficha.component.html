@@ -103,7 +103,11 @@
         </p>
       </div>
 
-      <button class="btn-principal" (click)="verMinhasFichas()">
+      <button class="btn-principal" (click)="baixarComprovante(reservaId)" [disabled]="!reservaId">
+        Baixar comprovante
+      </button>
+
+      <button class="btn-link" (click)="verMinhasFichas()">
         Ver minhas fichas
       </button>
 

@@ -44,6 +44,7 @@ export class ReservarFichaComponent implements OnInit {
 
   reservaConfirmada = false;
   dadosConfirmacao: any = null;
+  reservaId: number | null = null;
 
   postoIdRecebido: number | null = null;
 
@@ -138,11 +139,13 @@ export class ReservarFichaComponent implements OnInit {
       .subscribe({
         next: (resposta: any) => {
           this.reservaConfirmada = true;
+          this.reservaId = resposta.reservaId ?? null;
           this.dadosConfirmacao = {
             data: resposta.dataReserva || this.dataSelecionada,
             posto: this.postoSelecionado.nome,
             posicaoFila: resposta.posicaoFila
           };
+
           this.messageService.add({
             severity: 'success',
             summary: 'Sucesso',
@@ -157,6 +160,33 @@ export class ReservarFichaComponent implements OnInit {
           });
         }
       });
+  }
+
+  baixarComprovante(reservaId: number | null) {
+    if (!reservaId) {
+      return;
+    }
+
+    this.reservarService.baixarComprovante(reservaId).subscribe({
+      next: (pdf: Blob) => {
+        const blob = new Blob([pdf], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comprovante-reserva-${reservaId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => window.URL.revokeObjectURL(url), 0);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro no comprovante',
+          detail: 'Não foi possível baixar o comprovante agora.'
+        });
+      }
+    });
   }
 
   verMinhasFichas() {

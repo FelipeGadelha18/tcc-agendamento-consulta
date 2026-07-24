@@ -198,6 +198,17 @@ public class ReservaController {
                 Map.of("mensagem", "Reserva confirmada com sucesso"));
     }
 
+    // 🔹 Buscar reserva através do QR Code do comprovante
+    @GetMapping("/qr/{codigo}")
+    public ResponseEntity<?> localizarReservaPorQr(@PathVariable String codigo) {
+        try {
+            Reserva reserva = reservaService.buscarReservaPorCodigo(codigo);
+            return ResponseEntity.ok(reserva);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
+        }
+    }
+
     // 🔹 DOWNLOAD DO COMPROVANTE (PDF)
     @GetMapping("/{id}/comprovante")
     public ResponseEntity<byte[]> baixarComprovante(@PathVariable Long id) {

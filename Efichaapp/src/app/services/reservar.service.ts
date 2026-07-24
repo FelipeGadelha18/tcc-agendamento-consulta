@@ -46,6 +46,10 @@ export class ReservaService {
     return this.http.get<any[]>(`${this.apiUrl}/por-paciente/${pacienteId}`);
   }
 
+  buscarReservaPorQr(codigoQr: string) {
+    return this.http.get<any>(`${this.apiUrl}/qr/${encodeURIComponent(codigoQr)}`);
+  }
+
   cancelarReserva(reservaId: number, pacienteId: number) {
     return this.http.put(`${this.apiUrl}/${reservaId}/cancelar/${pacienteId}`, {});
   }
