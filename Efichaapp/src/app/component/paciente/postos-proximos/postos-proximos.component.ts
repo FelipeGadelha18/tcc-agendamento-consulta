@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -17,7 +18,8 @@ import { Menu } from 'primeng/menu';
     CommonModule,
     ButtonModule,
     MenuModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterLink
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   templateUrl: './postos-proximos.component.html',

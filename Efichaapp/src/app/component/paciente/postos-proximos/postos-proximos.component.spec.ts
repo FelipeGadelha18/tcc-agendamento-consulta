@@ -15,6 +15,7 @@ export class PostosProximosComponent implements AfterViewInit {
   private map: any;
 menu: any;
 items: any;
+menuAberto: any;
 
   constructor(private http: HttpClient) {}
 
