@@ -51,14 +51,15 @@
       </div>
 
       <!-- AÇÕES -->
-      <div class="acoes" *ngIf="reserva.status === 'CONFIRMADA'">
+      <div class="acoes" *ngIf="reserva.status !== 'CANCELADA' && reserva.status !== 'NO_SHOW'">
 
         <button pButton type="button" icon="pi pi-file-pdf" label="Baixar comprovante"
           class="p-button-sm p-button-outlined" (click)="baixarComprovante(reserva.id)">
         </button>
 
         <button pButton type="button" icon="pi pi-times" label="Cancelar ficha"
-          class="p-button-sm p-button-danger p-button-text" (click)="cancelarFicha(reserva.id)">
+          class="p-button-sm p-button-danger p-button-text" (click)="cancelarFicha(reserva.id)"
+          *ngIf="reserva.status === 'CONFIRMADA' || reserva.status === 'PENDENTE'">
         </button>
 
       </div>

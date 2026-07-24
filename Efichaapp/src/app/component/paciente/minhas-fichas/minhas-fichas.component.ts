@@ -94,24 +94,22 @@ export class MinhasFichasComponent implements OnInit {
   }
 
   baixarComprovante(idReserva: number) {
-    this.http
-      .get(`http://localhost:8080/reservas/${idReserva}/comprovante`, {
-        responseType: 'blob'
-      })
-      .subscribe({
-        next: (pdf) => {
-          const blob = new Blob([pdf], { type: 'application/pdf' });
-          const url = window.URL.createObjectURL(blob);
+    this.reservaService.baixarComprovante(idReserva).subscribe({
+      next: (pdf: Blob) => {
+        const blob = new Blob([pdf], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
 
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `comprovante-reserva-${idReserva}.pdf`;
-          a.click();
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `comprovante-reserva-${idReserva}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
 
-          window.URL.revokeObjectURL(url);
-        },
-        error: () => alert('Erro ao baixar comprovante')
-      });
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => alert('Erro ao baixar comprovante')
+    });
   }
 
   voltarInicio() {

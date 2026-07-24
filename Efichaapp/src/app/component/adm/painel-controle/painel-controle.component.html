@@ -13,6 +13,61 @@
 
   <!-- CONTEÚDO -->
   <main class="content">
+    <section class="card qr-card" style="grid-column: 1 / -1;">
+      <div class="card-header">
+        <h2>📸 Leitura por QR Code</h2>
+        <div class="header-actions">
+          <button class="btn primary" (click)="alternarScannerQr()">
+            <i class="pi" [ngClass]="scannerAtivo ? 'pi-stop-circle' : 'pi-camera'" aria-hidden="true"></i>
+            {{ scannerAtivo ? 'Parar câmera' : 'Ler QR Code' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="scanner-layout">
+        <div class="scanner-box" [class.scanner-box--active]="scannerAtivo">
+          <video #scannerPreview autoplay muted playsinline [class.hidden]="!scannerAtivo"></video>
+          <div class="scanner-overlay" *ngIf="scannerAtivo"></div>
+          <div class="scanner-frame" *ngIf="scannerAtivo"></div>
+          <button *ngIf="scannerAtivo" class="scanner-close" (click)="alternarScannerQr()" type="button"
+            title="Fechar câmera">
+            <i class="pi pi-times"></i>
+          </button>
+
+          <div class="scanner-placeholder" *ngIf="!scannerAtivo && !scannerLoading">
+            <i class="pi pi-camera"></i>
+            <h3>Leitura de QR Code</h3>
+            <p>Clique em “Ler QR Code” para abrir a câmera e identificar o agendamento pelo comprovante do paciente.</p>
+          </div>
+
+          <div class="scanner-loading" *ngIf="scannerLoading">
+            <i class="pi pi-spin pi-spinner"></i>
+            <h3>Aguardando câmera...</h3>
+            <p>Permita o acesso à câmera para iniciar a leitura do QR Code.</p>
+          </div>
+        </div>
+
+        <div class="scanner-info">
+          <p class="scanner-status">{{ scannerStatus }}</p>
+
+          <div class="reserva-identificada" *ngIf="reservaEscaneada">
+            <h3>Agendamento identificado</h3>
+            <p><strong>Paciente:</strong> {{ reservaEscaneada?.paciente?.nomeCompleto ||
+              reservaEscaneada?.paciente?.nome }}</p>
+            <p><strong>CPF:</strong> {{ reservaEscaneada?.paciente?.cpf }}</p>
+            <p><strong>Posto:</strong> {{ reservaEscaneada?.postoSaude?.nome }}</p>
+            <p><strong>Data:</strong> {{ reservaEscaneada?.dataReserva | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Status:</strong> {{ reservaEscaneada?.status }}</p>
+          </div>
+
+          <div class="scanner-help" *ngIf="!scannerAtivo && !reservaEscaneada">
+            <p>Use esta função para localizar rapidamente o agendamento do paciente a partir do QR Code impresso no
+              comprovante.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- TABELA (SPAN COLUMNS) -->
     <section class="card table-card" style="grid-column: 1 / -1;">
       <div class="card-header">
@@ -74,7 +129,7 @@
               </span>
             </td>
             <td class="acoes">
-               <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
+              <button class="icon success" (click)="confirmarFicha(ficha)" [disabled]="ficha.status === 'CANCELADA'"
                 title="Confirmar">
                 <i class="pi pi-check"></i>
               </button>
@@ -83,7 +138,7 @@
                 title="Cancelar">
                 <i class="pi pi-times"></i>
               </button>
-             
+
               <button class="icon Check-in" (click)="registrarCheckin(ficha)"
                 [disabled]="ficha.status !== 'CHAMADO' && ficha.status !== 'CONFIRMADA'" title="Check-in">
                 <i class="pi pi-sign-in"></i>
