@@ -1,7 +1,16 @@
 package com.example.Eficha.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Eficha.dto.LoginRequest;
@@ -10,7 +19,6 @@ import com.example.Eficha.model.Administrador;
 import com.example.Eficha.service.AdministradorService;
 
 import jakarta.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/administradores")
@@ -61,11 +69,15 @@ public class AdministradorController {
 
     @PutMapping("/{id}")
     public Administrador atualizar(@PathVariable Long id, @RequestBody Administrador administrador) {
-        Administrador atualizado = service.atualizar(id, administrador);
-        if (atualizado == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
+        try {
+            Administrador atualizado = service.atualizar(id, administrador);
+            if (atualizado == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
+            }
+            return atualizado;
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return atualizado;
     }
 
     @DeleteMapping("/{id}")

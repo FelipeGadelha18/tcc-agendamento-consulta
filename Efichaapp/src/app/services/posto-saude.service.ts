@@ -15,6 +15,18 @@ export class PostoSaudeService {
     return this.http.get<any[]>(`${this.apiUrl}/listar`);
   }
 
+  cadastrar(posto: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cadastrar`, posto);
+  }
+
+  atualizar(postoId: number, posto: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${postoId}`, posto);
+  }
+
+  excluir(postoId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${postoId}`);
+  }
+
   listarDatas(postoId: number): Observable<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/${postoId}/datas`);
   }

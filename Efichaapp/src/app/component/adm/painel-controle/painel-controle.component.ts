@@ -50,6 +50,32 @@ export class PainelControleComponent implements OnInit {
   novaData: string = '';
 
   posto: any = null;
+  postos: any[] = [];
+  recepcionistas: any[] = [];
+  novoPosto: any = {
+    nome: '',
+    endereco: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
+    telefone: '',
+    latitude: null,
+    longitude: null,
+    totalFichas: 100,
+    fichasDisponiveis: 100,
+    limiteFichasPorCpf: 1,
+    prazoCancelamentoHoras: 24
+  };
+  postoEditandoId: number | null = null;
+  novoRecepcionista: any = {
+    nomeCompleto: '',
+    cpf: '',
+    email: '',
+    senha: '',
+    perfil: 'RECEPCIONISTA',
+    idPosto: null as number | null
+  };
+  recepcionistaEditandoId: number | null = null;
   scannerAtivo = false;
   scannerLoading = false;
   scannerStatus = 'Aguardando leitura do QR Code do comprovante.';
@@ -71,6 +97,8 @@ export class PainelControleComponent implements OnInit {
     this.administrador = this.authService.obterAdministrador();
     this.idPosto = this.authService.obterIdPosto();
     this.atualizarFichas(0, this.pageSize);
+    this.carregarPostos();
+    this.carregarRecepcionistas();
     this.painelPostoService.getPostos().subscribe(postos => {
       this.posto = postos.find(p => p.id === this.idPosto) || null;
     });
@@ -437,6 +465,156 @@ export class PainelControleComponent implements OnInit {
         });
       }
     });
+  }
+
+  carregarPostos() {
+    this.postoService.listar().subscribe({
+      next: (postos) => {
+        this.postos = postos;
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os postos.' });
+      }
+    });
+  }
+
+  salvarPosto() {
+    if (!this.novoPosto.nome || !this.novoPosto.endereco || !this.novoPosto.cidade) {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha nome, endereço e cidade do posto.' });
+      return;
+    }
+
+    const payload = {
+      ...this.novoPosto,
+      latitude: this.novoPosto.latitude ? Number(this.novoPosto.latitude) : null,
+      longitude: this.novoPosto.longitude ? Number(this.novoPosto.longitude) : null
+    };
+
+    const operacao = this.postoEditandoId
+      ? this.postoService.atualizar(this.postoEditandoId, payload)
+      : this.postoService.cadastrar(payload);
+
+    operacao.subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Posto salvo', detail: 'O posto foi salvo com sucesso.' });
+        this.resetarFormularioPosto();
+        this.carregarPostos();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível salvar o posto.' });
+      }
+    });
+  }
+
+  editarPosto(posto: any) {
+    this.postoEditandoId = posto.id;
+    this.novoPosto = { ...posto };
+  }
+
+  excluirPosto(postoId: number) {
+    this.postoService.excluir(postoId).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Posto removido', detail: 'O posto foi removido com sucesso.' });
+        this.carregarPostos();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível remover o posto.' });
+      }
+    });
+  }
+
+  resetarFormularioPosto() {
+    this.postoEditandoId = null;
+    this.novoPosto = {
+      nome: '',
+      endereco: '',
+      bairro: '',
+      cidade: '',
+      estado: '',
+      telefone: '',
+      latitude: null,
+      longitude: null,
+      totalFichas: 100,
+      fichasDisponiveis: 100,
+      limiteFichasPorCpf: 1,
+      prazoCancelamentoHoras: 24
+    };
+  }
+
+  carregarRecepcionistas() {
+    this.authService.listarRecepcionistas().subscribe({
+      next: (recepcionistas) => {
+        this.recepcionistas = recepcionistas.filter((u: any) => u.perfil === 'RECEPCIONISTA');
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os recepcionistas.' });
+      }
+    });
+  }
+
+  salvarRecepcionista() {
+    if (!this.novoRecepcionista.nomeCompleto || !this.novoRecepcionista.cpf || !this.novoRecepcionista.email || !this.novoRecepcionista.senha) {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos obrigatórios do recepcionista.' });
+      return;
+    }
+
+    if (!this.novoRecepcionista.idPosto) {
+      this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Associe o recepcionista a um posto de saúde.' });
+      return;
+    }
+
+    const payload = {
+      ...this.novoRecepcionista,
+      perfil: 'RECEPCIONISTA',
+      idPosto: Number(this.novoRecepcionista.idPosto)
+    };
+
+    const operacao = this.recepcionistaEditandoId
+      ? this.authService.atualizarRecepcionista(this.recepcionistaEditandoId, payload)
+      : this.authService.cadastrarRecepcionista(payload);
+
+    operacao.subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Recepcionista salvo', detail: 'O recepcionista foi salvo com sucesso.' });
+        this.resetarFormularioRecepcionista();
+        this.carregarRecepcionistas();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível salvar o recepcionista.' });
+      }
+    });
+  }
+
+  editarRecepcionista(recepcionista: any) {
+    this.recepcionistaEditandoId = recepcionista.id;
+    this.novoRecepcionista = {
+      ...recepcionista,
+      senha: ''
+    };
+  }
+
+  excluirRecepcionista(recepcionistaId: number) {
+    this.authService.excluirRecepcionista(recepcionistaId).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Recepcionista removido', detail: 'O recepcionista foi removido com sucesso.' });
+        this.carregarRecepcionistas();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível remover o recepcionista.' });
+      }
+    });
+  }
+
+  resetarFormularioRecepcionista() {
+    this.recepcionistaEditandoId = null;
+    this.novoRecepcionista = {
+      nomeCompleto: '',
+      cpf: '',
+      email: '',
+      senha: '',
+      perfil: 'RECEPCIONISTA',
+      idPosto: null as number | null
+    };
   }
 }
 

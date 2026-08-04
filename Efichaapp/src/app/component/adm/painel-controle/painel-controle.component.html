@@ -181,7 +181,6 @@
       <i class="pi pi-refresh"></i> Resetar Fichas
     </button>
 
-    <!-- GERENCIAMENTO DE DATAS -->
     <div class="datas-admin">
       <h3>
         <i class="pi pi-calendar"></i>
@@ -202,6 +201,84 @@
           <i class="pi pi-plus"></i> Adicionar
         </button>
       </div>
+    </div>
+
+    <div class="datas-admin">
+      <h3 class="datas-title">
+        <i class="pi pi-building"></i>
+        Gerenciar Postos
+      </h3>
+      <form (ngSubmit)="salvarPosto()" class="form-grid">
+        <input pInputText [(ngModel)]="novoPosto.nome" name="nomePosto" placeholder="Nome do posto" />
+        <input pInputText [(ngModel)]="novoPosto.endereco" name="enderecoPosto" placeholder="Endereço" />
+        <input pInputText [(ngModel)]="novoPosto.bairro" name="bairroPosto" placeholder="Bairro" />
+        <input pInputText [(ngModel)]="novoPosto.cidade" name="cidadePosto" placeholder="Cidade" />
+        <input pInputText [(ngModel)]="novoPosto.estado" name="estadoPosto" placeholder="Estado" />
+        <input pInputText [(ngModel)]="novoPosto.telefone" name="telefonePosto" placeholder="Telefone" />
+        <input pInputText type="number" [(ngModel)]="novoPosto.totalFichas" name="totalFichas" placeholder="Total de fichas" />
+        <input pInputText type="number" [(ngModel)]="novoPosto.fichasDisponiveis" name="fichasDisponiveis" placeholder="Fichas disponíveis" />
+        <button class="btn primary" type="submit">
+          <i class="pi pi-save"></i> {{ postoEditandoId ? 'Atualizar posto' : 'Cadastrar posto' }}
+        </button>
+        <button class="btn secondary" type="button" (click)="resetarFormularioPosto()" *ngIf="postoEditandoId">
+          <i class="pi pi-times"></i> Cancelar
+        </button>
+      </form>
+
+      <ul class="lista-admin">
+        <li *ngFor="let postoItem of postos">
+          <strong>{{ postoItem.nome }}</strong>
+          <span>{{ postoItem.cidade }} - {{ postoItem.estado }}</span>
+          <div class="acoes-admin">
+            <button class="icon success" type="button" (click)="editarPosto(postoItem)" title="Editar">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="icon danger" type="button" (click)="excluirPosto(postoItem.id)" title="Excluir">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </li>
+        <li *ngIf="postos.length === 0">Nenhum posto cadastrado</li>
+      </ul>
+    </div>
+
+    <div class="datas-admin">
+      <h3 class="datas-title">
+        <i class="pi pi-user-plus"></i>
+        Gerenciar Recepcionistas
+      </h3>
+      <form (ngSubmit)="salvarRecepcionista()" class="form-grid">
+        <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista" placeholder="Nome completo" />
+        <input pInputText [(ngModel)]="novoRecepcionista.cpf" name="cpfRecepcionista" placeholder="CPF" />
+        <input pInputText [(ngModel)]="novoRecepcionista.email" name="emailRecepcionista" placeholder="E-mail" />
+        <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista" placeholder="Senha" />
+        <select [(ngModel)]="novoRecepcionista.idPosto" name="postoRecepcionista">
+          <option [ngValue]="null">Selecione um posto</option>
+          <option *ngFor="let postoItem of postos" [ngValue]="postoItem.id">{{ postoItem.nome }}</option>
+        </select>
+        <button class="btn primary" type="submit">
+          <i class="pi pi-save"></i> {{ recepcionistaEditandoId ? 'Atualizar recepcionista' : 'Cadastrar recepcionista' }}
+        </button>
+        <button class="btn secondary" type="button" (click)="resetarFormularioRecepcionista()" *ngIf="recepcionistaEditandoId">
+          <i class="pi pi-times"></i> Cancelar
+        </button>
+      </form>
+
+      <ul class="lista-admin">
+        <li *ngFor="let recepcionista of recepcionistas">
+          <strong>{{ recepcionista.nomeCompleto || recepcionista.nome }}</strong>
+          <span>{{ recepcionista.cpf }}</span>
+          <div class="acoes-admin">
+            <button class="icon success" type="button" (click)="editarRecepcionista(recepcionista)" title="Editar">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="icon danger" type="button" (click)="excluirRecepcionista(recepcionista.id)" title="Excluir">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </li>
+        <li *ngIf="recepcionistas.length === 0">Nenhum recepcionista cadastrado</li>
+      </ul>
     </div>
   </section>
 </div>

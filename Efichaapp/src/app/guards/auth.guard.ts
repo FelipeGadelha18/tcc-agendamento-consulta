@@ -17,7 +17,8 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    if (tipoUsuario === roleEsperado) {
+    const rolesEsperadas = Array.isArray(roleEsperado) ? roleEsperado : [roleEsperado];
+    if (rolesEsperadas.includes(tipoUsuario)) {
       return true;
     }
 

@@ -67,7 +67,7 @@ export const routes: Routes = [
     {
         path: 'admin',
         canActivate: [AuthGuard],
-        data: { role: 'ADM' },
+        data: { role: ['ADM', 'RECEPCIONISTA'] },
         children: [
             {
                 path: 'painel-controle',

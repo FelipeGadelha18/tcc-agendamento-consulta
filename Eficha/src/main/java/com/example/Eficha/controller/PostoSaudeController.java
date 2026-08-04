@@ -1,11 +1,19 @@
 package com.example.Eficha.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.PostoSaudeRepository;
@@ -18,15 +26,46 @@ public class PostoSaudeController {
     private PostoSaudeRepository postoRepository;
 
     @PostMapping("/cadastrar")
-    public String cadastrarPosto(@RequestBody PostoSaude posto) {
+    public PostoSaude cadastrarPosto(@RequestBody PostoSaude posto) {
         posto.setFichasDisponiveis(posto.getTotalFichas());
-        postoRepository.save(posto);
-        return "Posto cadastrado com sucesso!";
+        return postoRepository.save(posto);
     }
 
     @GetMapping("/listar")
     public List<PostoSaude> listarPostos() {
         return postoRepository.findAll();
+    }
+
+    @PutMapping("/{id}")
+    public PostoSaude atualizarPosto(@PathVariable Long id, @RequestBody PostoSaude postoAtualizado) {
+        PostoSaude posto = postoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
+
+        posto.setNome(postoAtualizado.getNome());
+        posto.setEndereco(postoAtualizado.getEndereco());
+        posto.setBairro(postoAtualizado.getBairro());
+        posto.setCidade(postoAtualizado.getCidade());
+        posto.setEstado(postoAtualizado.getEstado());
+        posto.setTelefone(postoAtualizado.getTelefone());
+        posto.setLatitude(postoAtualizado.getLatitude());
+        posto.setLongitude(postoAtualizado.getLongitude());
+        posto.setTotalFichas(postoAtualizado.getTotalFichas());
+        posto.setFichasDisponiveis(postoAtualizado.getFichasDisponiveis());
+        posto.setDatasDisponiveis(postoAtualizado.getDatasDisponiveis());
+        posto.setDatasBloqueadas(postoAtualizado.getDatasBloqueadas());
+        posto.setLimiteFichasPorCpf(postoAtualizado.getLimiteFichasPorCpf());
+        posto.setPrazoCancelamentoHoras(postoAtualizado.getPrazoCancelamentoHoras());
+
+        return postoRepository.save(posto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletarPosto(@PathVariable Long id) {
+        if (!postoRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        postoRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     // 🔹 listar datas disponíveis para um posto

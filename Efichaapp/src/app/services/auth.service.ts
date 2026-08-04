@@ -6,6 +6,7 @@ export interface LoginResponse {
   id: number;
   token: string;
   tipo: string;
+  perfil?: string;
   nome: string;
   cpf: string;
   idPosto?: number;
@@ -39,6 +40,22 @@ export class AuthService {
     });
   }
 
+  cadastrarRecepcionista(recepcionista: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/administradores`, recepcionista);
+  }
+
+  listarRecepcionistas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/administradores`);
+  }
+
+  atualizarRecepcionista(id: number, recepcionista: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/administradores/${id}`, recepcionista);
+  }
+
+  excluirRecepcionista(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/administradores/${id}`);
+  }
+
   recuperarSenha(cpf: string, novaSenha: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/pacientes/recuperar-senha`, {
       cpf: cpf,
@@ -58,14 +75,16 @@ export class AuthService {
   }
 
   salvarAdministrador(response: LoginResponse): void {
+    const nome = (response as any).nome || (response as any).nomeCompleto;
+    const nomeCompleto = (response as any).nomeCompleto || response.nome;
     localStorage.setItem('usuario', JSON.stringify({
       id: response.id,
       nome: response.nome,
       cpf: response.cpf,
-      tipo: response.tipo,
+      tipo,
       idPosto: response.idPosto
     }));
-    localStorage.setItem('tipoUsuario', 'ADM');
+    localStorage.setItem('tipoUsuario', tipo);
     localStorage.setItem('token', response.token);
     localStorage.setItem('idPosto', String(response.idPosto || 0));
   }
@@ -95,4 +114,3 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 }
-

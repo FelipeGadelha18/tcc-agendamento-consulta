@@ -1,7 +1,13 @@
 package com.example.Eficha.model;
 
-import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "administrador")
@@ -20,8 +26,11 @@ public class Administrador {
     @Column(nullable = false, unique = true, length = 120)
     private String email;
 
-    @Column(name = "id_posto", nullable = false)
+    @Column(name = "id_posto")
     private Long idPosto;
+
+    @Column(nullable = false, length = 20)
+    private String perfil = "ADM";
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false, length = 60)
@@ -71,12 +80,25 @@ public class Administrador {
         this.email = email;
     }
 
+    public String getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(String perfil) {
+        this.perfil = perfil;
+    }
+
     public Long getIdPosto() {
         return idPosto;
     }
 
     public void setIdPosto(Long idPosto) {
-        this.idPosto = idPosto;
+     
+
+    public void setIdPosto(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setIdPosto'");
+    }   this.idPosto = idPosto;
     }
 
     public String getSenha() {
@@ -93,5 +115,10 @@ public class Administrador {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public void setSenha(String senha2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setSenha'");
     }
 }

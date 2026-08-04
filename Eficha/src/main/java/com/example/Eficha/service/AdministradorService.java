@@ -1,5 +1,10 @@
 package com.example.Eficha.service;
 
+import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.example.Eficha.dto.LoginRequest;
 import com.example.Eficha.dto.LoginResponse;
 import com.example.Eficha.exception.UnauthorizedException;
@@ -7,10 +12,6 @@ import com.example.Eficha.model.Administrador;
 import com.example.Eficha.repository.AdministradorRepository;
 import com.example.Eficha.util.CpfValidator;
 import com.example.Eficha.util.JwtUtil;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AdministradorService {
@@ -37,6 +38,15 @@ public class AdministradorService {
             throw new IllegalArgumentException("Email já cadastrado");
         }
 
+        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
+        if ("RECEPCIONISTA".equals(perfil) && administrador.getIdPosto() == null) {
+            throw new IllegalArgumentException("Recepcionista deve estar vinculado a um posto de saúde");
+        }
+        if ("ADM".equals(perfil)) {
+            administrador.setIdPosto(null);
+        }
+
+        administrador.setPerfil(perfil);
         administrador.setSenha(encoder.encode(administrador.getSenha()));
         administrador.setAtivo(true);
         Administrador salvo = repository.save(administrador);
@@ -71,12 +81,13 @@ public class AdministradorService {
             throw new UnauthorizedException("CPF ou senha incorretos");
         }
 
-        String token = jwtUtil.generateToken(administrador.getId(), administrador.getCpf(), "ADM");
+        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
+        String token = jwtUtil.generateToken(administrador.getId(), administrador.getCpf(), perfil);
 
         LoginResponse response = new LoginResponse();
         response.setId(administrador.getId());
         response.setToken(token);
-        response.setTipo("ADM");
+        response.setTipo(perfil);
         response.setNome(administrador.getNomeCompleto());
         response.setCpf(administrador.getCpf());
         response.setIdPosto(administrador.getIdPosto());
@@ -106,8 +117,17 @@ public class AdministradorService {
             return null;
         }
 
+        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
+        if ("RECEPCIONISTA".equals(perfil) && administrador.getIdPosto() == null) {
+            throw new IllegalArgumentException("Recepcionista deve estar vinculado a um posto de saúde");
+        }
+        if ("ADM".equals(perfil)) {
+            administrador.setIdPosto(null);
+        }
+
         existente.setNomeCompleto(administrador.getNomeCompleto());
         existente.setEmail(administrador.getEmail());
+        existente.setPerfil(perfil);
         existente.setIdPosto(administrador.getIdPosto());
 
         Administrador atualizado = repository.save(existente);
@@ -125,9 +145,21 @@ public class AdministradorService {
 
     public List<Administrador> buscarPorIdPosto(Long idPosto) {
         List<Administrador> lista = repository.findAll().stream()
-                .filter(a -> a.getIdPosto().equals(idPosto))
+                .filter(a -> a.getIdPosto() != null && a.getIdPosto().equals(idPosto))
                 .toList();
         lista.forEach(a -> a.setSenha(null));
         return lista;
+    }
+
+    private String normalizarPerfil(String perfil, Long idPosto) {
+        if (perfil == null || perfil.isBlank()) {
+            return idPosto != null ? "RECEPCIONISTA" : "ADM";
+        }
+
+        String perfilNormalizado = perfil.trim().toUpperCase();
+        if ("RECEPCIONISTA".equals(perfilNormalizado)) {
+            return "RECEPCIONISTA";
+        }
+        return "ADM";
     }
 }
