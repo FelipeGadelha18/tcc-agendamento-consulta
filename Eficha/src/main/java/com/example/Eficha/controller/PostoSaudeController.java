@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +17,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Eficha.model.PostoSaude;
 import com.example.Eficha.repository.PostoSaudeRepository;
+import com.example.Eficha.security.AuthenticatedUser;
 
 @RestController
 @RequestMapping("/postos")
@@ -24,6 +29,16 @@ public class PostoSaudeController {
 
     @Autowired
     private PostoSaudeRepository postoRepository;
+
+    // Garante que o recepcionista autenticado só acesse dados do próprio posto
+    private void exigirPostoProprio(Long postoId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof AuthenticatedUser usuario
+                && "RECEPCIONISTA".equals(usuario.tipo())
+                && (postoId == null || !postoId.equals(usuario.idPosto()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso negado a dados de outro posto");
+        }
+    }
 
     @PostMapping("/cadastrar")
     public PostoSaude cadastrarPosto(@RequestBody PostoSaude posto) {
@@ -84,6 +99,7 @@ public class PostoSaudeController {
     // 🔹 adicionar data disponível a um posto
     @PostMapping("/{id}/datas")
     public ResponseEntity<?> adicionarData(@PathVariable Long id, @RequestBody DataDTO dto) {
+        exigirPostoProprio(id);
         var posto = postoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
         LocalDate data;
@@ -105,6 +121,7 @@ public class PostoSaudeController {
     // 🔹 remover uma data disponível
     @DeleteMapping("/{id}/datas/{data}")
     public ResponseEntity<?> removerData(@PathVariable Long id, @PathVariable String data) {
+        exigirPostoProprio(id);
         var posto = postoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
         if (posto.getDatasDisponiveis() != null) {
@@ -190,6 +207,7 @@ public class PostoSaudeController {
     // 🔹 resetar fichas disponíveis para o total
     @PutMapping("/{id}/resetar-fichas")
     public ResponseEntity<?> resetarFichas(@PathVariable Long id) {
+        exigirPostoProprio(id);
         var posto = postoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Posto não encontrado"));
         posto.setFichasDisponiveis(posto.getTotalFichas());

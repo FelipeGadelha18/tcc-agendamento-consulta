@@ -72,7 +72,6 @@ export class PainelControleComponent implements OnInit {
     cpf: '',
     email: '',
     senha: '',
-    perfil: 'RECEPCIONISTA',
     idPosto: null as number | null
   };
   recepcionistaEditandoId: number | null = null;
@@ -96,16 +95,30 @@ export class PainelControleComponent implements OnInit {
   ngOnInit(): void {
     this.administrador = this.authService.obterAdministrador();
     this.idPosto = this.authService.obterIdPosto();
-    this.atualizarFichas(0, this.pageSize);
-    this.carregarPostos();
-    this.carregarRecepcionistas();
-    this.painelPostoService.getPostos().subscribe(postos => {
-      this.posto = postos.find(p => p.id === this.idPosto) || null;
-    });
 
-    if (this.idPosto) {
-      this.postoService.listarDatas(this.idPosto).subscribe(d => this.datasDisponiveis = d);
+    if (this.isRecepcionista) {
+      this.atualizarFichas(0, this.pageSize);
+      this.painelPostoService.getPostos().subscribe(postos => {
+        this.posto = postos.find(p => p.id === this.idPosto) || null;
+      });
+
+      if (this.idPosto) {
+        this.postoService.listarDatas(this.idPosto).subscribe(d => this.datasDisponiveis = d);
+      }
     }
+
+    if (this.isAdmin) {
+      this.carregarPostos();
+      this.carregarRecepcionistas();
+    }
+  }
+
+  get isAdmin(): boolean {
+    return this.administrador?.tipo === 'ADM';
+  }
+
+  get isRecepcionista(): boolean {
+    return this.administrador?.tipo === 'RECEPCIONISTA';
   }
 
   onGlobalFilter(event: any, dt: any) {
@@ -544,7 +557,7 @@ export class PainelControleComponent implements OnInit {
   carregarRecepcionistas() {
     this.authService.listarRecepcionistas().subscribe({
       next: (recepcionistas) => {
-        this.recepcionistas = recepcionistas.filter((u: any) => u.perfil === 'RECEPCIONISTA');
+        this.recepcionistas = recepcionistas;
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os recepcionistas.' });
@@ -565,7 +578,6 @@ export class PainelControleComponent implements OnInit {
 
     const payload = {
       ...this.novoRecepcionista,
-      perfil: 'RECEPCIONISTA',
       idPosto: Number(this.novoRecepcionista.idPosto)
     };
 
@@ -612,7 +624,6 @@ export class PainelControleComponent implements OnInit {
       cpf: '',
       email: '',
       senha: '',
-      perfil: 'RECEPCIONISTA',
       idPosto: null as number | null
     };
   }

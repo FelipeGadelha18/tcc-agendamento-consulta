@@ -15,32 +15,32 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.Eficha.dto.LoginRequest;
 import com.example.Eficha.dto.LoginResponse;
-import com.example.Eficha.model.Administrador;
-import com.example.Eficha.service.AdministradorService;
+import com.example.Eficha.model.Recepcionista;
+import com.example.Eficha.service.RecepcionistaService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/administradores")
-public class AdministradorController {
+@RequestMapping("/recepcionistas")
+public class RecepcionistaController {
 
-    private final AdministradorService service;
+    private final RecepcionistaService service;
 
-    public AdministradorController(AdministradorService service) {
+    public RecepcionistaController(RecepcionistaService service) {
         this.service = service;
     }
 
     @PostMapping
-    public Administrador cadastrar(@Valid @RequestBody Administrador administrador) {
+    public Recepcionista cadastrar(@Valid @RequestBody Recepcionista recepcionista) {
         try {
-            return service.salvar(administrador);
+            return service.salvar(recepcionista);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @GetMapping
-    public List<Administrador> listar() {
+    public List<Recepcionista> listar() {
         return service.listar();
     }
 
@@ -50,29 +50,20 @@ public class AdministradorController {
     }
 
     @GetMapping("/{id}")
-    public Administrador buscarPorId(@PathVariable Long id) {
-        Administrador a = service.buscarPorId(id);
-        if (a == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
+    public Recepcionista buscarPorId(@PathVariable Long id) {
+        Recepcionista r = service.buscarPorId(id);
+        if (r == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recepcionista não encontrado");
         }
-        return a;
-    }
-
-    @GetMapping("/cpf/{cpf}")
-    public Administrador buscarPorCpf(@PathVariable String cpf) {
-        Administrador a = service.buscarPorCpf(cpf);
-        if (a == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
-        }
-        return a;
+        return r;
     }
 
     @PutMapping("/{id}")
-    public Administrador atualizar(@PathVariable Long id, @RequestBody Administrador administrador) {
+    public Recepcionista atualizar(@PathVariable Long id, @RequestBody Recepcionista recepcionista) {
         try {
-            Administrador atualizado = service.atualizar(id, administrador);
+            Recepcionista atualizado = service.atualizar(id, recepcionista);
             if (atualizado == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recepcionista não encontrado");
             }
             return atualizado;
         } catch (IllegalArgumentException e) {
@@ -84,7 +75,7 @@ public class AdministradorController {
     public void deletar(@PathVariable Long id) {
         boolean deletado = service.deletar(id);
         if (!deletado) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Administrador não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recepcionista não encontrado");
         }
     }
 }

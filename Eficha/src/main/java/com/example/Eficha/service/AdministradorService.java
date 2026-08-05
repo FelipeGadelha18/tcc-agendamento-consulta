@@ -38,15 +38,6 @@ public class AdministradorService {
             throw new IllegalArgumentException("Email já cadastrado");
         }
 
-        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
-        if ("RECEPCIONISTA".equals(perfil) && administrador.getIdPosto() == null) {
-            throw new IllegalArgumentException("Recepcionista deve estar vinculado a um posto de saúde");
-        }
-        if ("ADM".equals(perfil)) {
-            administrador.setIdPosto(null);
-        }
-
-        administrador.setPerfil(perfil);
         administrador.setSenha(encoder.encode(administrador.getSenha()));
         administrador.setAtivo(true);
         Administrador salvo = repository.save(administrador);
@@ -81,16 +72,14 @@ public class AdministradorService {
             throw new UnauthorizedException("CPF ou senha incorretos");
         }
 
-        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
-        String token = jwtUtil.generateToken(administrador.getId(), administrador.getCpf(), perfil);
+        String token = jwtUtil.generateToken(administrador.getId(), administrador.getCpf(), "ADM");
 
         LoginResponse response = new LoginResponse();
         response.setId(administrador.getId());
         response.setToken(token);
-        response.setTipo(perfil);
+        response.setTipo("ADM");
         response.setNome(administrador.getNomeCompleto());
         response.setCpf(administrador.getCpf());
-        response.setIdPosto(administrador.getIdPosto());
 
         return response;
     }
@@ -117,18 +106,8 @@ public class AdministradorService {
             return null;
         }
 
-        String perfil = normalizarPerfil(administrador.getPerfil(), administrador.getIdPosto());
-        if ("RECEPCIONISTA".equals(perfil) && administrador.getIdPosto() == null) {
-            throw new IllegalArgumentException("Recepcionista deve estar vinculado a um posto de saúde");
-        }
-        if ("ADM".equals(perfil)) {
-            administrador.setIdPosto(null);
-        }
-
         existente.setNomeCompleto(administrador.getNomeCompleto());
         existente.setEmail(administrador.getEmail());
-        existente.setPerfil(perfil);
-        existente.setIdPosto(administrador.getIdPosto());
 
         Administrador atualizado = repository.save(existente);
         atualizado.setSenha(null);
@@ -141,25 +120,5 @@ public class AdministradorService {
             return true;
         }
         return false;
-    }
-
-    public List<Administrador> buscarPorIdPosto(Long idPosto) {
-        List<Administrador> lista = repository.findAll().stream()
-                .filter(a -> a.getIdPosto() != null && a.getIdPosto().equals(idPosto))
-                .toList();
-        lista.forEach(a -> a.setSenha(null));
-        return lista;
-    }
-
-    private String normalizarPerfil(String perfil, Long idPosto) {
-        if (perfil == null || perfil.isBlank()) {
-            return idPosto != null ? "RECEPCIONISTA" : "ADM";
-        }
-
-        String perfilNormalizado = perfil.trim().toUpperCase();
-        if ("RECEPCIONISTA".equals(perfilNormalizado)) {
-            return "RECEPCIONISTA";
-        }
-        return "ADM";
     }
 }

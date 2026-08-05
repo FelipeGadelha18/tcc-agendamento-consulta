@@ -5,6 +5,7 @@ import com.example.Eficha.repository.ReservaRepository;
 import com.example.Eficha.service.ReservaPdfService;
 import com.example.Eficha.service.ReservaService;
 import com.example.Eficha.model.Reserva;
+import com.example.Eficha.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,6 +35,9 @@ class ReservaControllerQrTest {
 
     @MockBean
     private ReservaService reservaService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @Test
     void deveLocalizarReservaPorCodigoQr() throws Exception {

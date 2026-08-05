@@ -3,14 +3,19 @@ package com.example.Eficha.controller;
 import com.example.Eficha.model.Reserva;
 import com.example.Eficha.repository.ReservaRepository;
 import com.example.Eficha.repository.PostoSaudeRepository;
+import com.example.Eficha.security.AuthenticatedUser;
 import com.example.Eficha.service.ReservaPdfService;
 import com.example.Eficha.service.ReservaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -35,6 +40,23 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+
+    // Garante que o recepcionista autenticado só acesse dados do próprio posto
+    private void exigirPostoProprio(Long postoId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof AuthenticatedUser usuario
+                && "RECEPCIONISTA".equals(usuario.tipo())
+                && (postoId == null || !postoId.equals(usuario.idPosto()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acesso negado a dados de outro posto");
+        }
+    }
+
+    private Reserva exigirReservaDoPostoProprio(Long reservaId) {
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new RuntimeException("Reserva não encontrada"));
+        exigirPostoProprio(reserva.getPostoSaude() != null ? reserva.getPostoSaude().getId() : null);
+        return reserva;
+    }
 
     // 🔹 Listar todas as reservas
     @GetMapping
@@ -68,6 +90,7 @@ public class ReservaController {
             String nome = payload.get("nomeCompleto") == null ? null : payload.get("nomeCompleto").toString();
             String cpf = payload.get("cpf") == null ? null : payload.get("cpf").toString();
             Long postoId = payload.get("postoId") == null ? null : Long.valueOf(payload.get("postoId").toString());
+            exigirPostoProprio(postoId);
             String data = payload.get("dataReserva") == null ? null : payload.get("dataReserva").toString();
             LocalDate dataReserva = data != null ? LocalDate.parse(data) : LocalDate.now();
             var resposta = reservaService.emitirFichaManual(nome, cpf, postoId, dataReserva);
@@ -116,6 +139,7 @@ public class ReservaController {
     // 🔹 Listar reservas por posto
     @GetMapping("/por-posto/{id}")
     public List<Reserva> listarReservasPorPosto(@PathVariable Long id) {
+        exigirPostoProprio(id);
         return reservaRepository.findAll()
                 .stream()
                 .filter(r -> r.getPostoSaude() != null && r.getPostoSaude().getId().equals(id))
@@ -125,6 +149,7 @@ public class ReservaController {
     // 🔹 Listar reservas por posto (paginado)
     @GetMapping("/por-posto/{id}/paged")
     public Page<Reserva> listarReservasPorPostoPaged(@PathVariable Long id, Pageable pageable) {
+        exigirPostoProprio(id);
         return reservaRepository.findByPostoSaudeId(id, pageable);
     }
 
@@ -137,6 +162,7 @@ public class ReservaController {
     // 🔹 Chamar próximo da fila
     @PutMapping("/posto/{postoId}/chamar-proximo")
     public ResponseEntity<?> chamarProximo(@PathVariable Long postoId) {
+        exigirPostoProprio(postoId);
         try {
             Reserva proximo = reservaService.chamarProximoFila(postoId);
             return ResponseEntity.ok(Map.of("mensagem", "Próximo chamado com sucesso", "reserva", proximo));
@@ -148,6 +174,7 @@ public class ReservaController {
     // 🔹 Check-in do paciente
     @PutMapping("/{reservaId}/checkin")
     public ResponseEntity<?> checkinReserva(@PathVariable Long reservaId) {
+        exigirReservaDoPostoProprio(reservaId);
         reservaService.registrarCheckin(reservaId);
         return ResponseEntity.ok(Map.of("mensagem", "Check-in registrado com sucesso"));
     }
@@ -155,6 +182,7 @@ public class ReservaController {
     // 🔹 Registrar atendimento realizado
     @PutMapping("/{reservaId}/finalizar")
     public ResponseEntity<?> finalizarAtendimento(@PathVariable Long reservaId) {
+        exigirReservaDoPostoProprio(reservaId);
         reservaService.registrarAtendimento(reservaId);
         return ResponseEntity.ok(Map.of("mensagem", "Atendimento registrado com sucesso"));
     }
@@ -162,6 +190,7 @@ public class ReservaController {
     // 🔹 Marcar não comparecimento
     @PutMapping("/{reservaId}/no-show")
     public ResponseEntity<?> marcarNoShow(@PathVariable Long reservaId) {
+        exigirReservaDoPostoProprio(reservaId);
         reservaService.marcarNoShow(reservaId);
         return ResponseEntity.ok(Map.of("mensagem", "Ficha marcada como no-show"));
     }
@@ -181,6 +210,7 @@ public class ReservaController {
     // 🔹 CANCELAR RESERVA - ADMINISTRADOR
     @PutMapping("/{reservaId}/cancelar")
     public ResponseEntity<?> cancelarReservaPorAdministrador(@PathVariable Long reservaId) {
+        exigirReservaDoPostoProprio(reservaId);
 
         reservaService.cancelarReservaPorAdministrador(reservaId);
 
@@ -191,6 +221,7 @@ public class ReservaController {
     // 🔹 CONFIRMAR RESERVA - ADMINISTRADOR
     @PutMapping("/{reservaId}/confirmar")
     public ResponseEntity<?> confirmarReservaPorAdministrador(@PathVariable Long reservaId) {
+        exigirReservaDoPostoProprio(reservaId);
 
         reservaService.confirmarReservaPorAdministrador(reservaId);
 
@@ -203,6 +234,7 @@ public class ReservaController {
     public ResponseEntity<?> localizarReservaPorQr(@PathVariable String codigo) {
         try {
             Reserva reserva = reservaService.buscarReservaPorCodigo(codigo);
+            exigirPostoProprio(reserva.getPostoSaude() != null ? reserva.getPostoSaude().getId() : null);
             return ResponseEntity.ok(reserva);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));

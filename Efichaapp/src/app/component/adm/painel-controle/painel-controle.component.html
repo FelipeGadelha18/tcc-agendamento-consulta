@@ -12,7 +12,7 @@
   </header>
 
   <!-- CONTEÚDO -->
-  <main class="content">
+  <main class="content" *ngIf="isRecepcionista">
     <section class="card qr-card" style="grid-column: 1 / -1;">
       <div class="card-header">
         <h2>📸 Leitura por QR Code</h2>
@@ -160,50 +160,52 @@
 
   <!-- INFO POSTO -->
   <section class="info-card">
-    <h2>🏥 Informações do Posto</h2>
-    <p>
-      <strong>Nome:</strong>
-      <span>{{ posto?.nome }}</span>
-    </p>
-    <p>
-      <strong>Endereço:</strong>
-      <span>{{ posto?.endereco }}</span>
-    </p>
-    <p>
-      <strong>Quantidade de Fichas:</strong>
-      <span>{{ posto?.totalFichas }}</span>
-    </p>
-    <p>
-      <strong>Fichas Disponíveis:</strong>
-      <span>{{ posto?.fichasDisponiveis }}</span>
-    </p>
-    <button class="btn warning" (click)="resetarFichas()" title="Resetar fichas">
-      <i class="pi pi-refresh"></i> Resetar Fichas
-    </button>
+    <ng-container *ngIf="isRecepcionista">
+      <h2>🏥 Informações do Posto</h2>
+      <p>
+        <strong>Nome:</strong>
+        <span>{{ posto?.nome }}</span>
+      </p>
+      <p>
+        <strong>Endereço:</strong>
+        <span>{{ posto?.endereco }}</span>
+      </p>
+      <p>
+        <strong>Quantidade de Fichas:</strong>
+        <span>{{ posto?.totalFichas }}</span>
+      </p>
+      <p>
+        <strong>Fichas Disponíveis:</strong>
+        <span>{{ posto?.fichasDisponiveis }}</span>
+      </p>
+      <button class="btn warning" (click)="resetarFichas()" title="Resetar fichas">
+        <i class="pi pi-refresh"></i> Resetar Fichas
+      </button>
 
-    <div class="datas-admin">
-      <h3>
-        <i class="pi pi-calendar"></i>
-        Datas Disponíveis
-      </h3>
-      <ul>
-        <li *ngFor="let d of datasDisponiveis">
-          <strong>{{ d | date:'dd/MM/yyyy' }}</strong>
-          <button class="icon danger" (click)="excluirData(d)" title="Excluir data">
-            <i class="pi pi-trash"></i>
+      <div class="datas-admin">
+        <h3>
+          <i class="pi pi-calendar"></i>
+          Datas Disponíveis
+        </h3>
+        <ul>
+          <li *ngFor="let d of datasDisponiveis">
+            <strong>{{ d | date:'dd/MM/yyyy' }}</strong>
+            <button class="icon danger" (click)="excluirData(d)" title="Excluir data">
+              <i class="pi pi-trash"></i>
+            </button>
+          </li>
+          <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
+        </ul>
+        <div class="add-data">
+          <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
+          <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
+            <i class="pi pi-plus"></i> Adicionar
           </button>
-        </li>
-        <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
-      </ul>
-      <div class="add-data">
-        <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
-        <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
-          <i class="pi pi-plus"></i> Adicionar
-        </button>
+        </div>
       </div>
-    </div>
+    </ng-container>
 
-    <div class="datas-admin">
+    <div class="datas-admin" *ngIf="isAdmin">
       <h3 class="datas-title">
         <i class="pi pi-building"></i>
         Gerenciar Postos
@@ -215,8 +217,10 @@
         <input pInputText [(ngModel)]="novoPosto.cidade" name="cidadePosto" placeholder="Cidade" />
         <input pInputText [(ngModel)]="novoPosto.estado" name="estadoPosto" placeholder="Estado" />
         <input pInputText [(ngModel)]="novoPosto.telefone" name="telefonePosto" placeholder="Telefone" />
-        <input pInputText type="number" [(ngModel)]="novoPosto.totalFichas" name="totalFichas" placeholder="Total de fichas" />
-        <input pInputText type="number" [(ngModel)]="novoPosto.fichasDisponiveis" name="fichasDisponiveis" placeholder="Fichas disponíveis" />
+        <input pInputText type="number" [(ngModel)]="novoPosto.totalFichas" name="totalFichas"
+          placeholder="Total de fichas" />
+        <input pInputText type="number" [(ngModel)]="novoPosto.fichasDisponiveis" name="fichasDisponiveis"
+          placeholder="Fichas disponíveis" />
         <button class="btn primary" type="submit">
           <i class="pi pi-save"></i> {{ postoEditandoId ? 'Atualizar posto' : 'Cadastrar posto' }}
         </button>
@@ -242,24 +246,28 @@
       </ul>
     </div>
 
-    <div class="datas-admin">
+    <div class="datas-admin" *ngIf="isAdmin">
       <h3 class="datas-title">
         <i class="pi pi-user-plus"></i>
         Gerenciar Recepcionistas
       </h3>
       <form (ngSubmit)="salvarRecepcionista()" class="form-grid">
-        <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista" placeholder="Nome completo" />
+        <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista"
+          placeholder="Nome completo" />
         <input pInputText [(ngModel)]="novoRecepcionista.cpf" name="cpfRecepcionista" placeholder="CPF" />
         <input pInputText [(ngModel)]="novoRecepcionista.email" name="emailRecepcionista" placeholder="E-mail" />
-        <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista" placeholder="Senha" />
+        <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista"
+          placeholder="Senha" />
         <select [(ngModel)]="novoRecepcionista.idPosto" name="postoRecepcionista">
           <option [ngValue]="null">Selecione um posto</option>
           <option *ngFor="let postoItem of postos" [ngValue]="postoItem.id">{{ postoItem.nome }}</option>
         </select>
         <button class="btn primary" type="submit">
-          <i class="pi pi-save"></i> {{ recepcionistaEditandoId ? 'Atualizar recepcionista' : 'Cadastrar recepcionista' }}
+          <i class="pi pi-save"></i> {{ recepcionistaEditandoId ? 'Atualizar recepcionista' : 'Cadastrar recepcionista'
+          }}
         </button>
-        <button class="btn secondary" type="button" (click)="resetarFormularioRecepcionista()" *ngIf="recepcionistaEditandoId">
+        <button class="btn secondary" type="button" (click)="resetarFormularioRecepcionista()"
+          *ngIf="recepcionistaEditandoId">
           <i class="pi pi-times"></i> Cancelar
         </button>
       </form>

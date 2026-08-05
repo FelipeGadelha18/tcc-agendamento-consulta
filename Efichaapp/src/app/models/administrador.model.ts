@@ -4,4 +4,5 @@ export interface Administrador {
   cpf: string;
   email: string;
   idPosto: number;
+  tipo: string;
 }

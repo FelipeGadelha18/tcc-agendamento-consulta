@@ -40,20 +40,27 @@ export class AuthService {
     });
   }
 
+  loginRecepcionista(cpf: string, senha: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/recepcionistas/login`, {
+      cpf: cpf,
+      senha: senha
+    });
+  }
+
   cadastrarRecepcionista(recepcionista: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/administradores`, recepcionista);
+    return this.http.post(`${this.apiUrl}/recepcionistas`, recepcionista);
   }
 
   listarRecepcionistas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/administradores`);
+    return this.http.get<any[]>(`${this.apiUrl}/recepcionistas`);
   }
 
   atualizarRecepcionista(id: number, recepcionista: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/administradores/${id}`, recepcionista);
+    return this.http.put(`${this.apiUrl}/recepcionistas/${id}`, recepcionista);
   }
 
   excluirRecepcionista(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/administradores/${id}`);
+    return this.http.delete(`${this.apiUrl}/recepcionistas/${id}`);
   }
 
   recuperarSenha(cpf: string, novaSenha: string): Observable<any> {
@@ -75,11 +82,10 @@ export class AuthService {
   }
 
   salvarAdministrador(response: LoginResponse): void {
-    const nome = (response as any).nome || (response as any).nomeCompleto;
-    const nomeCompleto = (response as any).nomeCompleto || response.nome;
+    const tipo = response.tipo;
     localStorage.setItem('usuario', JSON.stringify({
       id: response.id,
-      nome: response.nome,
+      nomeCompleto: response.nome,
       cpf: response.cpf,
       tipo,
       idPosto: response.idPosto

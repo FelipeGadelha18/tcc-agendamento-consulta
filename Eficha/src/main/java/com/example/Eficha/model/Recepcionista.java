@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "administrador")
-public class Administrador {
+@Table(name = "recepcionista")
+public class Recepcionista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,9 @@ public class Administrador {
     @Column(nullable = false, unique = true, length = 120)
     private String email;
 
+    @Column(name = "id_posto", nullable = false)
+    private Long idPosto;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false, length = 60)
     private String senha;
@@ -33,18 +36,8 @@ public class Administrador {
     @Column(nullable = false, columnDefinition = "TINYINT DEFAULT 1")
     private Boolean ativo = true;
 
-    public Administrador() {
+    public Recepcionista() {
     }
-
-    public Administrador(String nomeCompleto, String cpf, String email, String senha) {
-        this.nomeCompleto = nomeCompleto;
-        this.cpf = cpf;
-        this.email = email;
-        this.senha = senha;
-        this.ativo = true;
-    }
-
-    // GETTERS E SETTERS
 
     public Long getId() {
         return id;
@@ -74,6 +67,14 @@ public class Administrador {
         this.email = email;
     }
 
+    public Long getIdPosto() {
+        return idPosto;
+    }
+
+    public void setIdPosto(Long idPosto) {
+        this.idPosto = idPosto;
+    }
+
     public String getSenha() {
         return senha;
     }
@@ -89,5 +90,4 @@ public class Administrador {
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-
 }

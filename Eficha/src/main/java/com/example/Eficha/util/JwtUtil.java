@@ -26,9 +26,16 @@ public class JwtUtil {
     }
 
     public String generateToken(Long userId, String cpf, String tipo) {
+        return generateToken(userId, cpf, tipo, null);
+    }
+
+    public String generateToken(Long userId, String cpf, String tipo, Long idPosto) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("cpf", cpf);
         claims.put("tipo", tipo);
+        if (idPosto != null) {
+            claims.put("idPosto", idPosto);
+        }
 
         return createToken(claims, String.valueOf(userId));
     }
@@ -68,6 +75,19 @@ public class JwtUtil {
         try {
             Claims claims = getAllClaims(token);
             return (String) claims.get("tipo");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Long extractIdPosto(String token) {
+        try {
+            Claims claims = getAllClaims(token);
+            Object valor = claims.get("idPosto");
+            if (valor == null) {
+                return null;
+            }
+            return Long.parseLong(valor.toString());
         } catch (Exception e) {
             return null;
         }

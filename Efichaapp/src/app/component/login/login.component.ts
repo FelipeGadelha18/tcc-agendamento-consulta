@@ -70,6 +70,8 @@ export class LoginComponent {
 
     if (this.tipoLogin === 'PACIENTE') {
       this.loginPaciente(cpfLimpo);
+    } else if (this.tipoLogin === 'RECEPCIONISTA') {
+      this.loginRecepcionista(cpfLimpo);
     } else {
       this.loginAdministrador(cpfLimpo);
     }
@@ -103,6 +105,31 @@ export class LoginComponent {
   loginAdministrador(cpfLimpo: string) {
     this.carregando = true;
     this.authService.loginAdministrador(cpfLimpo, this.senha).subscribe({
+      next: (response: LoginResponse) => {
+        this.authService.salvarAdministrador(response);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: `Bem-vindo ${response.nome}!`
+        });
+        setTimeout(() => this.router.navigate(['/admin/painel-controle']), 500);
+        this.carregando = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.carregando = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: err?.error?.message || 'CPF ou senha incorretos.'
+        });
+      }
+    });
+  }
+
+  loginRecepcionista(cpfLimpo: string) {
+    this.carregando = true;
+    this.authService.loginRecepcionista(cpfLimpo, this.senha).subscribe({
       next: (response: LoginResponse) => {
         this.authService.salvarAdministrador(response);
         this.messageService.add({
