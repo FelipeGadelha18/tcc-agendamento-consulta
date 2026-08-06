@@ -513,8 +513,9 @@ export class PainelControleComponent implements OnInit {
         this.resetarFormularioPosto();
         this.carregarPostos();
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível salvar o posto.' });
+      error: (err: any) => {
+        console.error('Erro ao salvar posto', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.message || 'Não foi possível salvar o posto.' });
       }
     });
   }
@@ -559,8 +560,9 @@ export class PainelControleComponent implements OnInit {
       next: (recepcionistas) => {
         this.recepcionistas = recepcionistas;
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível carregar os recepcionistas.' });
+      error: (err: any) => {
+        console.error('Erro ao carregar recepcionistas', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.message || 'Não foi possível carregar os recepcionistas.' });
       }
     });
   }
@@ -578,6 +580,7 @@ export class PainelControleComponent implements OnInit {
 
     const payload = {
       ...this.novoRecepcionista,
+      cpf: String(this.novoRecepcionista.cpf).replace(/\D/g, ''),
       idPosto: Number(this.novoRecepcionista.idPosto)
     };
 
@@ -591,8 +594,9 @@ export class PainelControleComponent implements OnInit {
         this.resetarFormularioRecepcionista();
         this.carregarRecepcionistas();
       },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível salvar o recepcionista.' });
+      error: (err: any) => {
+        console.error('Erro ao salvar recepcionista', err);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: err?.error?.message || 'Não foi possível salvar o recepcionista.' });
       }
     });
   }
