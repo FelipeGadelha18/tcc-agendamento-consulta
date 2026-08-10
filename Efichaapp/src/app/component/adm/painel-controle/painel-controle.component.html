@@ -4,7 +4,9 @@
 
   <!-- HEADER -->
   <header class="header">
-    <h1>E-Ficha - Painel de Controle</h1>
+
+    <h1 *ngIf="isRecepcionista">E-Ficha – Painel da Recepção</h1>
+    <h1 *ngIf="isAdmin">E-Ficha – Painel de Administração</h1>
     <button class="btn sair" (click)="sair()">
       <i class="pi pi-sign-out"></i>
       Sair
@@ -215,7 +217,7 @@
         Gerenciar Postos
       </h3>
       <!-- Formulário para adicionar/editar postos -->
-      <form (ngSubmit)="salvarPosto()" class="form-grid">
+      <form (ngSubmit)="salvarPosto()" class="gerenciarPosto form-grid">
         <input pInputText [(ngModel)]="novoPosto.nome" name="nomePosto" placeholder="Nome do posto" />
         <input pInputText [(ngModel)]="novoPosto.endereco" name="enderecoPosto" placeholder="Endereço" />
         <input pInputText [(ngModel)]="novoPosto.bairro" name="bairroPosto" placeholder="Bairro" />
@@ -260,7 +262,7 @@
         Gerenciar Recepcionistas
       </h3>
       <!-- Formulário para adicionar/editar recepcionistas -->
-      <form (ngSubmit)="salvarRecepcionista()" class="form-grid">
+      <form (ngSubmit)="salvarRecepcionista()" class=" gerenciarRecepcionista form-grid">
         <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista"
           placeholder="Nome completo" />
         <input pInputText [(ngModel)]="novoRecepcionista.cpf" name="cpfRecepcionista" placeholder="CPF" />

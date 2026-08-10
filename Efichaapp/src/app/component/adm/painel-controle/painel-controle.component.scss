@@ -381,23 +381,36 @@
 }
 
 .datas-admin {
-  background: #f3f8fd;
+  background: var(--bg-white);
   padding: 20px;
   border-radius: 12px;
   margin-top: 18px
-}
 
-.datas-admin ul {
-  list-style: none;
-  padding: 0
-}
+  ul {
+    list-style: none;
+    padding: 0
+  }
 
-.datas-admin li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #dce7f3
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #dce7f3
+  }
+
+  .gerenciarPosto {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px
+  }
+
+  .gerenciarRecepcionista {
+    display: grid;
+    grid-template-columns: repeat(3, 3fr);
+    gap: 12px
+  }
+
 }
 
 .add-data {
@@ -415,7 +428,7 @@
 
 .footer {
   background: linear-gradient(#307BD2, #284C77, #0E2948);
-  color: #fff;
+  color: var(--bg-white);
   padding: 24px 40px;
   text-align: center
 }
