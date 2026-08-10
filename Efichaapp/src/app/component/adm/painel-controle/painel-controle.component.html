@@ -269,10 +269,13 @@
         <input pInputText [(ngModel)]="novoRecepcionista.email" name="emailRecepcionista" placeholder="E-mail" />
         <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista"
           placeholder="Senha" />
-        <select [(ngModel)]="novoRecepcionista.idPosto" name="postoRecepcionista">
+        <!-- <select [(ngModel)]="novoRecepcionista.idPosto" name="postoRecepcionista">
           <option [ngValue]="null">Selecione um posto</option>
           <option *ngFor="let postoItem of postos" [ngValue]="postoItem.id">{{ postoItem.nome }}</option>
-        </select>
+        </select> -->
+        <p-select [(ngModel)]="novoRecepcionista.idPosto" [options]="postos" optionLabel="nome" optionValue="id"
+          placeholder="Selecione um posto" name="postoRecepcionista" [showClear]="true" styleClass="select-posto">
+        </p-select>
         <button class="btn primary" type="submit">
           <i class="pi pi-save"></i> {{ recepcionistaEditandoId ? 'Atualizar recepcionista' : 'Cadastrar recepcionista'
           }}

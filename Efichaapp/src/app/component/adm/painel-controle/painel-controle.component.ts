@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -29,7 +30,8 @@ import { PainelControlePostoService } from '../../../services/painel-controle-po
     ButtonModule,
     TagModule,
     InputTextModule,
-    ToastModule
+    ToastModule,
+    SelectModule
   ],
   providers: [MessageService],
   templateUrl: './painel-controle.component.html',
