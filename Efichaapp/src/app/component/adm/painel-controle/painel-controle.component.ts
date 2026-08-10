@@ -61,8 +61,8 @@ export class PainelControleComponent implements OnInit {
     telefone: '',
     latitude: null,
     longitude: null,
-    totalFichas: 100,
-    fichasDisponiveis: 100,
+    totalFichas: null,
+    fichasDisponiveis: null,
     limiteFichasPorCpf: 1,
     prazoCancelamentoHoras: 24
   };
@@ -548,8 +548,8 @@ export class PainelControleComponent implements OnInit {
       telefone: '',
       latitude: null,
       longitude: null,
-      totalFichas: 100,
-      fichasDisponiveis: 100,
+      totalFichas: null,
+      fichasDisponiveis: null,
       limiteFichasPorCpf: 1,
       prazoCancelamentoHoras: 24
     };
