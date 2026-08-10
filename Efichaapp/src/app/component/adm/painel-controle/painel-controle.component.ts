@@ -93,9 +93,12 @@ export class PainelControleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    // Obter informações do administrador logado
     this.administrador = this.authService.obterAdministrador();
     this.idPosto = this.authService.obterIdPosto();
 
+    // Carregar dados iniciais com base no tipo de usuário
     if (this.isRecepcionista) {
       this.atualizarFichas(0, this.pageSize);
       this.painelPostoService.getPostos().subscribe(postos => {
@@ -113,18 +116,22 @@ export class PainelControleComponent implements OnInit {
     }
   }
 
+  // Propriedades para verificar o tipo de usuário
   get isAdmin(): boolean {
     return this.administrador?.tipo === 'ADM';
   }
 
+  
   get isRecepcionista(): boolean {
     return this.administrador?.tipo === 'RECEPCIONISTA';
   }
 
+  // Método para filtrar globalmente a tabela de fichas 
   onGlobalFilter(event: any, dt: any) {
     dt.filterGlobal(event.target.value, 'contains');
   }
 
+  // Método para alternar o scanner QR Code
   async alternarScannerQr() {
     if (this.scannerAtivo) {
       this.pararLeituraQr();
@@ -150,6 +157,7 @@ export class PainelControleComponent implements OnInit {
         throw new Error('Nenhuma câmera disponível.');
       }
 
+      // Inicializar o leitor de QR Code e iniciar a leitura
       this.qrReader = new BrowserQRCodeReader();
       this.scannerControls = await this.qrReader.decodeFromVideoDevice(
         deviceId,
@@ -184,6 +192,7 @@ export class PainelControleComponent implements OnInit {
     }
   }
 
+  // Método para parar a leitura do QR Code e liberar recursos
   private pararLeituraQr() {
     this.scannerControls?.stop?.();
     this.scannerControls = null;
@@ -202,6 +211,7 @@ export class PainelControleComponent implements OnInit {
     this.scannerStatus = 'Câmera desligada.';
   }
 
+  // Método para buscar reserva pelo QR Code escaneado
   private buscarReservaPorQr(codigoQr: string) {
     this.reservaService.buscarReservaPorQr(codigoQr).subscribe({
       next: (reserva: any) => {
@@ -225,6 +235,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para confirmar a ficha de um paciente
   confirmarFicha(ficha: any) {
     if (ficha.status === 'CANCELADA') {
       this.messageService.add({
@@ -235,6 +246,7 @@ export class PainelControleComponent implements OnInit {
       return;
     }
 
+    // Confirmar a ficha do paciente
     this.reservaService.confirmarReservaAdministrador(ficha.id).subscribe({
       next: () => {
         this.messageService.add({
@@ -255,6 +267,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para chamar o próximo paciente na fila
   chamarProximo() {
     if (!this.idPosto) return;
 
@@ -281,6 +294,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para registrar o check-in de um paciente
   registrarCheckin(ficha: any) {
     this.reservaService.registrarCheckin(ficha.id).subscribe({
       next: () => {
@@ -303,6 +317,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para finalizar o atendimento de um paciente
   finalizarAtendimento(ficha: any) {
     this.reservaService.finalizarAtendimento(ficha.id).subscribe({
       next: () => {
@@ -325,6 +340,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para marcar um paciente como não compareceu (no-show)
   marcarNoShow(ficha: any) {
 
     this.reservaService.marcarNoShow(ficha.id).subscribe({
@@ -348,6 +364,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para cancelar a ficha de um paciente
   cancelarFicha(ficha: any) {
     // if (!confirm(`Deseja realmente cancelar a ficha de ${ficha.nome}?`)) {
     //   return;
@@ -374,11 +391,13 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para sair do painel de controle e deslogar o usuário
   sair(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
+  // Método para atualizar a lista de fichas com base na página e tamanho da página
   atualizarFichas(page: number = 0, size: number = this.pageSize) {
     console.log('Atualizando fichas... page=', page, 'size=', size);
     if (!this.idPosto) {
@@ -387,6 +406,7 @@ export class PainelControleComponent implements OnInit {
       return;
     }
 
+    // Chamar o serviço para listar fichas do posto com paginação
     this.reservaService.listarPorPostoPaginado(this.idPosto, page, size).subscribe({
       next: (res: any) => {
         const content = res?.content ?? res;
@@ -409,6 +429,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método chamado quando a tabela de fichas é carregada ou paginada
   onLazyLoad(event: any) {
     const page = Math.floor(event.first / event.rows);
     const size = event.rows;
@@ -416,6 +437,7 @@ export class PainelControleComponent implements OnInit {
     this.atualizarFichas(page, size);
   }
 
+  // Método para adicionar uma nova data disponível para o posto
   adicionarData() {
     if (!this.novaData || !this.idPosto) {
       return;
@@ -433,6 +455,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para remover uma data disponível do posto
   excluirData(data: string) {
     if (!this.idPosto) return;
     this.postoService.removerData(this.idPosto, data).subscribe({
@@ -447,6 +470,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+    // Método para resetar as fichas disponíveis do posto
   resetarFichas() {
     if (!this.idPosto) return;
 
@@ -456,6 +480,7 @@ export class PainelControleComponent implements OnInit {
       detail: 'Resetando fichas disponíveis...'
     });
 
+    // Chamar o serviço para resetar as fichas do posto
     this.postoService.resetarFichas(this.idPosto).subscribe({
       next: () => {
         this.messageService.add({
@@ -471,6 +496,7 @@ export class PainelControleComponent implements OnInit {
       error: (err: any) => {
         console.error('Erro ao resetar fichas', err);
 
+        
         this.messageService.add({
           severity: 'error',
           summary: 'Erro',
@@ -480,6 +506,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para carregar a lista de postos de saúde
   carregarPostos() {
     this.postoService.listar().subscribe({
       next: (postos) => {
@@ -491,6 +518,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para salvar (cadastrar ou atualizar) um posto de saúde
   salvarPosto() {
     if (!this.novoPosto.nome || !this.novoPosto.endereco || !this.novoPosto.cidade) {
       this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha nome, endereço e cidade do posto.' });
@@ -520,11 +548,13 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para editar um posto de saúde existente
   editarPosto(posto: any) {
     this.postoEditandoId = posto.id;
     this.novoPosto = { ...posto };
   }
 
+  // Método para excluir um posto de saúde
   excluirPosto(postoId: number) {
     this.postoService.excluir(postoId).subscribe({
       next: () => {
@@ -537,6 +567,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para resetar o formulário de cadastro/edição de posto de saúde
   resetarFormularioPosto() {
     this.postoEditandoId = null;
     this.novoPosto = {
@@ -555,6 +586,7 @@ export class PainelControleComponent implements OnInit {
     };
   }
 
+  // Método para carregar a lista de recepcionistas
   carregarRecepcionistas() {
     this.authService.listarRecepcionistas().subscribe({
       next: (recepcionistas) => {
@@ -567,6 +599,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para salvar (cadastrar ou atualizar) um recepcionista
   salvarRecepcionista() {
     if (!this.novoRecepcionista.nomeCompleto || !this.novoRecepcionista.cpf || !this.novoRecepcionista.email || !this.novoRecepcionista.senha) {
       this.messageService.add({ severity: 'warn', summary: 'Atenção', detail: 'Preencha todos os campos obrigatórios do recepcionista.' });
@@ -601,6 +634,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para editar um recepcionista existente
   editarRecepcionista(recepcionista: any) {
     this.recepcionistaEditandoId = recepcionista.id;
     this.novoRecepcionista = {
@@ -609,6 +643,7 @@ export class PainelControleComponent implements OnInit {
     };
   }
 
+  // Método para excluir um recepcionista
   excluirRecepcionista(recepcionistaId: number) {
     this.authService.excluirRecepcionista(recepcionistaId).subscribe({
       next: () => {
@@ -621,6 +656,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // Método para resetar o formulário de cadastro/edição de recepcionista
   resetarFormularioRecepcionista() {
     this.recepcionistaEditandoId = null;
     this.novoRecepcionista = {

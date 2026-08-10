@@ -160,6 +160,7 @@
 
   <!-- INFO POSTO -->
   <section class="info-card">
+    <!-- ==================== INÍCIO: ÁREA DA RECEPCIONISTA ==================== -->
     <ng-container *ngIf="isRecepcionista">
       <h2>🏥 Informações do Posto</h2>
       <p>
@@ -204,12 +205,16 @@
         </div>
       </div>
     </ng-container>
+    <!-- ==================== FIM: ÁREA DA RECEPCIONISTA ==================== -->
 
+    <!-- ==================== INÍCIO: ÁREA DO ADMINISTRADOR ==================== -->
+    <!-- ---------- INÍCIO: ADMIN - GERENCIAR POSTOS ---------- -->
     <div class="datas-admin" *ngIf="isAdmin">
       <h3 class="datas-title">
         <i class="pi pi-building"></i>
         Gerenciar Postos
       </h3>
+      <!-- Formulário para adicionar/editar postos -->
       <form (ngSubmit)="salvarPosto()" class="form-grid">
         <input pInputText [(ngModel)]="novoPosto.nome" name="nomePosto" placeholder="Nome do posto" />
         <input pInputText [(ngModel)]="novoPosto.endereco" name="enderecoPosto" placeholder="Endereço" />
@@ -229,6 +234,7 @@
         </button>
       </form>
 
+      <!-- Lista de postos cadastrados -->
       <ul class="lista-admin">
         <li *ngFor="let postoItem of postos">
           <strong>{{ postoItem.nome }}</strong>
@@ -245,12 +251,15 @@
         <li *ngIf="postos.length === 0">Nenhum posto cadastrado</li>
       </ul>
     </div>
+    <!-- ---------- FIM: ADMIN - GERENCIAR POSTOS ---------- -->
 
+    <!-- ---------- INÍCIO: ADMIN - GERENCIAR RECEPCIONISTAS ---------- -->
     <div class="datas-admin" *ngIf="isAdmin">
       <h3 class="datas-title">
         <i class="pi pi-user-plus"></i>
         Gerenciar Recepcionistas
       </h3>
+      <!-- Formulário para adicionar/editar recepcionistas -->
       <form (ngSubmit)="salvarRecepcionista()" class="form-grid">
         <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista"
           placeholder="Nome completo" />
@@ -272,6 +281,7 @@
         </button>
       </form>
 
+      <!-- Lista de recepcionistas cadastrados -->
       <ul class="lista-admin">
         <li *ngFor="let recepcionista of recepcionistas">
           <strong>{{ recepcionista.nomeCompleto || recepcionista.nome }}</strong>
@@ -288,12 +298,13 @@
         <li *ngIf="recepcionistas.length === 0">Nenhum recepcionista cadastrado</li>
       </ul>
     </div>
+    <!-- ==================== FIM: ÁREA DO ADMINISTRADOR ==================== -->
   </section>
 </div>
 
+<!-- RODAPÉ -->
 <div class="footer">
   <p>
     &copy; Todos os direitos reservados a E-Ficha RB.
   </p>
-
 </div>
