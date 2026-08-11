@@ -4,7 +4,6 @@
 
   <!-- HEADER -->
   <header class="header">
-
     <h1 *ngIf="isRecepcionista">E-Ficha – Painel da Recepção</h1>
     <h1 *ngIf="isAdmin">E-Ficha – Painel de Administração</h1>
     <button class="btn sair" (click)="sair()">
@@ -212,10 +211,10 @@
     <!-- ==================== INÍCIO: ÁREA DO ADMINISTRADOR ==================== -->
     <!-- ---------- INÍCIO: ADMIN - GERENCIAR POSTOS ---------- -->
     <div class="datas-admin" *ngIf="isAdmin">
-      <h3 class="datas-title">
+      <h2 class="datas-title">
         <i class="pi pi-building"></i>
         Gerenciar Postos
-      </h3>
+      </h2>
       <!-- Formulário para adicionar/editar postos -->
       <form (ngSubmit)="salvarPosto()" class="gerenciarPosto form-grid">
         <input pInputText [(ngModel)]="novoPosto.nome" name="nomePosto" placeholder="Nome do posto" />
@@ -228,7 +227,7 @@
           placeholder="Total de fichas" />
         <input pInputText type="number" [(ngModel)]="novoPosto.fichasDisponiveis" name="fichasDisponiveis"
           placeholder="Fichas disponíveis" />
-        <button class="btn primary" type="submit">
+        <button class="btn-primary" type="submit">
           <i class="pi pi-save"></i> {{ postoEditandoId ? 'Atualizar posto' : 'Cadastrar posto' }}
         </button>
         <button class="btn secondary" type="button" (click)="resetarFormularioPosto()" *ngIf="postoEditandoId">
@@ -237,35 +236,49 @@
       </form>
 
       <!-- Lista de postos cadastrados -->
-      <ul class="lista-admin">
-        <li *ngFor="let postoItem of postos">
-          <strong>{{ postoItem.nome }}</strong>
-          <span>{{ postoItem.cidade }} - {{ postoItem.estado }}</span>
-          <div class="acoes-admin">
-            <button class="icon success" type="button" (click)="editarPosto(postoItem)" title="Editar">
-              <i class="pi pi-pencil"></i>
-            </button>
-            <button class="icon danger" type="button" (click)="excluirPosto(postoItem.id)" title="Excluir">
-              <i class="pi pi-trash"></i>
-            </button>
+      <div class="tabela-postos">
+        <!-- Cabeçalho -->
+        <div class="cabecalho-postos">
+          <strong>Nome do posto</strong>
+          <strong>Bairro</strong>
+          <strong>Cidade / Estado</strong>
+          <strong>Ações</strong>
+        </div>
+        <!-- Linhas -->
+        <div class="lista-admin">
+          <div class="linha-posto" *ngFor="let postoItem of postos">
+            <strong>{{ postoItem.nome }}</strong>
+            <span>{{ postoItem.bairro }}</span>
+            <span>{{ postoItem.cidade }} - {{ postoItem.estado }}</span>
+            <div class="acoes-admin">
+              <button class="icon success" type="button" (click)="editarPosto(postoItem)" title="Editar">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button class="icon danger" type="button" (click)="excluirPosto(postoItem.id)" title="Excluir">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
           </div>
-        </li>
-        <li *ngIf="postos.length === 0">Nenhum posto cadastrado</li>
-      </ul>
+          <div class="linha-vazia" *ngIf="postos.length === 0">
+            Nenhum posto cadastrado
+          </div>
+        </div>
+      </div>
     </div>
     <!-- ---------- FIM: ADMIN - GERENCIAR POSTOS ---------- -->
 
     <!-- ---------- INÍCIO: ADMIN - GERENCIAR RECEPCIONISTAS ---------- -->
-    <div class="datas-admin" *ngIf="isAdmin">
-      <h3 class="datas-title">
+    <div class="datas-admin recepcionista" *ngIf="isAdmin">
+      <h2 class="datas-title">
         <i class="pi pi-user-plus"></i>
         Gerenciar Recepcionistas
-      </h3>
+      </h2>
       <!-- Formulário para adicionar/editar recepcionistas -->
       <form (ngSubmit)="salvarRecepcionista()" class=" gerenciarRecepcionista form-grid">
         <input pInputText [(ngModel)]="novoRecepcionista.nomeCompleto" name="nomeRecepcionista"
           placeholder="Nome completo" />
-        <input pInputText [(ngModel)]="novoRecepcionista.cpf" name="cpfRecepcionista" placeholder="CPF" />
+        <input pInputText type="text" [(ngModel)]="novoRecepcionista.cpf" name="cpfRecepcionista" placeholder="CPF"
+          maxlength="14" (input)="formatarCpfInput()" />
         <input pInputText [(ngModel)]="novoRecepcionista.email" name="emailRecepcionista" placeholder="E-mail" />
         <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista"
           placeholder="Senha" />
@@ -276,7 +289,7 @@
         <p-select [(ngModel)]="novoRecepcionista.idPosto" [options]="postos" optionLabel="nome" optionValue="id"
           placeholder="Selecione um posto" name="postoRecepcionista" [showClear]="true" styleClass="select-posto">
         </p-select>
-        <button class="btn primary" type="submit">
+        <button class="btn-primary" type="submit">
           <i class="pi pi-save"></i> {{ recepcionistaEditandoId ? 'Atualizar recepcionista' : 'Cadastrar recepcionista'
           }}
         </button>
@@ -287,7 +300,7 @@
       </form>
 
       <!-- Lista de recepcionistas cadastrados -->
-      <ul class="lista-admin">
+      <!-- <ul class="lista-admin">
         <li *ngFor="let recepcionista of recepcionistas">
           <strong>{{ recepcionista.nomeCompleto || recepcionista.nome }}</strong>
           <span>{{ recepcionista.cpf }}</span>
@@ -301,7 +314,48 @@
           </div>
         </li>
         <li *ngIf="recepcionistas.length === 0">Nenhum recepcionista cadastrado</li>
-      </ul>
+      </ul> -->
+
+      <div class="tabela-recepcionistas">
+
+        <!-- Cabeçalho -->
+        <div class="cabecalho-recepcionistas">
+          <strong>Nome</strong>
+          <strong>CPF</strong>
+          <strong>Ações</strong>
+        </div>
+
+        <!-- Linhas -->
+        <div class="lista-admin">
+          <div class="linha-recepcionista" *ngFor="let recepcionista of recepcionistas">
+
+            <strong>
+              {{ recepcionista.nomeCompleto || recepcionista.nome }}
+            </strong>
+
+            <span>
+              {{ formatarCpf(recepcionista.cpf) }}
+            </span>
+
+            <div class="acoes-admin">
+              <button class="icon success" type="button" (click)="editarRecepcionista(recepcionista)" title="Editar">
+                <i class="pi pi-pencil"></i>
+              </button>
+
+              <button class="icon danger" type="button" (click)="excluirRecepcionista(recepcionista.id)"
+                title="Excluir">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="linha-vazia" *ngIf="recepcionistas.length === 0">
+            Nenhum recepcionista cadastrado
+          </div>
+        </div>
+
+      </div>
     </div>
     <!-- ==================== FIM: ÁREA DO ADMINISTRADOR ==================== -->
   </section>

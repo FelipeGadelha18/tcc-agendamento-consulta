@@ -123,7 +123,7 @@ export class PainelControleComponent implements OnInit {
     return this.administrador?.tipo === 'ADM';
   }
 
-  
+
   get isRecepcionista(): boolean {
     return this.administrador?.tipo === 'RECEPCIONISTA';
   }
@@ -472,7 +472,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
-    // Método para resetar as fichas disponíveis do posto
+  // Método para resetar as fichas disponíveis do posto
   resetarFichas() {
     if (!this.idPosto) return;
 
@@ -498,7 +498,7 @@ export class PainelControleComponent implements OnInit {
       error: (err: any) => {
         console.error('Erro ao resetar fichas', err);
 
-        
+
         this.messageService.add({
           severity: 'error',
           summary: 'Erro',
@@ -508,6 +508,7 @@ export class PainelControleComponent implements OnInit {
     });
   }
 
+  // ==================== INÍCIO: ÁREA DO ADMINISTRADOR ====================
   // Método para carregar a lista de postos de saúde
   carregarPostos() {
     this.postoService.listar().subscribe({
@@ -668,6 +669,51 @@ export class PainelControleComponent implements OnInit {
       senha: '',
       idPosto: null as number | null
     };
+  }
+
+  // Método para formatar o CPF do recepcionista antes de salvar
+  formatarCpf(cpf: string): string {
+    if (!cpf) {
+      return '';
+    }
+
+    const numeros = cpf.replace(/\D/g, '');
+
+    if (numeros.length !== 11) {
+      return cpf;
+    }
+
+    return numeros.replace(
+      /(\d{3})(\d{3})(\d{3})(\d{2})/,
+      '$1.$2.$3-$4'
+    );
+  }
+
+  // Método para formatar o CPF do recepcionista enquanto o usuário digita
+  formatarCpfInput(): void {
+    let cpf = String(this.novoRecepcionista.cpf || '');
+
+    cpf = cpf.replace(/\D/g, '');
+    cpf = cpf.substring(0, 11);
+
+    if (cpf.length > 9) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{3})(\d{1,2})/,
+        '$1.$2.$3-$4'
+      );
+    } else if (cpf.length > 6) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{1,3})/,
+        '$1.$2.$3'
+      );
+    } else if (cpf.length > 3) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{1,3})/,
+        '$1.$2'
+      );
+    }
+
+    this.novoRecepcionista.cpf = cpf;
   }
 }
 
