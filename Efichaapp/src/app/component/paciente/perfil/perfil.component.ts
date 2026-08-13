@@ -27,7 +27,7 @@ export class PerfilComponent implements OnInit {
   constructor(
     private router: Router,
     private pacienteService: PacienteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarPaciente();
