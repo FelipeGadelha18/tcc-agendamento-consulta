@@ -22,6 +22,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -144,6 +145,7 @@ public class ReservaController {
         return reservaRepository.findAll()
                 .stream()
                 .filter(r -> r.getPostoSaude() != null && r.getPostoSaude().getId().equals(id))
+                .peek(r -> r.setPosicaoNaFila(reservaService.calcularPosicaoNaFila(r)))
                 .collect(Collectors.toList());
     }
 
@@ -151,7 +153,11 @@ public class ReservaController {
     @GetMapping("/por-posto/{id}/paged")
     public Page<Reserva> listarReservasPorPostoPaged(@PathVariable Long id, Pageable pageable) {
         exigirPostoProprio(id);
-        return reservaRepository.findByPostoSaudeId(id, pageable);
+        return reservaRepository.findByPostoSaudeId(id, pageable)
+                .map(reserva -> {
+                    reserva.setPosicaoNaFila(reservaService.calcularPosicaoNaFila(reserva));
+                    return reserva;
+                });
     }
 
     // 🔹 Listar reservas por paciente

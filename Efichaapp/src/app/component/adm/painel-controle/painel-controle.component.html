@@ -116,7 +116,7 @@
             <td>{{ ficha.cpf }}</td>
             <td><strong>{{ ficha.numero }}</strong></td>
             <td>{{ ficha.dataReserva | date:'dd/MM/yyyy' }}</td>
-            <td>{{ ficha.posicaoNaFila || '—' }}</td>
+            <td>{{ ficha.posicaoNaFila ?? '—' }}</td>
             <td>
               <span [ngClass]="'status ' + getStatusClass(ficha.status)">
                 <i class="pi" [ngClass]="{
