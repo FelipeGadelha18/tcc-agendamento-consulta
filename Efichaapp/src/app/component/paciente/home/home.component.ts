@@ -49,6 +49,10 @@ export class HomeComponent implements OnInit {
     return reservasValidas[0] ?? null;
   }
 
+  getStatusLabel(status: string | null | undefined): string {
+    return status || 'Sem status';
+  }
+
   sair(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

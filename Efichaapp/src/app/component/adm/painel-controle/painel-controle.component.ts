@@ -129,6 +129,23 @@ export class PainelControleComponent implements OnInit {
     return this.administrador?.tipo === 'RECEPCIONISTA';
   }
 
+  getStatusLabel(status: string | null | undefined): string {
+    return status || 'Sem status';
+  }
+
+  getStatusClass(status: string | null | undefined): string {
+    switch (status) {
+      case 'NO_SHOW':
+        return 'cancelada';
+      case 'UTILIZADA':
+        return 'confirmada';
+      case 'CHAMADO':
+        return 'chamado';
+      default:
+        return (status || '').toLowerCase();
+    }
+  }
+
   // Método para filtrar globalmente a tabela de fichas 
   onGlobalFilter(event: any, dt: any) {
     dt.filterGlobal(event.target.value, 'contains');

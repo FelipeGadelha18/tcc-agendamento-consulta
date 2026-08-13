@@ -58,7 +58,7 @@
             <p><strong>CPF:</strong> {{ reservaEscaneada?.paciente?.cpf }}</p>
             <p><strong>Posto:</strong> {{ reservaEscaneada?.postoSaude?.nome }}</p>
             <p><strong>Data:</strong> {{ reservaEscaneada?.dataReserva | date:'dd/MM/yyyy' }}</p>
-            <p><strong>Status:</strong> {{ reservaEscaneada?.status }}</p>
+            <p><strong>Status:</strong> {{ getStatusLabel(reservaEscaneada?.status) }}</p>
           </div>
 
           <div class="scanner-help" *ngIf="!scannerAtivo && !reservaEscaneada">
@@ -118,15 +118,16 @@
             <td>{{ ficha.dataReserva | date:'dd/MM/yyyy' }}</td>
             <td>{{ ficha.posicaoNaFila || '—' }}</td>
             <td>
-              <span [ngClass]="'status ' + (ficha.status || '').toLowerCase()">
+              <span [ngClass]="'status ' + getStatusClass(ficha.status)">
                 <i class="pi" [ngClass]="{
                   'pi-check-circle': ficha.status === 'CONFIRMADA',
                   'pi-times-circle': ficha.status === 'CANCELADA',
                   'pi-exclamation-circle': ficha.status === 'PENDENTE',
                   'pi-clock': ficha.status === 'CHAMADO',
-                  'pi-ban': ficha.status === 'NO_SHOW'
+                  'pi-ban': ficha.status === 'NO_SHOW',
+                  'pi-flag': ficha.status === 'UTILIZADA'
                 }"></i>
-                {{ ficha.status }}
+                {{ getStatusLabel(ficha.status) }}
               </span>
             </td>
             <td class="acoes">

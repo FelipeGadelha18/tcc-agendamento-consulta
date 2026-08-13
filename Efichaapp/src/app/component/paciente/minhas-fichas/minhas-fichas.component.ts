@@ -64,6 +64,23 @@ export class MinhasFichasComponent implements OnInit {
     ];
   }
 
+  getStatusLabel(status: string | null | undefined): string {
+    return status || 'Sem status';
+  }
+
+  getStatusClass(status: string | null | undefined): string {
+    switch (status) {
+      case 'NO_SHOW':
+        return 'cancelada';
+      case 'UTILIZADA':
+        return 'confirmada';
+      case 'CHAMADO':
+        return 'chamado';
+      default:
+        return (status || '').toLowerCase();
+    }
+  }
+
   carregarMinhasReservas() {
     this.reservaService.listarPorPaciente(this.pacienteLogado.id)
       .subscribe({

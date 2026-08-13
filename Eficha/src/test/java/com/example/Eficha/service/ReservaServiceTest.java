@@ -1,6 +1,7 @@
 package com.example.Eficha.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -133,5 +134,32 @@ class ReservaServiceTest {
                 StatusReserva.CANCELADA);
         verify(reservaRepository).findByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva,
                 StatusReserva.CANCELADA);
+    }
+
+    @Test
+    void deveAlterarStatusParaConfirmadaAoRegistrarCheckinDeReservaChamada() {
+        Reserva reserva = new Reserva();
+        reserva.setId(55L);
+        reserva.setStatus(StatusReserva.CHAMADO);
+
+        when(reservaRepository.findById(55L)).thenReturn(Optional.of(reserva));
+
+        reservaService.registrarCheckin(55L);
+
+        assertThat(reserva.getStatus()).isEqualTo(StatusReserva.CONFIRMADA);
+        verify(reservaRepository).save(reserva);
+    }
+
+    @Test
+    void naoDeveRegistrarCheckinParaReservaJaFinalizada() {
+        Reserva reserva = new Reserva();
+        reserva.setId(56L);
+        reserva.setStatus(StatusReserva.UTILIZADA);
+
+        when(reservaRepository.findById(56L)).thenReturn(Optional.of(reserva));
+
+        assertThatThrownBy(() -> reservaService.registrarCheckin(56L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Não é possível fazer check-in de uma reserva já finalizada.");
     }
 }

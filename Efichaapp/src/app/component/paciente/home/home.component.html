@@ -39,7 +39,7 @@
         <div *ngIf="proximaReserva as reserva; else semReserva" class="info">
             <p><i class="pi pi-map-marker"></i> {{ reserva.postoSaude?.nome || 'Posto não informado' }}</p>
             <p><i class="pi pi-calendar"></i> {{ reserva.dataReserva | date:'dd/MM/yyyy' }}</p>
-            <p *ngIf="reserva.status"><i class="pi pi-info-circle"></i> Status: {{ reserva.status }}</p>
+            <p *ngIf="reserva.status"><i class="pi pi-info-circle"></i> Status: {{ getStatusLabel(reserva.status) }}</p>
         </div>
 
         <ng-template #semReserva>

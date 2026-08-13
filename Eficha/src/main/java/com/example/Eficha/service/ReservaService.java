@@ -209,7 +209,11 @@ public class ReservaService {
             throw new RuntimeException("Não é possível fazer check-in dessa reserva.");
         }
 
-        reserva.setStatus(StatusReserva.CHAMADO);
+        if (reserva.getStatus() == StatusReserva.UTILIZADA) {
+            throw new RuntimeException("Não é possível fazer check-in de uma reserva já finalizada.");
+        }
+
+        reserva.setStatus(StatusReserva.CONFIRMADA);
         reservaRepository.save(reserva);
     }
 

@@ -41,12 +41,12 @@
 
 <!-- Banner -->
 <header class="header">
-  
+
   <h1>Minhas Fichas</h1>
   <a routerLink="/paciente/inicio" class="back-button">
-      <i class="pi pi-arrow-left"></i>
-      Voltar
-    </a>
+    <i class="pi pi-arrow-left"></i>
+    Voltar
+  </a>
 </header>
 
 <div class="container">
@@ -78,16 +78,17 @@
           <span>Posição: {{ reserva.posicaoNaFila }}</span>
         </div>
 
-        <div class="status" [ngClass]="reserva.status?.toLowerCase()">
+        <div class="status" [ngClass]="getStatusClass(reserva.status)">
           <i class="pi" [ngClass]="{
               'pi-check-circle': reserva.status === 'CONFIRMADA',
               'pi-times-circle': reserva.status === 'CANCELADA',
               'pi-exclamation-circle': reserva.status === 'PENDENTE',
               'pi-clock': reserva.status === 'CHAMADO',
-              'pi-ban': reserva.status === 'NO_SHOW'
+              'pi-ban': reserva.status === 'NO_SHOW',
+              'pi-flag': reserva.status === 'UTILIZADA'
             }">
           </i>
-          <span>{{ reserva.status }}</span>
+          <span>{{ getStatusLabel(reserva.status) }}</span>
         </div>
 
       </div>
