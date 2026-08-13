@@ -199,7 +199,7 @@
           <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
         </ul>
         <div class="add-data">
-          <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
+          <input type="date" [(ngModel)]="novaData" [min]="dataMinimaCadastro" placeholder="Selecione uma data" />
           <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
             <i class="pi pi-plus"></i> Adicionar
           </button>
