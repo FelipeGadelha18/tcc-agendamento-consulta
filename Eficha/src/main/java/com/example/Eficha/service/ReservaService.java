@@ -52,12 +52,13 @@ public class ReservaService {
         }
 
         // Verifica se já possui reserva na mesma data
-        if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, data)) {
+        if (reservaRepository.existsByPacienteIdAndDataReservaAndStatusNot(pacienteId, data, StatusReserva.CANCELADA)) {
             throw new RuntimeException("O paciente já possui uma reserva para esta data.");
         }
 
         // Verifica limite de fichas por CPF
-        List<Reserva> reservasMesmoCpf = reservaRepository.findByPacienteIdAndDataReserva(pacienteId, data);
+        List<Reserva> reservasMesmoCpf = reservaRepository.findByPacienteIdAndDataReservaAndStatusNot(pacienteId, data,
+                StatusReserva.CANCELADA);
         int limiteFichasPorCpf = posto.getLimiteFichasPorCpf();
         if (limiteFichasPorCpf <= 0) {
             limiteFichasPorCpf = Integer.MAX_VALUE;

@@ -113,7 +113,8 @@ public class ReservaController {
         Long pacienteId = reserva.getPaciente().getId();
         LocalDate dataSelecionada = reserva.getDataReserva();
 
-        if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, dataSelecionada)) {
+        if (reservaRepository.existsByPacienteIdAndDataReservaAndStatusNot(pacienteId, dataSelecionada,
+                com.example.Eficha.model.StatusReserva.CANCELADA)) {
             throw new RuntimeException("Você já possui uma reserva para esta data.");
         }
 

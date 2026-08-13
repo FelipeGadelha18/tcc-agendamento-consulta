@@ -14,7 +14,8 @@ import java.util.Optional;
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     // Verifica se paciente já tem reserva no dia
-    boolean existsByPacienteIdAndDataReserva(Long pacienteId, LocalDate dataReserva);
+    boolean existsByPacienteIdAndDataReservaAndStatusNot(Long pacienteId, LocalDate dataReserva,
+            StatusReserva status);
 
     // Lista reservas do paciente
     List<Reserva> findByPacienteId(Long pacienteId);
@@ -35,5 +36,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     List<Reserva> findByPostoSaudeIdAndStatusInOrderByDataCriacaoAsc(Long postoId, List<StatusReserva> statuses);
 
     // Buscar reservas por paciente e data
-    List<Reserva> findByPacienteIdAndDataReserva(Long pacienteId, LocalDate dataReserva);
+    List<Reserva> findByPacienteIdAndDataReservaAndStatusNot(Long pacienteId, LocalDate dataReserva,
+            StatusReserva status);
 }
