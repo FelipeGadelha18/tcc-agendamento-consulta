@@ -1,106 +1,148 @@
 <div class="page-container">
+  <!-- Navbar -->
+  <nav class="navbar">
 
-    <header class="header">
-      <div class="header-left" (click)="voltarHome()">
-        <i class="pi pi-arrow-left"></i>
-        <span>Meu Perfil</span>
+    <div class="logo">
+      E-FICHA
+    </div>
+
+    <div class="menu-desktop">
+
+      <a routerLink="/paciente/inicio">
+        <i class="pi pi-home"></i>
+        Início
+      </a>
+
+      <a routerLink="/paciente/minhas-fichas">
+        <i class="pi pi-file"></i>
+        Minhas Fichas
+      </a>
+
+      <a routerLink="/paciente/reservar-ficha">
+        <i class="pi pi-calendar"></i>
+        Reservar Ficha
+      </a>
+
+      <a routerLink="/paciente/postos-proximos">
+        <i class="pi pi-map-marker"></i>
+        Postos Próximos
+      </a>
+
+
+    </div>
+
+    <!-- MENU POPUP -->
+  <p-menu #menu [popup]="true" [model]="items" class="mobile-menu">
+  </p-menu>
+
+  <button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn mobile-menu" aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
+  </nav>
+
+  <!-- Banner -->
+  <header class="header">
+
+    <a routerLink="/paciente/inicio" class="back-button">
+      <i class="pi pi-arrow-left"></i>
+      Voltar
+    </a>
+  </header>
+
+  <!-- SEÇÃO PERFIL -->
+  <section class="profile">
+    <div class="avatar-container">
+      <div class="avatar">
+        <img [src]="photoPreview || paciente.foto || 'assets/user-default.png'" alt="Avatar">
       </div>
-    </header>
-    
-    <!-- SEÇÃO PERFIL -->
-    <section class="profile">
-        <div class="avatar-container">
-          <div class="avatar">
-            <img [src]="photoPreview || paciente.foto || 'assets/user-default.png'" alt="Avatar">
-          </div>
-          <button *ngIf="editando" class="btn-upload" (click)="fileInput.click()">
-            <i class="pi pi-camera"></i>
-          </button>
-          <input #fileInput type="file" accept="image/*" (change)="onFotoSelecionada($event)" style="display: none">
-        </div>
-        <h2>{{ paciente.nomeCompleto || 'Usuário' }}</h2>
-        <p class="subtitle" *ngIf="!editando">CPF: {{ paciente.cpf }}</p>
-    </section>
+      <button *ngIf="editando" class="btn-upload" (click)="fileInput.click()">
+        <i class="pi pi-camera"></i>
+      </button>
+      <input #fileInput type="file" accept="image/*" (change)="onFotoSelecionada($event)" style="display: none">
+    </div>
+    <h2>{{ paciente.nomeCompleto || 'Usuário' }}</h2>
+    <p class="subtitle" *ngIf="!editando">CPF: {{ paciente.cpf }}</p>
+  </section>
 
-    <!-- MODO VISUALIZAÇÃO -->
-    <section class="info" *ngIf="!editando">
-      <div class="info-card">
-        <div class="info-item left">
-          <span class="label pi pi-envelope"> Email</span>
-          <p class="value">{{ paciente.email || '-' }}</p>
+  <!-- MODO VISUALIZAÇÃO -->
+  <section class="info" *ngIf="!editando">
+    <div class="info-card">
+      <div class="info-item left">
+        <span class="label pi pi-envelope"> Email</span>
+        <p class="value">{{ paciente.email || '-' }}</p>
+      </div>
+      <div class="info-item right">
+        <span class="label pi pi-phone"> Telefone</span>
+        <p class="value">{{ paciente.telefone || '-' }}</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-item left">
+        <span class="label pi pi-map-marker"> Endereço</span>
+        <p class="value">{{ paciente.endereco || '-' }}</p>
+      </div>
+      <div class="info-item right">
+        <span class="label pi pi-home"> Número</span>
+        <p class="value">{{ paciente.numeroCasa || '-' }}</p>
+      </div>
+    </div>
+
+    <div class="buttons-row">
+      <button class="btn primary" (click)="editando = true">
+        <i class="pi pi-pencil"></i>
+        Editar Perfil
+      </button>
+
+      <button class="btn danger" (click)="sair()">
+        <i class="pi pi-sign-out"></i>
+        Sair
+      </button>
+    </div>
+  </section>
+
+  <!-- MODO EDIÇÃO -->
+  <section class="edit-form" *ngIf="editando">
+    <form (ngSubmit)="salvarPerfil()">
+      <div class="form-group">
+        <label>Nome Completo</label>
+        <input type="text" [(ngModel)]="paciente.nomeCompleto" name="nomeCompleto" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="paciente.email" name="email" required>
         </div>
-        <div class="info-item right">
-          <span class="label pi pi-phone"> Telefone</span>
-          <p class="value">{{ paciente.telefone || '-' }}</p>
+        <div class="form-group">
+          <label>Telefone</label>
+          <input type="text" [(ngModel)]="paciente.telefone" name="telefone" required>
         </div>
       </div>
 
-      <div class="info-card">
-        <div class="info-item left">
-          <span class="label pi pi-map-marker"> Endereço</span>
-          <p class="value">{{ paciente.endereco || '-' }}</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Endereço</label>
+          <input type="text" [(ngModel)]="paciente.endereco" name="endereco" required>
         </div>
-        <div class="info-item right">
-          <span class="label pi pi-home"> Número</span>
-          <p class="value">{{ paciente.numeroCasa || '-' }}</p>
+        <div class="form-group">
+          <label>Número da Casa</label>
+          <input type="text" [(ngModel)]="paciente.numeroCasa" name="numeroCasa" required>
         </div>
       </div>
 
       <div class="buttons-row">
-        <button class="btn primary" (click)="editando = true">
-          <i class="pi pi-pencil"></i>
-          Editar Perfil
+        <button type="submit" class="btn primary" [disabled]="carregando">
+          <i class="pi pi-check"></i>
+          {{ carregando ? 'Salvando...' : 'Salvar Alterações' }}
         </button>
 
-        <button class="btn danger" (click)="sair()">
-          <i class="pi pi-sign-out"></i>
-          Sair
+        <button type="button" class="btn secondary" (click)="cancelarEdicao()" [disabled]="carregando">
+          <i class="pi pi-times"></i>
+          Cancelar
         </button>
       </div>
-    </section>
-
-    <!-- MODO EDIÇÃO -->
-    <section class="edit-form" *ngIf="editando">
-      <form (ngSubmit)="salvarPerfil()">
-        <div class="form-group">
-          <label>Nome Completo</label>
-          <input type="text" [(ngModel)]="paciente.nomeCompleto" name="nomeCompleto" required>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" [(ngModel)]="paciente.email" name="email" required>
-          </div>
-          <div class="form-group">
-            <label>Telefone</label>
-            <input type="text" [(ngModel)]="paciente.telefone" name="telefone" required>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Endereço</label>
-            <input type="text" [(ngModel)]="paciente.endereco" name="endereco" required>
-          </div>
-          <div class="form-group">
-            <label>Número da Casa</label>
-            <input type="text" [(ngModel)]="paciente.numeroCasa" name="numeroCasa" required>
-          </div>
-        </div>
-
-        <div class="buttons-row">
-          <button type="submit" class="btn primary" [disabled]="carregando">
-            <i class="pi pi-check"></i>
-            {{ carregando ? 'Salvando...' : 'Salvar Alterações' }}
-          </button>
-
-          <button type="button" class="btn secondary" (click)="cancelarEdicao()" [disabled]="carregando">
-            <i class="pi pi-times"></i>
-            Cancelar
-          </button>
-        </div>
-      </form>
-    </section>
+    </form>
+  </section>
 
 </div>

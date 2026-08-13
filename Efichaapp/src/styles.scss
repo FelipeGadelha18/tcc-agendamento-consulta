@@ -4,6 +4,7 @@
 :root{
   --primary: #1976d2;
   --primaryDark: #1565c0;
+  --blue-bg: #164d8b;
   --bluedark: #0F2C4E;
   --primaryLight: #42a5f5;
   --success: #4caf50;
@@ -16,6 +17,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --gradient-primary: linear-gradient(to right, #2b65a7, #284C77, #0E2948);
   --border-radius: 12px;
 }
 

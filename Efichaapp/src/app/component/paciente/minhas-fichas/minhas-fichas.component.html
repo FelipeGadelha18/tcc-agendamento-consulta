@@ -1,14 +1,56 @@
-<header class="header"></header>
+<!-- Navbar -->
+<nav class="navbar">
 
-<!-- MENU POPUP -->
-<p-menu #menu [popup]="true" [model]="items"></p-menu>
+  <div class="logo">
+    E-FICHA
+  </div>
 
-<button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn" aria-label="Abrir menu"
-  (click)="menu.toggle($event)">
-</button>
+  <div class="menu-desktop">
+
+    <a routerLink="/paciente/inicio">
+      <i class="pi pi-home"></i>
+      Início
+    </a>
+
+    <a routerLink="/paciente/reservar-ficha">
+      <i class="pi pi-calendar"></i>
+      Reservar Ficha
+    </a>
+
+    <a routerLink="/paciente/postos-proximos">
+      <i class="pi pi-map-marker"></i>
+      Postos Próximos
+    </a>
+
+    <a routerLink="/paciente/perfil">
+      <i class="pi pi-user"></i>
+      Perfil
+    </a>
+
+  </div>
+
+  <!-- MENU POPUP -->
+  <p-menu #menu [popup]="true" [model]="items" class="mobile-menu">
+  </p-menu>
+
+  <button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn mobile-menu" aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
+
+</nav>
+
+<!-- Banner -->
+<header class="header">
+  
+  <h1>Minhas Fichas</h1>
+  <a routerLink="/paciente/inicio" class="back-button">
+      <i class="pi pi-arrow-left"></i>
+      Voltar
+    </a>
+</header>
 
 <div class="container">
-  <h2>Minhas Fichas</h2>
+  <!-- <h2>Minhas Fichas</h2> -->
 
   <div *ngIf="reservas.length === 0" class="vazio">
     Você ainda não possui fichas reservadas.
