@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 
 import { PacienteService } from '../../../services/paciente.service';
@@ -11,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule, FormsModule, RouterLink, MenuModule],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, MenuModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss']
 })
