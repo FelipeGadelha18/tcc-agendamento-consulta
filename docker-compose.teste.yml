@@ -1,0 +1,79 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: eficha-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tcc_agendamento}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # NÃO importamos mais o tcc_agendamento.sql: ele está defasado em relação às
+      # entidades (ex.: administrador.id_posto NOT NULL não existe mais no código).
+      # O schema correto é criado pelo Hibernate via ddl-auto=update.
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./Eficha
+    container_name: eficha-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/${MYSQL_DATABASE:-tcc_agendamento}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    # Quando o Spring passa a escutar na 8080, o contexto já subiu por completo
+    # (incluindo a criação das tabelas). Usamos isso como sinal de "pronto".
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/8080' 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+  # Serviço de execução única: espera o backend ficar pronto (schema já existe),
+  # aplica o seed e encerra. O SQL é idempotente, então pode rodar em todo "up".
+  seed:
+    image: mysql:8.0
+    container_name: eficha-seed
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      MYSQL_PWD: ${MYSQL_ROOT_PASSWORD:-root}
+    volumes:
+      - ./database/seed.sql:/seed.sql:ro
+    entrypoint:
+      - sh
+      - -c
+      - >
+        until mysql -h db -uroot ${MYSQL_DATABASE:-tcc_agendamento} < /seed.sql;
+        do echo 'seed: aguardando banco...'; sleep 3; done;
+        echo 'seed: aplicado com sucesso'
+    restart: "no"
+
+  frontend:
+    build:
+      context: ./Efichaapp
+    container_name: eficha-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  db_data:
