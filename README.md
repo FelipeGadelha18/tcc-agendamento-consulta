@@ -7,9 +7,7 @@
 > Todas as instruções de instalação, configuração das tecnologias, clonagem do repositório, configuração do banco de dados, importação do arquivo SQL e execução do projeto estão documentadas no arquivo **SETUP.md**.
 >
 > Consulte o guia antes de executar a aplicação:
->
-
-[SETUP.md](SETUP.md)
+> [SETUP.md](SETUP.md)
 
 ## 📋 Sobre o Projeto
 
