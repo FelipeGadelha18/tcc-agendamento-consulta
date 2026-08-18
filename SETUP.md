@@ -22,7 +22,7 @@ Antes de executar o projeto, instale as seguintes tecnologias:
 
 Acesse o site oficial da Oracle:
 
-[Oracle JDK 25](https://www.oracle.com/java/technologies/downloads/?utm_source=chatgpt.com)
+[Oracle JDK 25](https://www.oracle.com/java/technologies/downloads/)
 
 ### Instalação
 
@@ -57,7 +57,7 @@ O Spring Boot requer Java 17 ou superior.
 
 Site oficial:
 
-[Apache Maven](https://maven.apache.org/maven.apache.org/download.cgi?utm_source=chatgpt.com)
+[Apache Maven](https://maven.apache.org/)
 
 ### Instalação
 
@@ -105,7 +105,7 @@ O Maven 3.9+ é a versão recomendada atualmente.
 
 Site oficial:
 
-[XAMPP Download](https://www.apachefriends.org/pt_br/index.html?utm_source=chatgpt.com)
+[XAMPP Download](https://www.apachefriends.org/pt_br/index.html)
 
 ### Instalação
 
@@ -212,7 +212,7 @@ spring.datasource.password=suasenha
 
 Site oficial:
 
-[Node.js Download](https://nodejs.org/pt?utm_source=chatgpt.com)
+[Node.js Download](https://nodejs.org/pt-br?gad_source=1&gad_campaignid=24151855376&gbraid=0AAAABEXI-NLYqYZE0Q3ei-cjtIBJS5PUv&gclid=CjwKCAjwhZDUBhBGEiwAbi5bjt2YLGIOwhAiNJJuzMOj8T995cL4N7REA0cwyNbgy5aB36IV-emAiRoCYfYQAvD_BwE)
 
 Instale a versão LTS mais próxima da utilizada no projeto (22.x).
 
@@ -312,7 +312,7 @@ Instale:
 
 Marketplace:
 
-[Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack&utm_source=chatgpt.com)
+[Java Extension Pack](https://www.oracle.com/java/technologies/downloads/)
 
 ---
 
@@ -324,7 +324,7 @@ Instale:
 
 Marketplace:
 
-[Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=vmware.vscode-boot-dev-pack&utm_source=chatgpt.com)
+[Spring Boot Extension Pack](https://spring.io/projects/spring-boot)
 
 ---
 
@@ -336,7 +336,7 @@ Instale:
 
 Marketplace:
 
-[Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template&utm_source=chatgpt.com)
+[Angular Language Service](https://angular.dev/installation)
 
 ---
 
@@ -349,7 +349,7 @@ Instale:
 
 Marketplace:
 
-[SQLTools](https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools&utm_source=chatgpt.com)
+[SQLTools](https://marketplace.visualstudio.com/items?itemName=mtxr.sqltools)
 
 ---
 
