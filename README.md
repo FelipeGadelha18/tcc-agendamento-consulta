@@ -8,9 +8,8 @@
 >
 > Consulte o guia antes de executar a aplicação:
 >
-> ```text
-> SETUP.md
-> ```
+
+[SETUP.md](SETUP.md)
 
 ## 📋 Sobre o Projeto
 
