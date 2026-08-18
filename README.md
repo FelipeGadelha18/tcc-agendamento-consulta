@@ -193,9 +193,7 @@ tcc-agendamento-consulta/
 
 A documentação completa de instalação e configuração encontra-se em:
 
-```text
-SETUP.md
-```
+[SETUP.md](SETUP.md)
 
 ---
 
