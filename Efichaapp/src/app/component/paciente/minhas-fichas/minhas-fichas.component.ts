@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -12,7 +13,7 @@ import { ReservaService } from '../../../services/reservar.service';
 @Component({
   selector: 'app-minhas-fichas',
   standalone: true,
-  imports: [CommonModule, ButtonModule, MenuModule],
+  imports: [CommonModule, ButtonModule, MenuModule, RouterLink],
   templateUrl: './minhas-fichas.component.html',
   styleUrls: ['./minhas-fichas.component.scss']
 })
@@ -61,6 +62,23 @@ export class MinhasFichasComponent implements OnInit {
         command: () => this.router.navigate(['/paciente/perfil'])
       }
     ];
+  }
+
+  getStatusLabel(status: string | null | undefined): string {
+    return status || 'Sem status';
+  }
+
+  getStatusClass(status: string | null | undefined): string {
+    switch (status) {
+      case 'NO_SHOW':
+        return 'cancelada';
+      case 'UTILIZADA':
+        return 'confirmada';
+      case 'CHAMADO':
+        return 'chamado';
+      default:
+        return (status || '').toLowerCase();
+    }
   }
 
   carregarMinhasReservas() {

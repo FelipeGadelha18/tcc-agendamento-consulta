@@ -108,6 +108,9 @@ public class PostoSaudeController {
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body("Formato de data inválido");
         }
+        if (data.isBefore(LocalDate.now())) {
+            return ResponseEntity.badRequest().body("Não é permitido cadastrar uma data anterior ao dia atual.");
+        }
         if (posto.getDatasDisponiveis() == null) {
             posto.setDatasDisponiveis(new ArrayList<>());
         }

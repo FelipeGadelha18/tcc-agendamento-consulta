@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
 import { AuthService, LoginResponse } from '../../services/auth.service';
 
 @Component({
@@ -13,7 +14,8 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
     CommonModule,
     FormsModule,
     RouterLink,
-    ToastModule
+    ToastModule,
+    SelectModule
   ],
   providers: [MessageService],
   templateUrl: './login.component.html',
@@ -26,6 +28,11 @@ export class LoginComponent {
   mostrarSenha: boolean = false;
   tipoLogin: string = 'PACIENTE';
   carregando: boolean = false;
+  tiposLogin = [
+    { label: 'Paciente', value: 'PACIENTE' },
+    { label: 'Administrador', value: 'ADM' },
+    { label: 'Recepcionista', value: 'RECEPCIONISTA' }
+  ];
 
   constructor(
     private router: Router,
@@ -37,14 +44,28 @@ export class LoginComponent {
     this.mostrarSenha = !this.mostrarSenha;
   }
 
-  formatarCpf() {
+  formatarCpf(): void {
     let cpf = this.cpf.replace(/\D/g, '');
-    if (cpf.length > 11) {
-      cpf = cpf.substring(0, 11);
+
+    cpf = cpf.substring(0, 11);
+
+    if (cpf.length > 9) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{3})(\d{1,2})/,
+        '$1.$2.$3-$4'
+      );
+    } else if (cpf.length > 6) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{1,3})/,
+        '$1.$2.$3'
+      );
+    } else if (cpf.length > 3) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{1,3})/,
+        '$1.$2'
+      );
     }
-    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
-    cpf = cpf.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
-    cpf = cpf.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+
     this.cpf = cpf;
   }
 
@@ -75,6 +96,7 @@ export class LoginComponent {
     } else {
       this.loginAdministrador(cpfLimpo);
     }
+
   }
 
   loginPaciente(cpfLimpo: string) {

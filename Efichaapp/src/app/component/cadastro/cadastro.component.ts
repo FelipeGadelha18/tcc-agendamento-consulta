@@ -31,11 +31,9 @@ export class CadastroComponent {
     let nivel = 0;
     const senha = this.senha;
 
-    // Verifica comprimento
     if (senha.length >= 8) nivel++;
     if (senha.length >= 12) nivel++;
 
-    // Verifica tipos de caracteres
     if (/[a-z]/.test(senha)) nivel++;
     if (/[A-Z]/.test(senha)) nivel++;
     if (/[0-9]/.test(senha)) nivel++;
@@ -77,15 +75,55 @@ export class CadastroComponent {
     private messageService: MessageService,
   ) { }
 
-  formatarCpf() {
+  formatarCpf(): void {
     let cpf = this.paciente.cpf.replace(/\D/g, '');
-    if (cpf.length > 11) {
-      cpf = cpf.substring(0, 11);
+
+    cpf = cpf.substring(0, 11);
+
+    if (cpf.length > 9) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{3})(\d{1,2})/,
+        '$1.$2.$3-$4'
+      );
+    } else if (cpf.length > 6) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{3})(\d{1,3})/,
+        '$1.$2.$3'
+      );
+    } else if (cpf.length > 3) {
+      cpf = cpf.replace(
+        /(\d{3})(\d{1,3})/,
+        '$1.$2'
+      );
     }
-    cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
-    cpf = cpf.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
-    cpf = cpf.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+
     this.paciente.cpf = cpf;
+  }
+
+  formatarTelefone(): void {
+    let telefone = String(this.paciente.telefone || '');
+
+    telefone = telefone.replace(/\D/g, '');
+    telefone = telefone.substring(0, 11);
+
+    if (telefone.length > 10) {
+      telefone = telefone.replace(
+        /(\d{2})(\d{5})(\d{1,4})/,
+        '($1) $2-$3'
+      );
+    } else if (telefone.length > 6) {
+      telefone = telefone.replace(
+        /(\d{2})(\d{4})(\d{1,4})/,
+        '($1) $2-$3'
+      );
+    } else if (telefone.length > 2) {
+      telefone = telefone.replace(
+        /(\d{2})(\d{1,5})/,
+        '($1) $2'
+      );
+    }
+
+    this.paciente.telefone = telefone;
   }
 
   salvar() {

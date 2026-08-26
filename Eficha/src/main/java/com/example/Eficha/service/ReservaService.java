@@ -52,12 +52,13 @@ public class ReservaService {
         }
 
         // Verifica se já possui reserva na mesma data
-        if (reservaRepository.existsByPacienteIdAndDataReserva(pacienteId, data)) {
+        if (reservaRepository.existsByPacienteIdAndDataReservaAndStatusNot(pacienteId, data, StatusReserva.CANCELADA)) {
             throw new RuntimeException("O paciente já possui uma reserva para esta data.");
         }
 
         // Verifica limite de fichas por CPF
-        List<Reserva> reservasMesmoCpf = reservaRepository.findByPacienteIdAndDataReserva(pacienteId, data);
+        List<Reserva> reservasMesmoCpf = reservaRepository.findByPacienteIdAndDataReservaAndStatusNot(pacienteId, data,
+                StatusReserva.CANCELADA);
         int limiteFichasPorCpf = posto.getLimiteFichasPorCpf();
         if (limiteFichasPorCpf <= 0) {
             limiteFichasPorCpf = Integer.MAX_VALUE;
@@ -208,7 +209,11 @@ public class ReservaService {
             throw new RuntimeException("Não é possível fazer check-in dessa reserva.");
         }
 
-        reserva.setStatus(StatusReserva.CHAMADO);
+        if (reserva.getStatus() == StatusReserva.UTILIZADA) {
+            throw new RuntimeException("Não é possível fazer check-in de uma reserva já finalizada.");
+        }
+
+        reserva.setStatus(StatusReserva.CONFIRMADA);
         reservaRepository.save(reserva);
     }
 

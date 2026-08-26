@@ -1,25 +1,66 @@
-<header class="header"></header>
+<!-- Navbar -->
+<nav class="navbar">
+
+  <div class="logo">
+    E-FICHA
+  </div>
+
+  <div class="menu-desktop">
+
+    <a routerLink="/paciente/inicio">
+      <i class="pi pi-home"></i>
+      Início
+    </a>
+
+    <a routerLink="/paciente/minhas-fichas">
+      <i class="pi pi-file"></i>
+      Minhas Fichas
+    </a>
+
+    <a routerLink="/paciente/postos-proximos">
+      <i class="pi pi-map-marker"></i>
+      Postos Próximos
+    </a>
+
+    <a routerLink="/paciente/perfil">
+      <i class="pi pi-user"></i>
+      Perfil
+    </a>
+
+  </div>
+
+  <!-- MENU POPUP -->
+  <p-menu #menu [popup]="true" [model]="items" class="mobile-menu">
+  </p-menu>
+
+  <button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn mobile-menu" aria-label="Abrir menu"
+    (click)="menu.toggle($event)">
+  </button>
+
+</nav>
+
+<!-- Banner -->
+<header class="header" *ngIf="!reservaConfirmada">
+
+  <!-- <h1 *ngIf="reservaConfirmada">Reservar Ficha</h1> -->
+  <h1 *ngIf="!reservaConfirmada">Reservar Ficha</h1>
+
+  <a routerLink="/paciente/inicio" class="back-button">
+    <i class="pi pi-arrow-left"></i>
+    Voltar
+  </a>
+</header>
 
 <div class="container">
   <p-toast position="top-right"></p-toast>
 
-
   <div *ngIf="!reservaConfirmada">
-
-    <!-- MENU POPUP -->
-    <p-menu #menu [popup]="true" [model]="items"></p-menu>
-
-    <button pButton type="button" icon="pi pi-bars" class="p-button-text menu-btn" aria-label="Abrir menu"
-      (click)="menu.toggle($event)">
-    </button>
-
-    <h1> Reservar Ficha</h1>
 
     <div class="content">
 
       <!-- LISTA DE POSTOS -->
       <div class="postos-lista">
-        <h3>Postos de Saúde</h3>
+        <h2>Postos de Saúde</h2>
 
         <!-- BUSCA -->
         <div class="busca">
@@ -29,7 +70,7 @@
         <!-- LISTA FILTRADA -->
         <div class="posto-card" *ngFor="let posto of postosFiltrados" (click)="selecionarPosto(posto)"
           [class.ativo]="postoSelecionado?.id === posto.id">
-          <h4>{{ posto.nome }}</h4>
+          <h3>{{ posto.nome }}</h3>
           <p>{{ posto.bairro }} - {{ posto.cidade }}</p>
         </div>
 
@@ -40,11 +81,11 @@
 
       <!-- DETALHES DO POSTO -->
       <div class="posto-detalhes" *ngIf="postoSelecionado">
-        <h3>{{ postoSelecionado.nome }}</h3>
+        <h2>{{ postoSelecionado.nome }}</h2>
 
-        <p><strong>Endereço:</strong> {{ postoSelecionado.endereco }}</p>
         <p><strong>Bairro:</strong> {{ postoSelecionado.bairro }}</p>
         <p><strong>Cidade:</strong> {{ postoSelecionado.cidade }}</p>
+        <p><strong>Endereço:</strong> {{ postoSelecionado.endereco }}</p>
         <p><strong>Telefone:</strong> {{ postoSelecionado.telefone }}</p>
 
         <div class="fichas">
@@ -88,18 +129,18 @@
     <div class="card-confirmacao">
       <div class="icone-sucesso">✔</div>
 
-      <h2>Agendamento Confirmado</h2>
+      <h1>Agendamento Confirmado</h1>
       <p class="sucesso">Sua ficha foi reservada com sucesso</p>
 
       <div class="info">
-        <p>📅 <strong>Data:</strong>
+        <p><i class="pi pi-calendar"></i> <strong>Data:</strong>
           {{ dadosConfirmacao.data | date:'dd/MM/yyyy' }}
         </p>
-        <p>🔢 <strong>Posição na fila:</strong>
-          {{ dadosConfirmacao.posicaoFila || 'A definir' }}
-        </p>
-        <p>📍 <strong>Unidade:</strong>
+        <p><i class="pi pi-map-marker"></i> <strong>Unidade:</strong>
           {{ dadosConfirmacao.posto }}
+        </p>
+        <p><i class="pi pi-sort-amount-down"></i> <strong>Posição na fila:</strong>
+          {{ dadosConfirmacao.posicaoFila || 'A definir' }}
         </p>
       </div>
 

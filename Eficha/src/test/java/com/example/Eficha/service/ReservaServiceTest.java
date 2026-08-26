@@ -1,8 +1,10 @@
 package com.example.Eficha.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
@@ -71,8 +73,10 @@ class ReservaServiceTest {
 
         when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
         when(postoRepository.findById(10L)).thenReturn(Optional.of(posto));
-        when(reservaRepository.existsByPacienteIdAndDataReserva(1L, dataReserva)).thenReturn(false);
-        when(reservaRepository.findByPacienteIdAndDataReserva(1L, dataReserva)).thenReturn(List.of());
+        when(reservaRepository.existsByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva, StatusReserva.CANCELADA))
+                .thenReturn(false);
+        when(reservaRepository.findByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva, StatusReserva.CANCELADA))
+                .thenReturn(List.of());
         when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
         when(postoRepository.save(any(PostoSaude.class))).thenReturn(posto);
         when(reservaRepository.findByPostoSaudeAndDataReserva(eq(posto), eq(dataReserva))).thenReturn(List.of(reserva));
@@ -82,5 +86,80 @@ class ReservaServiceTest {
         assertThat(resposta)
                 .containsKey("reservaId")
                 .containsEntry("reservaId", 42L);
+    }
+
+    @Test
+    void devePermitirNovaReservaQuandoReservaAnteriorDoDiaEstiverCancelada() {
+        LocalDate dataReserva = LocalDate.now().plusDays(1);
+
+        Paciente paciente = new Paciente();
+        ReflectionTestUtils.setField(paciente, "id", 1L);
+        paciente.setNomeCompleto("Maria Silva");
+        paciente.setCpf("12345678900");
+
+        PostoSaude posto = new PostoSaude();
+        posto.setId(10L);
+        posto.setNome("Posto Central");
+        posto.setEndereco("Rua A");
+        posto.setBairro("Centro");
+        posto.setCidade("São Paulo");
+        posto.setEstado("SP");
+        posto.setTelefone("11999999999");
+        posto.setFichasDisponiveis(3);
+        posto.setLimiteFichasPorCpf(1);
+        posto.setDatasDisponiveis(List.of(dataReserva));
+        posto.setDatasBloqueadas(List.of());
+
+        Reserva reserva = new Reserva();
+        reserva.setId(43L);
+        reserva.setDataReserva(dataReserva);
+        reserva.setPaciente(paciente);
+        reserva.setPostoSaude(posto);
+        reserva.setStatus(StatusReserva.PENDENTE);
+
+        when(pacienteRepository.findById(1L)).thenReturn(Optional.of(paciente));
+        when(postoRepository.findById(10L)).thenReturn(Optional.of(posto));
+        when(reservaRepository.existsByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva, StatusReserva.CANCELADA))
+                .thenReturn(false);
+        when(reservaRepository.findByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva, StatusReserva.CANCELADA))
+                .thenReturn(List.of());
+        when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
+        when(postoRepository.save(any(PostoSaude.class))).thenReturn(posto);
+        when(reservaRepository.findByPostoSaudeAndDataReserva(eq(posto), eq(dataReserva))).thenReturn(List.of(reserva));
+
+        Map<String, Object> resposta = reservaService.reservarFicha(1L, 10L, dataReserva);
+
+        assertThat(resposta).containsEntry("reservaId", 43L);
+        verify(reservaRepository).existsByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva,
+                StatusReserva.CANCELADA);
+        verify(reservaRepository).findByPacienteIdAndDataReservaAndStatusNot(1L, dataReserva,
+                StatusReserva.CANCELADA);
+    }
+
+    @Test
+    void deveAlterarStatusParaConfirmadaAoRegistrarCheckinDeReservaChamada() {
+        Reserva reserva = new Reserva();
+        reserva.setId(55L);
+        reserva.setStatus(StatusReserva.CHAMADO);
+
+        when(reservaRepository.findById(55L)).thenReturn(Optional.of(reserva));
+
+        reservaService.registrarCheckin(55L);
+
+        assertThat(reserva.getStatus()).isEqualTo(StatusReserva.CONFIRMADA);
+        verify(reservaRepository).save(reserva);
+    }
+
+    @Test
+    void naoDeveRegistrarCheckinParaReservaJaFinalizada() {
+        Reserva reserva = new Reserva();
+        reserva.setId(56L);
+        reserva.setStatus(StatusReserva.UTILIZADA);
+
+        when(reservaRepository.findById(56L)).thenReturn(Optional.of(reserva));
+
+        assertThatThrownBy(() -> reservaService.registrarCheckin(56L))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessage("Não é possível fazer check-in de uma reserva já finalizada.");
     }
 }

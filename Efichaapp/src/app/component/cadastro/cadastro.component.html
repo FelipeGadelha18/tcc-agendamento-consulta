@@ -23,11 +23,11 @@
         <div class="row">
           <div class="col">
             <label>CPF:</label>
-            <input type="text" name="cpf" [(ngModel)]="paciente.cpf" required (input)="formatarCpf()" />
+        <input type="text" [(ngModel)]="paciente.cpf" name="cpf" id="cpf" maxlength="14" placeholder="CPF" (input)="formatarCpf()" />
           </div>
           <div class="col">
             <label>Telefone:</label>
-            <input type="text" name="telefone" [(ngModel)]="paciente.telefone" required />
+            <input type="text" name="telefone" [(ngModel)]="paciente.telefone" (input)="formatarTelefone()" maxlength="15" required />
           </div>
         </div>
 

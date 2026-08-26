@@ -50,6 +50,7 @@ export class PainelControleComponent implements OnInit {
 
   datasDisponiveis: string[] = [];
   novaData: string = '';
+  readonly dataMinimaCadastro = this.obterDataAtualIso();
 
   posto: any = null;
   postos: any[] = [];
@@ -126,6 +127,23 @@ export class PainelControleComponent implements OnInit {
 
   get isRecepcionista(): boolean {
     return this.administrador?.tipo === 'RECEPCIONISTA';
+  }
+
+  getStatusLabel(status: string | null | undefined): string {
+    return status || 'Sem status';
+  }
+
+  getStatusClass(status: string | null | undefined): string {
+    switch (status) {
+      case 'NO_SHOW':
+        return 'cancelada';
+      case 'UTILIZADA':
+        return 'confirmada';
+      case 'CHAMADO':
+        return 'chamado';
+      default:
+        return (status || '').toLowerCase();
+    }
   }
 
   // Método para filtrar globalmente a tabela de fichas 
@@ -439,9 +457,25 @@ export class PainelControleComponent implements OnInit {
     this.atualizarFichas(page, size);
   }
 
+  private obterDataAtualIso(): string {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
+  }
+
   // Método para adicionar uma nova data disponível para o posto
   adicionarData() {
     if (!this.novaData || !this.idPosto) {
+      return;
+    }
+    if (this.novaData < this.dataMinimaCadastro) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Data inválida',
+        detail: 'Só é permitido cadastrar datas a partir do dia atual.'
+      });
       return;
     }
     this.postoService.adicionarData(this.idPosto, this.novaData).subscribe({
@@ -452,7 +486,10 @@ export class PainelControleComponent implements OnInit {
       },
       error: err => {
         console.error('erro adicionando data', err);
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Não foi possível adicionar a data.' });
+        const detail = typeof err?.error === 'string'
+          ? err.error
+          : err?.error?.erro || 'Não foi possível adicionar a data.';
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail });
       }
     });
   }

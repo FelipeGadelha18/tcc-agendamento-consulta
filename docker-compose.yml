@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: eficha-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-tcc_agendamento}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # Importa o esquema no primeiro boot (só roda com o volume db_data vazio)
+      - ./database/tcc_agendamento.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./Eficha
+    container_name: eficha-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Sobrescreve o application.properties via relaxed binding do Spring.
+      # allowPublicKeyRetrieval=true evita erro de auth com o MySQL 8 (caching_sha2_password).
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/${MYSQL_DATABASE:-tcc_agendamento}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./Efichaapp
+    container_name: eficha-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    # Mapeado na 4200 de propósito: o CORS do backend libera http://localhost:4200,
+    # então funciona sem alterar o código-fonte.
+    ports:
+      - "4200:80"
+
+volumes:
+  db_data:

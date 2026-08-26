@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -21,7 +22,8 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     ToastModule,
     ButtonModule,
-    MenuModule
+    MenuModule,
+    RouterLink
   ],
   templateUrl: './reservar-ficha.component.html',
   styleUrls: ['./reservar-ficha.component.scss'],
@@ -29,7 +31,7 @@ import { MessageService } from 'primeng/api';
 })
 export class ReservarFichaComponent implements OnInit {
 
-  items: MenuItem[] = []; // ✅ FALTAVA ISSO
+  items: MenuItem[] = [];
 
   postos: any[] = [];
   postosFiltrados: any[] = [];

@@ -1,0 +1,10 @@
+target
+node_modules
+.git
+.gitignore
+*.log
+.vscode
+.idea
+Dockerfile
+.dockerignore
+HELP.md

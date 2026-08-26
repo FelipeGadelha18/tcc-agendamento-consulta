@@ -1,12 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+
 import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+
 import { PacienteService } from '../../../services/paciente.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink, ButtonModule, MenuModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss']
 })
@@ -16,14 +22,41 @@ export class PerfilComponent implements OnInit {
   carregando = false;
   editando = false;
   photoPreview: string | null = null;
+  items: MenuItem[] = [];
 
   constructor(
     private router: Router,
     private pacienteService: PacienteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarPaciente();
+    this.configurarMenu();
+  }
+
+  configurarMenu() {
+    this.items = [
+      {
+        label: 'Início',
+        icon: 'pi pi-home',
+        command: () => this.router.navigate(['/paciente/inicio'])
+      },
+      {
+        label: 'Minhas Fichas',
+        icon: 'pi pi-file',
+        command: () => this.router.navigate(['/paciente/minhas-fichas'])
+      },
+      {
+        label: 'Reservar ficha',
+        icon: 'pi pi-calendar-plus',
+        command: () => this.router.navigate(['/paciente/reservar-ficha'])
+      },
+      {
+        label: 'Postos próximos',
+        icon: 'pi pi-map-marker',
+        command: () => this.router.navigate(['/paciente/postos-proximos'])
+      }
+    ];
   }
 
   carregarPaciente(): void {

@@ -58,7 +58,7 @@
             <p><strong>CPF:</strong> {{ reservaEscaneada?.paciente?.cpf }}</p>
             <p><strong>Posto:</strong> {{ reservaEscaneada?.postoSaude?.nome }}</p>
             <p><strong>Data:</strong> {{ reservaEscaneada?.dataReserva | date:'dd/MM/yyyy' }}</p>
-            <p><strong>Status:</strong> {{ reservaEscaneada?.status }}</p>
+            <p><strong>Status:</strong> {{ getStatusLabel(reservaEscaneada?.status) }}</p>
           </div>
 
           <div class="scanner-help" *ngIf="!scannerAtivo && !reservaEscaneada">
@@ -116,17 +116,18 @@
             <td>{{ ficha.cpf }}</td>
             <td><strong>{{ ficha.numero }}</strong></td>
             <td>{{ ficha.dataReserva | date:'dd/MM/yyyy' }}</td>
-            <td>{{ ficha.posicaoNaFila || '—' }}</td>
+            <td>{{ ficha.posicaoNaFila ?? '—' }}</td>
             <td>
-              <span [ngClass]="'status ' + (ficha.status || '').toLowerCase()">
+              <span [ngClass]="'status ' + getStatusClass(ficha.status)">
                 <i class="pi" [ngClass]="{
                   'pi-check-circle': ficha.status === 'CONFIRMADA',
                   'pi-times-circle': ficha.status === 'CANCELADA',
                   'pi-exclamation-circle': ficha.status === 'PENDENTE',
                   'pi-clock': ficha.status === 'CHAMADO',
-                  'pi-ban': ficha.status === 'NO_SHOW'
+                  'pi-ban': ficha.status === 'NO_SHOW',
+                  'pi-flag': ficha.status === 'UTILIZADA'
                 }"></i>
-                {{ ficha.status }}
+                {{ getStatusLabel(ficha.status) }}
               </span>
             </td>
             <td class="acoes">
@@ -199,7 +200,7 @@
           <li *ngIf="datasDisponiveis.length === 0">Nenhuma data cadastrada</li>
         </ul>
         <div class="add-data">
-          <input type="date" [(ngModel)]="novaData" placeholder="Selecione uma data" />
+          <input type="date" [(ngModel)]="novaData" [min]="dataMinimaCadastro" placeholder="Selecione uma data" />
           <button class="btn success" (click)="adicionarData()" [disabled]="!novaData">
             <i class="pi pi-plus"></i> Adicionar
           </button>
@@ -282,10 +283,7 @@
         <input pInputText [(ngModel)]="novoRecepcionista.email" name="emailRecepcionista" placeholder="E-mail" />
         <input pInputText type="password" [(ngModel)]="novoRecepcionista.senha" name="senhaRecepcionista"
           placeholder="Senha" />
-        <!-- <select [(ngModel)]="novoRecepcionista.idPosto" name="postoRecepcionista">
-          <option [ngValue]="null">Selecione um posto</option>
-          <option *ngFor="let postoItem of postos" [ngValue]="postoItem.id">{{ postoItem.nome }}</option>
-        </select> -->
+
         <p-select [(ngModel)]="novoRecepcionista.idPosto" [options]="postos" optionLabel="nome" optionValue="id"
           placeholder="Selecione um posto" name="postoRecepcionista" [showClear]="true" styleClass="select-posto">
         </p-select>
@@ -298,23 +296,6 @@
           <i class="pi pi-times"></i> Cancelar
         </button>
       </form>
-
-      <!-- Lista de recepcionistas cadastrados -->
-      <!-- <ul class="lista-admin">
-        <li *ngFor="let recepcionista of recepcionistas">
-          <strong>{{ recepcionista.nomeCompleto || recepcionista.nome }}</strong>
-          <span>{{ recepcionista.cpf }}</span>
-          <div class="acoes-admin">
-            <button class="icon success" type="button" (click)="editarRecepcionista(recepcionista)" title="Editar">
-              <i class="pi pi-pencil"></i>
-            </button>
-            <button class="icon danger" type="button" (click)="excluirRecepcionista(recepcionista.id)" title="Excluir">
-              <i class="pi pi-trash"></i>
-            </button>
-          </div>
-        </li>
-        <li *ngIf="recepcionistas.length === 0">Nenhum recepcionista cadastrado</li>
-      </ul> -->
 
       <div class="tabela-recepcionistas">
 

@@ -1,0 +1,4 @@
+# Credenciais do banco usadas pelo docker-compose.
+# Troque a senha antes de usar em qualquer ambiente que não seja local.
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=tcc_agendamento
