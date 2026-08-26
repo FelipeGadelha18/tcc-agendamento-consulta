@@ -26,7 +26,7 @@ export class LoginComponent {
   cpf: string = '';
   senha!: string;
   mostrarSenha: boolean = false;
-  tipoLogin: string = 'PACIENTE';
+  tipoLogin: string | null = null;
   carregando: boolean = false;
   tiposLogin = [
     { label: 'Paciente', value: 'PACIENTE' },

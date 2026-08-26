@@ -136,96 +136,278 @@
 
 /* TEXTO DE RIO BRANCO */
 .side-text {
-    position: absolute;
-    right: 350px;
-    top: 35%;
-    transform: translateY(-50%);
-    z-index: 3;
-    text-align: right;
-}
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  right: 8%;
+  transform: translateY(-50%);
 
-.side-text h1 {
-    margin-top: -5px;
-    font-size: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: min(42%, 500px);
+  text-align: center;
+
+  .logo {
+    width: clamp(180px, 24vw, 380px);
+    height: auto;
+    object-fit: contain;
+  }
+
+  h1 {
+    margin: 15px 0 0;
     color: #003d80;
+    font-size: clamp(45px, 5.5vw, 78px);
+    line-height: 1;
     font-weight: 700;
+  }
 }
 
 /* FORMAS DECORATIVAS */
 .shape {
-    position: absolute;
-    background: #012f60;
-    border-radius: 50%;
-    z-index: 1;
-}
+  position: absolute;
+  width: 420px;
+  height: 360px;
+  border-radius: 50%;
+  background: #012f60;
+  z-index: 1;
+  pointer-events: none;
 
-.shape1 {
-    width: 559px;
-    height: 401px;
+  &.top-left {
     top: -200px;
-    left: -100px;
+    left: -120px;
+  }
+
+  &.bottom-right {
+    right: -150px;
+    bottom: -220px;
+  }
 }
 
-.shape2 {
-    width: 466px;
-    height: 664px;
-    bottom: -100px;
-    right: -200px;
-}
 
-/* RESPONSIVO */
-@media (max-width: 1100px) {
-    .side-text {
-        right: 150px;
+// RESPONSIVIDADE
+
+@media (max-width: 1400px) and (min-width: 901px) {
+    .login-container {
+        padding-left: 10%;
     }
-}
 
-@media (max-width: 600px) {
     .login-card {
-        width: 90%;
-        padding: 40px 30px;
+        width: 430px;
+        padding: 50px 40px;
+    }
+
+    .side-text {
+        right: 5%;
+    }
+
+    .side-text .logo {
+        width: clamp(180px, 22vw, 300px);
     }
 
     .side-text h1 {
-        font-size: 48px;
+        font-size: clamp(50px, 5vw, 70px);
     }
 
-    .side-text h3 {
-        font-size: 24px;
+    .shape.top-left {
+        width: 380px;
+        height: 330px;
+        top: -180px;
+        left: -120px;
     }
 
-    .shape2 {
+    .shape.bottom-right {
+        width: 380px;
+        height: 330px;
+        right: -140px;
+        bottom: -200px;
+    }
+}
+
+@media (max-width: 900px) {
+    .login-container {
+        min-height: 100vh;
+        height: auto;
+
+        padding: 40px 30px;
+
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+
+        gap: 30px;
+
+        overflow-y: auto;
+    }
+
+    .side-text {
+        position: static;
+        transform: none;
+
+        order: 1;
+
+        width: 100%;
+        max-width: 500px;
+
+        text-align: center;
+    }
+
+    .side-text .logo {
+        width: 200px;
+        max-width: 60vw;
+    }
+
+    .side-text h1 {
+        font-size: 50px;
+        margin-top: 10px;
+    }
+
+    .login-card {
+        order: 2;
+
+        width: 100%;
+        max-width: 460px;
+
+        box-sizing: border-box;
+
+        padding: 40px 35px;
+    }
+
+    .shape {
         display: none;
     }
 }
 
-/* TELAS DE 14 POLEGADAS - 1366px */
-@media (max-width: 1400px) and (min-width: 1100px) {
-    .login-container {
-        padding-left: 12%;
-    }
 
-    .login-card {
-        transform: scale(0.95);
+@media (max-width: 600px) {
+    .login-container {
+        min-height: 100dvh;
+        width: 100%;
+
+        box-sizing: border-box;
+
+        padding: 25px 16px 35px;
+
+         background: linear-gradient(
+            to bottom,
+            #ebecec 0%,
+            #3282e4 55%,
+            #0e2948 100%
+        );
+
+        gap: 20px;
+
+        justify-content: flex-start;
+
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     .side-text {
-        right: 200px;
-        top: 40%;
+        position: static;
+        transform: none;
+
+        width: 100%;
+        max-width: 100%;
+
+        flex-shrink: 0;
+    }
+
+    .side-text .logo {
+        width: clamp(120px, 40vw, 180px);
+        height: auto;
     }
 
     .side-text h1 {
-        font-size: 82px;
+        margin: 8px 0 0;
+
+        color: #fff;
+
+        font-size: clamp(32px, 10vw, 48px);
+        line-height: 1;
     }
 
-    .side-text h3 {
+    .login-card {
+        width: 100%;
+        max-width: 460px;
+
+        box-sizing: border-box;
+
+        padding: 30px 20px;
+
+        border-radius: 14px;
+
+        background: rgba(255, 255, 255, 0.97);
+
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+    }
+
+    .login-card h2 {
+        font-size: 21px;
+        margin-bottom: 25px;
+    }
+
+    .input-group {
+        padding: 13px 15px;
+        margin-bottom: 15px;
+    }
+
+    .input-group input {
+        font-size: 14px;
+    }
+
+    .icon,
+    .toggle-icon {
+        font-size: 16px;
+    }
+
+    .senha-strength {
+        padding: 0 5px;
+        margin-bottom: 15px;
+    }
+
+    .login-btn {
+        padding: 14px 0;
+        font-size: 14px;
+    }
+
+    .signup-text {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .shape {
+        display: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .login-container {
+        padding: 20px 12px 30px;
+        gap: 15px;
+    }
+
+    .side-text .logo {
+        width: 120px;
+    }
+
+    .side-text h1 {
         font-size: 32px;
     }
 
-    .shape1 {
-        width: 480px;
-        height: 350px;
-        top: -160px;
-        left: -140px;
+    .login-card {
+        padding: 25px 16px;
+    }
+
+    .login-card h2 {
+        font-size: 19px;
+    }
+
+    .input-group {
+        padding: 12px;
     }
 }

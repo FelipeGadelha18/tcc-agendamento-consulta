@@ -2,36 +2,66 @@
 
   <p-toast></p-toast>
 
-  <div class="shape shape1"></div>
-  <div class="shape shape2"></div>
+  <div class="shape top-left" aria-hidden="true"></div>
+  <div class="shape bottom-right" aria-hidden="true"></div>
 
   <div class="login-card">
-    <h2>Bem vindos ao E-ficha RB</h2>
+
+    <h2>Bem-vindos ao E-ficha</h2>
 
     <form (ngSubmit)="entrar()">
-      <label for="tipoLogin"
-        style="font-size: 12px; color: #555; margin-bottom: 5px; display: block; font-weight: 500;">Tipo de
-        Acesso:</label>
 
-        <p-select [(ngModel)]="tipoLogin" name="tipoLogin" inputId="tipoLogin" [options]="tiposLogin" optionLabel="label"
-          optionValue="value" placeholder="Selecione o tipo de acesso" class="select-login">
-        </p-select>
+      <label for="tipoLogin" class="field-label">
+        Tipo de Acesso:
+      </label>
+
+      <p-select
+        [(ngModel)]="tipoLogin"
+        name="tipoLogin"
+        inputId="tipoLogin"
+        [options]="tiposLogin"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecione o tipo de acesso"
+        class="select-login">
+      </p-select>
 
       <div class="input-group">
         <i class="pi pi-user icon"></i>
-        <input type="text" [(ngModel)]="cpf" name="cpf" id="cpf" maxlength="14" placeholder="CPF" (input)="formatarCpf()" />
+
+        <input
+          type="text"
+          [(ngModel)]="cpf"
+          name="cpf"
+          id="cpf"
+          maxlength="14"
+          placeholder="CPF"
+          (input)="formatarCpf()"
+        />
       </div>
 
       <div class="input-group">
         <i class="pi pi-lock icon"></i>
-        <input [type]="mostrarSenha ? 'text' : 'password'" [(ngModel)]="senha" name="senha" placeholder="Senha" />
-        <i class="pi toggle-icon" [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'"
-          (click)="alternarVisibilidadeSenha()"></i>
+
+        <input
+          [type]="mostrarSenha ? 'text' : 'password'"
+          [(ngModel)]="senha"
+          name="senha"
+          placeholder="Senha"
+        />
+
+        <i
+          class="pi toggle-icon"
+          [ngClass]="mostrarSenha ? 'pi-eye-slash' : 'pi-eye'"
+          (click)="alternarVisibilidadeSenha()">
+        </i>
       </div>
 
-      <button class="login-btn">Entrar</button>
-    </form>
+      <button type="submit" class="login-btn">
+        Entrar
+      </button>
 
+    </form>
 
     <p class="signup-text">
       Ainda não possui cadastro?
@@ -42,9 +72,16 @@
       Esqueceu sua senha?
       <a routerLink="/recuperar-senha">Recuperar</a>
     </p>
+
   </div>
 
   <div class="side-text">
-    <h1>E-FICHA RB</h1>
+    <img
+      src="/assets/logo.png"
+      alt="Logo E-ficha"
+      class="logo"
+    />
+    <h1>E-FICHA</h1>
   </div>
+
 </div>
