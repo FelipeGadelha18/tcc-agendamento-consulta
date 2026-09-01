@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {RouterLink} from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -73,8 +73,19 @@ export class ReservarFichaComponent implements OnInit {
     this.carregarPostos();
     // se veio id do querystring, busque também as datas
     if (this.postoIdRecebido) {
-      this.postoService.listarDatas(this.postoIdRecebido).subscribe(d => this.datasDisponiveis = d);
+      this.postoService.listarDatas(this.postoIdRecebido).subscribe(d => this.datasDisponiveis = this.filtrarDatasFuturas(d));
     }
+  }
+
+  // remove datas anteriores a hoje, que não fazem mais sentido para agendamento
+  private filtrarDatasFuturas(datas: string[]): string[] {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    return (datas || []).filter(data => {
+      const dataObj = new Date(data + 'T00:00:00');
+      return dataObj >= hoje;
+    });
   }
 
   carregarPostos() {
@@ -88,7 +99,7 @@ export class ReservarFichaComponent implements OnInit {
             this.postos.find(p => p.id === this.postoIdRecebido);
           if (this.postoSelecionado) {
             this.postoService.listarDatas(this.postoSelecionado.id).subscribe(dates => {
-              this.datasDisponiveis = dates;
+              this.datasDisponiveis = this.filtrarDatasFuturas(dates);
             });
           }
         }
@@ -110,7 +121,7 @@ export class ReservarFichaComponent implements OnInit {
 
     // buscar datas disponíveis do posto
     this.postoService.listarDatas(posto.id).subscribe(dates => {
-      this.datasDisponiveis = dates;
+      this.datasDisponiveis = this.filtrarDatasFuturas(dates);
     }, err => {
       console.error('erro ao buscar datas', err);
       this.datasDisponiveis = [];
